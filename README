@@ -1,0 +1,25 @@
+# Spirit-News is a simple blogging system for the Faculty of Computer Science of the University of Applied Sciences Schmalkalden!
+
+First lines of code were produced by students during a course on functional programming by Professor Braun.
+Professor Braun is always seeking for students to improve code and functionality in this open source project!
+
+Features:
+* Auth against internal university LDAP Server
+* Using Lift 2.1 with Scala 2.8.0 and MongoDB
+* News will be directly posted on Twitter and Facebook
+* Students can be notified via mailinglists
+* lots more.....
+
+In the future it is planned to create a plattform for students, where
+they can log in, read news ( which is possible now ) and manage their
+schedule and hopefully a lot more!
+
+NOTICE: This code works with a MongoDB installation, but a login only works inside of the campus network since auth only works
+with the internal LDAP Server.
+
+We know there is lots of room for improvement on the code. But most people working on it just started
+with real world programming, so don't be to hard on us ;)!
+
+Ideas, friendly critisism and bugs are always welcomed!
+
+Live version running at http://spirit.fh-schmalkalden.de

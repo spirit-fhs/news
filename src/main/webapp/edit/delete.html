@@ -1,0 +1,11 @@
+<lift:surround with="default" at="content">
+		<h2>Confirm Delete!</h2>
+		<lift:EditNews.confirmDelete form="POST">
+			Verfasser : <test:verfasser /><br /> 
+			Nr: <test:Nr /><br />
+			Betreff : <test:subject /><br />			
+			News: <test:textarea /><br />
+			<test:submit />
+		</lift:EditNews.confirmDelete>
+</lift:surround>
+

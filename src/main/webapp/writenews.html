@@ -1,0 +1,52 @@
+<lift:surround with="default" at="content">
+
+    
+	<h2>News schreiben</h2>
+	<lift:WriteNews.writeNews form ="POST">
+		Name:<br />  <lift:NewsSnippets.hello /> <br />
+		Verf&auml;llt am:<br /> <form:date /><br />
+		Betreff:<br />    <form:subject /><br />
+		Semester:(Die Auswahl entspricht dem Aktuellen Mail Verteiler!)<br /> 
+
+        <table style="table-layout:fixed" width="80%">
+            <tr>
+            <td style="width:5%">
+                <lift:WriteNews.makeOtherCheckboxList>
+                <Other:checkbox /> <Other:label /><br/>
+                </lift:WriteNews.makeOtherCheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:WriteNews.makeBaICheckboxList>
+		        <BaI:checkbox /> <BaI:label /><br/>
+                </lift:WriteNews.makeBaICheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:WriteNews.makeBaWICheckboxList>
+                <BaWI:checkbox /> <BaWI:label /><br/>
+                </lift:WriteNews.makeBaWICheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:WriteNews.makeMuMaCheckboxList>
+                <MuMa:checkbox /> <MuMa:label /><br/>
+                </lift:WriteNews.makeMuMaCheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:WriteNews.makeITSCheckboxList>
+                <ITS:checkbox /> <ITS:label /><br/>
+                </lift:WriteNews.makeITSCheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:WriteNews.makeMaCheckboxList>
+                <Ma:checkbox /> <Ma:label /><br/>
+                </lift:WriteNews.makeMaCheckboxList>
+            </td>
+
+        </tr>
+</table>
+    <hr />
+	<form:email />  E-Mail senden <br />
+	<table width="100%"><tr><td width="75%"><form:textarea /></td><td width="25%"><lift:NewsSnippets:code /></td></tr></table>
+		<form:submit /> <br />		
+	</lift:WriteNews.writeNews>
+</lift:surround>
+

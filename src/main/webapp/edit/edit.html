@@ -1,0 +1,51 @@
+<lift:surround with="default" at="content">
+		<h2>Edit!</h2>
+		<lift:EditNews.edit form="POST">
+			Verfasser : <test:verfasser /><br />
+		        Nr: <test:Nr /><br />
+			Betreff : <br /><test:subject /><br />
+            Semester :
+             <table style="table-layout:fixed" width="80%">
+            <tr>
+            <td style="width:5%">
+                <lift:EditNews.makeOtherCheckboxList>
+                <Other:checkbox /> <Other:label /><br/>
+                </lift:EditNews.makeOtherCheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:EditNews.makeBaICheckboxList>
+		        <BaI:checkbox /> <BaI:label /><br/>
+                </lift:EditNews.makeBaICheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:EditNews.makeBaWICheckboxList>
+                <BaWI:checkbox /> <BaWI:label /><br/>
+                </lift:EditNews.makeBaWICheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:EditNews.makeMuMaCheckboxList>
+                <MuMa:checkbox /> <MuMa:label /><br/>
+                </lift:EditNews.makeMuMaCheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:EditNews.makeITSCheckboxList>
+                <ITS:checkbox /> <ITS:label /><br/>
+                </lift:EditNews.makeITSCheckboxList>
+            </td>
+            <td style="width:3%">
+                <lift:EditNews.makeMaCheckboxList>
+                <Ma:checkbox /> <Ma:label /><br/>
+                </lift:EditNews.makeMaCheckboxList>
+            </td>
+
+        </tr>
+        </table>
+			Verf&auml;llt am: <br /><test:date /><br /><br />
+		    <test:email />E-Mail senden<br />
+
+			<table width="100%"><tr><td width="75%"><test:textarea /></td>
+					<td width="25%"><lift:NewsSnippets:code /></td></tr></table><br />
+			<test:submit /><test:back />
+		</lift:EditNews.edit>
+</lift:surround>
+
