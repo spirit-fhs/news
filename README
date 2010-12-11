@@ -10,15 +10,11 @@ Features:
 * Students can be notified via mailinglists
 * lots more.....
 
-In the future it is planned to create a plattform for students, where
-they can log in, read news ( which is possible now ) and manage their
-schedule and hopefully a lot more!
+In the future it is planned to create a plattform for students, where they can log in, read news ( which is possible now ) and manage their schedule and hopefully a lot more!
 
-NOTICE: This code works with a MongoDB installation, but a login only works inside of the campus network since auth only works
-with the internal LDAP Server.
+NOTICE: This code works with a MongoDB installation, but a login only works inside of the campus network since auth only works with the internal LDAP Server.
 
-We know there is lots of room for improvement on the code. But most people working on it just started
-with real world programming, so don't be to hard on us ;)!
+We know there is lots of room for improvement on the code. But most people working on it just started with real world programming, so don't be to hard on us ;)!
 
 Ideas, friendly critisism and bugs are always welcomed!
 
