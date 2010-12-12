@@ -56,9 +56,9 @@ class NewsSnippets {
     <span>
       <table>
         <tr><td><strong>Formatierung:</strong>
-		    <br />* bold text *
-		    <br />_ italic text _
-		    <br />*_ bold italic text _*
+		    <br />**bold text**
+		    <br />__italic text__
+		    <br />*_  bold italic text  _*
 		    <br />{"%{color:red}Text in red %"}
         <br /><strong>Aufz&auml;hlung:</strong>
 		    <br />* bulleted list
