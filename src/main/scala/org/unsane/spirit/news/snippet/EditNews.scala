@@ -144,7 +144,6 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
         "email" -> checkbox(false, if(_) sendEmail = true),
         "textarea" -> textarea(oldEntry.news.value.toString, tn => textNote = tn, "rows" -> "12", "cols" -> "80", "style" -> "width:100%", "id" -> "entry"),
         "twitter" -> checkbox(true, if(_) tweetUpdate = true),
-        "textarea" -> textarea(oldEntry.news.value.toString, tn => textNote = tn, "rows" -> "12", "cols" -> "80", "style" -> "width:100%"),
         "subject" -> text(subject, subject = _),
         "semester" -> oldEntry.semester.value.toString,
         "verfasser" -> oldEntry.writer.value.toString,
