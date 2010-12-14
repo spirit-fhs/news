@@ -46,6 +46,11 @@
 			<table width="100%"><tr><td width="75%"><test:textarea /></td>
 					<td width="25%"><lift:NewsSnippets:code /></td></tr></table><br />
 			<test:submit /><test:back />
-		</lift:EditNews.edit>
-</lift:surround>
+		 </lift:EditNews.edit>
 
+         <lift:WriteNews.mkPreview>
+          <json:script/>
+          <button json:onclick="onclick">Vorschau</button>
+          <div id="entry_preview"></div>
+         </lift:WriteNews.mkPreview>
+</lift:surround>
