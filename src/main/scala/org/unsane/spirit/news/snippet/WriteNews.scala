@@ -35,24 +35,34 @@ package snippet
 
 import scala.xml.{XML, NodeSeq}
 import net.liftweb.util.Helpers._
-import net.liftweb.http.S._
+import net.liftweb.http._
+import S._
+import js._
+import JsCmds._
+import JE._
+
 import net.liftweb.http.SHtml._
 import net.liftweb.textile._
 import net.liftweb.common.Loggable
+import net.liftweb.textile
 import java.util._
 import java.text._
 import model._
+import scala.xml._
+
+
 
 /**
  * WriteNews lets you write entries and send them directly to the FhS mailinglists via SPIRIT.
  * @author Marcus Denison
  */
-class WriteNews extends Loggable with Config with SpiritHelpers {
-
+class WriteNews extends Loggable with Config with SpiritHelpers with EntryPreview {
+  
   /**
    * Creates the view for writing entries.
    */
   def writeNews(xhtml : NodeSeq) : NodeSeq = {
+
     def submitNode(name: String, subject: String, post: String, lifecycle: String, semester: String) {
       val date = df format today
       lazy val nr = if(EntryCounter.findAll.isEmpty) "1" else EntryCounter.findAll.head.counter.toString
@@ -86,8 +96,8 @@ class WriteNews extends Loggable with Config with SpiritHelpers {
     //"month" -> text(month format today, lifecycle += _ + ".", "size" -> "2"),
     //"year" -> text(year format today, lifecycle += _, "size" -> "4"),
     "email" -> checkbox(false, if (_) sendEmail = true),
-    "textarea" -> textarea("", news = _, "rows" -> "12", "cols" -> "80", "style" -> "width:100%"),
-    "submit" -> submit("Send",
+    "textarea" -> textarea("", news = _, "rows" -> "12", "cols" -> "80", "style" -> "width:100%", "id" -> "entry"),
+    "submit" -> submit("Senden",
       () => submitNode(name,
       subject,
       news,

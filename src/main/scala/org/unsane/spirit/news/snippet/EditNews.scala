@@ -50,7 +50,7 @@ import net.liftweb.json.JsonDSL._
  * Using different Methods to talk to the MongoDB, to see what is possible!
  * @author Marcus Denison
  */
-class EditNews extends Loggable with SpiritHelpers with Config {
+class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview {
 
   /** 
    * Views the list of entries from the current user for editing or deleting them.
@@ -104,7 +104,7 @@ class EditNews extends Loggable with SpiritHelpers with Config {
     logger info "Entry was created by " + User.currentUserId.openOr("")
     logger info "Entry was updated by " + User.currentUserId.openOr("")
     // if (sendEmail) MailHandler.send(TextileParser.toHtml(post).toString, subject, semester split (" "))
-    // Spreader ! Tweet("[Update] " + subject, semester.split(" ").map(" #"+_).mkString , newNr)
+    // if (tweetUpdate) Spreader ! Tweet("[Update] " + subject, semester.split(" ").map(" #"+_).mkString , newNr)
     S notice "Ihr update wurde gespeichert"
     S redirectTo "/index"
   }
@@ -142,13 +142,14 @@ class EditNews extends Loggable with SpiritHelpers with Config {
         //"month" -> text(month, lc => lifecycle += lc + ".", "size" -> "2"),
         //"year" -> text(year, lc => lifecycle += lc, "size" -> "4"),
         "email" -> checkbox(false, if(_) sendEmail = true),
-        "textarea" -> textarea(oldEntry.news.value.toString, tn => textNote = tn, "rows" -> "12", "cols" -> "80", "style" -> "width:100%"),
+        "textarea" -> textarea(oldEntry.news.value.toString, tn => textNote = tn, "rows" -> "12", "cols" -> "80", "style" -> "width:100%", "id" -> "entry"),
+        "twitter" -> checkbox(true, if(_) tweetUpdate = true),
         "subject" -> text(subject, subject = _),
         "semester" -> oldEntry.semester.value.toString,
         "verfasser" -> oldEntry.writer.value.toString,
         "Nr" -> oldEntry.nr.value.toString,
-        "back" -> link("/edit/editieren", () => Empty, Text("Zurück")),
-        "submit" -> submit("Send", () => changeEntry(oldEntry, nr, textNote, subject, changedSemester, dateValidator(lifecycle))))
+        "back" -> submit("Zurück", () => S redirectTo "/edit/editieren"),
+        "submit" -> submit("Senden", () => changeEntry(oldEntry, nr, textNote, subject, changedSemester, dateValidator(lifecycle))))
     } catch {
       case e: NullPointerException => e
         logger info e.printStackTrace.toString
@@ -248,4 +249,5 @@ class EditNews extends Loggable with SpiritHelpers with Config {
   private val userhome = System.getProperty("user.dir")
   private val df = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
   private var sendEmail = false
+  private var tweetUpdate = false
 }

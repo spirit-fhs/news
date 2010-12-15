@@ -43,18 +43,27 @@ import scala.collection.JavaConversions._
 /**
  *  To much static text in here, move to props!!!!! 
  */
-trait LDAPAuth extends Loggable {
+trait LDAPAuth extends Loggable with Config {
+  private val productive = loadProps("Productive") == "yes"
   private val env = new Hashtable[String,String]
   private val userhome = System.getProperty("user.dir")
   System.setProperty("javax.net.ssl.trustStore", userhome + "/fhstore")
   
+  def tryLogin(userName: String, passWord: String) =
+    if (productive) tryLoginLDAP(userName, passWord)
+    else {
+      S.setSessionAttribute("fullname", "TestUser")
+      S.setSessionAttribute("email", "testuser@nonvalid")
+      true
+    }
+
   /**
    * Trying to get auth from the LDAP
    * @param userName the login
    * @param passWord the password
    * @return Boolean
    */
-  def tryLogin(userName: String, passWord: String): Boolean = {
+  def tryLoginLDAP(userName: String, passWord: String): Boolean = {
     logger info userName + " is trying to log in!"
     var base = ""
     if (userName.equals("denison")) base = "ou=students,dc=fh-sm,dc=de"
