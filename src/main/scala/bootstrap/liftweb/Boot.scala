@@ -99,6 +99,7 @@ class Boot extends Loggable with Config {
 
     // TODO Build Menu some different way, a cleaner way!?
     val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home")) ::
+            Menu(Loc("Feed", List("feed"), "feed", Hidden )) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             Menu(Loc("Stundenplan", List("stundenplan", "index"), "Stundenplan" ),
