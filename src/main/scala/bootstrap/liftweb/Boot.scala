@@ -50,6 +50,8 @@ import mongodb._
 class Boot extends Loggable with Config {
   def boot {
 
+    val productive = loadProps("Productive") == "yes"
+
     // Opens connection to MongoDB with user/pass "spirit_news"
     MongoDB.defineDbAuth(DefaultMongoIdentifier,
       MongoAddress(MongoHost("127.0.0.1", 27017), "spirit_news"),
@@ -125,8 +127,11 @@ class Boot extends Loggable with Config {
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
-            Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login") , "Anmelden", loggedOut)) ::
-            User.sitemap
+            (if (productive)
+              Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login") , "Anmelden", loggedOut)) ::
+              User.sitemap
+            else
+              User.sitemap)
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
     DayChecker.start()

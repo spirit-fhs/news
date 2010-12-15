@@ -45,7 +45,9 @@ class User extends MegaProtoUser[User] {
   def getSingleton = User
 }
 
-object User extends User with MetaMegaProtoUser[User] with LDAPAuth {
+object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config {
+
+  private val productive = loadProps("Productive") == "yes"
 
   import SiteMap._
 
@@ -57,7 +59,9 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth {
   enforceUniqueLinks = false
 
   override def loginMenuLoc: Box[Menu] =
-    Full(Menu(Loc("Login", loginPath, S.??("login"), Hidden :: loginMenuLocParams)))
+    if (productive)
+      Full(Menu(Loc("Login", loginPath, S.??("login"), Hidden :: loginMenuLocParams)))
+    else super.loginMenuLoc 
 
   override def menus: List[Menu] = sitemap
   override lazy val sitemap: List[Menu] = List(loginMenuLoc, logoutMenuLoc).flatten(a => a)
