@@ -52,6 +52,8 @@ import net.liftweb.json.JsonDSL._
  */
 class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview {
 
+  private val tweet = loadProps("Tweet") == "yes"
+
   /** 
    * Views the list of entries from the current user for editing or deleting them.
    */
@@ -104,7 +106,7 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
     logger info "Entry was created by " + User.currentUserId.openOr("")
     logger info "Entry was updated by " + User.currentUserId.openOr("")
     // if (sendEmail) MailHandler.send(TextileParser.toHtml(post).toString, subject, semester split (" "))
-    // if (tweetUpdate) Spreader ! Tweet("[Update] " + subject, semester.split(" ").map(" #"+_).mkString , newNr)
+    if (tweet && tweetUpdate) Spreader ! Tweet("[Update] " + subject, semester.split(" ").map(" #"+_).mkString , newNr)
     S notice "Ihr update wurde gespeichert"
     S redirectTo "/index"
   }
