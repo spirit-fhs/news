@@ -47,9 +47,9 @@ import Http._
 
 case class Tweet(subject: String, semester: String, number: String)
 
-object Spreader extends Actor {
-  private val consumer = new Consumer("", "")
-  private val token = new Token("", "")
+object Spreader extends Actor with Config {
+  private val consumer = new Consumer(loadProps("Consumer"), loadProps("ConsumerSecret"))
+  private val token = new Token(loadProps("Token"), loadProps("TokenSecret"))
 
   private def mkTweet(subject: String, tinyurl: String, semester: String) = {
     val tailWithoutSemester = " " + tinyurl
