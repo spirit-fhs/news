@@ -58,6 +58,8 @@ import scala.xml._
  */
 class WriteNews extends Loggable with Config with SpiritHelpers with EntryPreview {
   
+  private val tweet = loadProps("Tweet") == "yes"
+
   /**
    * Creates the view for writing entries.
    */
@@ -84,7 +86,7 @@ class WriteNews extends Loggable with Config with SpiritHelpers with EntryPrevie
       // if(sendEmail && semester.nonEmpty){
       //   MailHandler.send(TextileParser.toHtml(post).toString, subject, loadEmails(semester.split(" ")))
       // }
-      // Spreader ! Tweet(subject, semester.split(" ").map(" #"+_).mkString , nr)
+      if (tweet) Spreader ! Tweet(subject, semester.split(" ").map(" #"+_).mkString , nr)
       redirectTo("/index")
     }
 

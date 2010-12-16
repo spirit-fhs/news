@@ -51,6 +51,7 @@ class Boot extends Loggable with Config {
   def boot {
 
     val productive = loadProps("Productive") == "yes"
+    val tweet = loadProps("Tweet") == "yes"
 
     // Opens connection to MongoDB with user/pass "spirit_news"
     MongoDB.defineDbAuth(DefaultMongoIdentifier,
@@ -135,7 +136,7 @@ class Boot extends Loggable with Config {
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
     DayChecker.start()
-    // Spreader.start()
+    if (tweet) Spreader.start()
     if (loadProps("ircConnect").equals("true")){
       SpiritBot.connect
     }
