@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <link rel="shortcut icon" href="http://spirit.fh-schmalkalden.de/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="http://twitter.com/statuses/user_timeline/214951815.rss" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -95,32 +95,46 @@
 .lift_notice {
 }
 
+table.gadgets {
+	border: none;
+}
+
+table.gadgets td {
+	border: 0px none;
+  padding: 5px 5px;
+	text-align: center;
+}
 
   /* ]]> */
   </style>
   </head>
   <body style="margin:40px auto;width:950px;">
     <div class="container">
-        <a target="_blank" href="http://www.fh-schmalkalden.de">
-        <img style="float:left" src="/classpath/images/logo_fhs.jpg" alt="" border="0" width="220" height="45"/> </a>
-        <div style="margin:0px 0px 0px 250px;"><h1 class="alt">Aktuelles der Fakult&auml;t Informatik</h1></div>
+      <a target="_blank" href="http://www.fh-schmalkalden.de">
+      <img style="float:left" src="/classpath/images/logo_fhs.jpg" alt="" border="0" width="220" height="45"/> </a>
+      <div style="margin:0px 0px 0px 250px;"><h1 class="alt">Aktuelles der Fakult&auml;t Informatik</h1></div>
 
-      
       <hr/>
 
       <div class="column span-6 colborder sidebar" style="width:200px;float:left;">
         <hr class="space" />
         <lift:Menu.builder />
-	<lift:snippet type="msgs" />
-	<div style="text-align:center;padding-top:30px">
-    <img src="/classpath/images/logo_spirit.jpg" alt="" border="0" width="200" height="175"/>
-    <hr class="space" />
- 	</div>
-              <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FFhS-Spirit%2F171882629503842%3Fref%3Dsgm&amp;layout=button_count&amp;show_faces=true&amp;width=110&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;" allowTransparency="true"></iframe>
-          <a href="http://www.twitter.com/FhS_Spirit"><img src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow FhS_Spirit on Twitter"/></a>
+				<lift:snippet type="msgs" />
+				<div style="text-align:center;padding-top:30px">
+					<img src="/classpath/images/logo_spirit.jpg" alt="" border="0" width="200" height="175"/>
+					<hr class="space" />
+			 	</div>
+        
+				<table class="gadgets">
+					<tr><td>
+				    <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FFhS-Spirit%2F171882629503842%3Fref%3Dsgm&amp;layout=button_count&amp;show_faces=true&amp;width=110&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;" allowTransparency="true"></iframe>
+		        <a href="http://www.twitter.com/FhS_Spirit"><img src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow FhS_Spirit on Twitter"/></a>
+					</td></tr><tr><td>
+    		    <a href="/feed"><img src="/classpath/images/feedicon.png" width="16" height="16" alt="RSS Feed"/></a>
+					</td></tr>
+				</table>
               
       </div>
-    
         	
       <div class="column span-30 last" style="width:699px;float:right;">
         <lift:bind name="content" />
@@ -129,9 +143,9 @@
       <hr />
       <div class="column span-23 last" style="text-align: center;clear:both;">
         <h4 class="alt">
-          <a href="http://www.facebook.com/marcus.denison">Coded by Marcus Denison</a><br />
-          <a href="http://pads.fh-schmalkalden.de">Supported by pads.fh-schmalkalden.de</a><br />
-          <a href="http://www.liftweb.net">Powered by Lift</a></h4>  
+        <a href="http://www.facebook.com/marcus.denison">Coded by Marcus Denison</a><br />
+        <a href="http://pads.fh-schmalkalden.de">Supported by pads.fh-schmalkalden.de</a><br />
+        <a href="http://www.liftweb.net">Powered by Lift</a></h4>  
       </div>
       
     </div>
