@@ -89,7 +89,7 @@ class Feed {
 				{news.map{entry =>
 					(<item>
 						<title>{entry.subject.value.toString} ({semesterChanger(entry.semester.value.toString)})</title>
-						<description>{shorten(entry.news.value.toString, entry.nr.value.toString)}</description>
+						<description>{TextileParser toHtml entry.news.value.toString toString}</description>
 						<link>{url}/entry/{entry.nr.value.toString}</link>
 						<author>{entry.writer.value.toString}</author>
 						<guid>{entry.nr.value.toString}</guid>
