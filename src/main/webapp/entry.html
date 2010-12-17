@@ -1,27 +1,22 @@
 <lift:surround with="defaultTable" at="content">
- <head><title>News</title></head>
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <thead>
-
-  </thead>
-
-  <tbody>
-   <lift:EntrySearcher.view>
-   <tr>
-    <table>
-     <tr>
-      <th width="100%">Betreff: <entry:subject /></th>
-     </tr>
-    </table>
-   </tr>
-   <table>
-    <td>Semester: <entry:semester /></td>
-	<td>Verfasser: <entry:writer /></td>
-	<td>Vom: <entry:date /></td>
-    <td>Nr: <entry:nr /></td>
-   </table>
-   <tr><entry:news /></tr>
-   </lift:EntrySearcher.view>
-  </tbody>
-  </table>
+	<lift:EntrySearcher.view>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<thead>
+				<tr>
+					<th width="100%" colspan="4">Betreff: <entry:subject /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Semester: <entry:semester /></td>
+					<td>Verfasser: <entry:writer /></td>
+					<td>Vom: <entry:date /></td>
+					<td>Nr: <entry:nr /></td>
+				</tr>
+				<tr>
+					<td colspan="4"><entry:news /></td>
+				</tr>
+			</tbody>
+		</table>
+	</lift:EntrySearcher.view>
 </lift:surround>
