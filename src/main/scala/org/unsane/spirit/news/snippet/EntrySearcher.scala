@@ -46,7 +46,7 @@ import net.liftweb.json.JsonDSL._
  * e.g. http://spirit.fh-schmalkalden.de/entry/5 for the entry with the nr 5.
  * @author Marcus Denison
  */
-class EntrySearcher {
+class EntrySearcher extends SpiritHelpers {
 
   /**
    * Binds exactly the one found entry with /entry/<search number>.
@@ -62,7 +62,7 @@ class EntrySearcher {
           "nr" -> news.open_!.nr.toString,
           "lifecycle" -> news.open_!.lifecycle.toString,
           "date" -> Text(news.open_!.date.toString.substring(4, 11) + ". " + news.open_!.date.toString.substring(17, 22)),
-          "semester" -> ViewNews.semesterChanger(news.open_!.semester.toString),
+          "semester" -> sem2link(ViewNews.semesterChanger(news.open_!.semester.value.toString).split(" ")),
           "news" -> TextileParser.toHtml(news.open_!.news.toString))
     }
     catch {

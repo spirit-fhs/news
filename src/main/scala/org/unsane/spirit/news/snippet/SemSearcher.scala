@@ -37,23 +37,33 @@ import scala.xml._
 import net.liftweb.util.Helpers._
 import net.liftweb.textile._
 import java.text._
-import org.unsane.spirit.news.model.Entry
 import net.liftweb.http.S
 import net.liftweb.json.JsonDSL._
+import model.{Config, Entry}
+import net.liftweb.common.Loggable
 
 /**
  * SemSearcher lets you find entries for your semester!
  * e.g. http://spirit.fh-schmalkalden.de/semsearch/I5 for all Bachelor Informatik in the 5th Semester.
  * @author Marcus Denison
  */
-class SemSearcher {
+class SemSearcher extends SpiritHelpers with Config with Loggable {
 
   /**
    * Binds all entries found with /semsearch/<search string>.
    */
   def view (xhtml : NodeSeq) : NodeSeq = {
     try {
-      val news = Entry.findAll.filter { x => x.semester.toString.split(" ").contains(S.param("semsearch").openOr(("NOT"))) }
+      val validSearch = loadSemesters("BaI") :: loadSemesters("BaWI") :: loadSemesters("BaMuMa") :: loadSemesters("BaITS") :: loadSemesters("Ma") :: loadSemesters("Other") :: Nil
+      if(!validSearch.flatten.contains(S.param("semsearch").openOr(""))) {
+        logger error (S.param("semsearch").openOr("empty") + " is not a valid search!")
+        S redirectTo ("/index")
+      }
+
+      logger info ("Searching for " + S.param("semsearch").openOr("empty") + "!")
+      val news = Entry.findAll.filter { x =>
+          x.semester.toString.split(" ").contains(S.param("semsearch").openOr(("NOT"))) || x.semester.toString.split(" ").contains("semester")
+      }
 
       if (news.isEmpty) S redirectTo ("/index")
       else
@@ -64,7 +74,7 @@ class SemSearcher {
             "nr" -> entry.nr.value.toString,
             "lifecycle" -> entry.lifecycle.value.toString,
             "date" -> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)),
-            "semester" -> ViewNews.semesterChanger(entry.semester.value.toString),
+            "semester" -> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")),
             "news" -> TextileParser.toHtml(entry.news.value.toString)))
     }
     catch {

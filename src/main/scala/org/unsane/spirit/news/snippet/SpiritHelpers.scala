@@ -40,13 +40,23 @@ import net.liftweb.util.Helpers._
 import net.liftweb.http.SHtml._
 import java.util._
 import java.text._
+import scala.collection._
 
 /**
- * Since i don't know whats best practice how to handle dates, I wrote 2 little helpers
- * which i needed to get around using actual dates in the database.
  * @author Marcus Denison
  */
 trait SpiritHelpers {
+
+  /**
+   * Renders links for the semesters so each semester can be clicked in the index, semsearcher and entry.
+   * User will be forwarded to /semsearch/<semester>. 
+   */
+  def sem2link(semesterArray: Array[String]): NodeSeq = {
+    val renderedLinks = semesterArray map { currentSem =>
+      link(currentSem, () => S redirectTo "/semsearch/" + currentSem, <span class="semester_space">{ currentSem }</span> )
+    }
+    renderedLinks.toSeq.flatten
+  }
 
   /**
    * Checks all entries if they match to the current or older date, and deletes them.
