@@ -52,7 +52,7 @@ object ViewNews {
   }
 }
 
-class ViewNews {
+class ViewNews extends SpiritHelpers {
 
   /**
    * Binds all entries!
@@ -67,7 +67,7 @@ class ViewNews {
         "nr" -> entry.nr.value.toString,
         "lifecycle" -> entry.lifecycle.value.toString,
         "date" -> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)),
-        "semester" -> ViewNews.semesterChanger(entry.semester.value.toString),
+        "semester" -> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")),
         "news" -> TextileParser.toHtml(entry.news.value.toString)))
   }
 }
