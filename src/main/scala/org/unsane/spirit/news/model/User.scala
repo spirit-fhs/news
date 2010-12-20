@@ -74,7 +74,7 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
         <tr><td colspan="2">{S.??("log.in")}</td></tr>
         <tr><td>{S.??("FHS-ID")}</td><td><user:user /></td></tr>
         <tr><td>{S.??("password")}</td><td><user:password /></td></tr>
-            <td><user:submit /></td>
+        <tr><td><user:submit /></td></tr>
       </table>
       </form>
      </lift:surround>)
