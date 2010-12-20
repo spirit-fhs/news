@@ -71,4 +71,5 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 		 nc -u pads.fh-schmalkalden.de 9900 -q 1
 endif
 
-
+deploydev:
+	@ssh root@spiritdev.fh-schmalkalden.de "cd news && make all"
