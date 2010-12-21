@@ -129,6 +129,7 @@ class Boot extends Loggable with Config {
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
+            Menu(Loc("Spirit-Blog", ExtLink("http://fhs-spirit.posterous.com/"), "Spirit-Blog")) ::
             (if (productive)
               Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login") , "Anmelden", loggedOut)) ::
               User.sitemap
