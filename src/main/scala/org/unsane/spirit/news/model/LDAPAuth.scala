@@ -40,19 +40,18 @@ import net.liftweb.http.S
 import net.liftweb.common.Loggable
 import scala.collection.JavaConversions._
 
-/**
- *  To much static text in here, move to props!!!!! 
- */
 trait LDAPAuth extends Loggable with Config {
-  private val productive = loadProps("Productive") == "yes"
+  private val useLDAPAuth =
+    loadProps("Productive") == "yes" ||
+      loadProps("UseLDAPAuth") == "yes"
   private val env = new Hashtable[String,String]
   private val userhome = System.getProperty("user.dir")
   System.setProperty("javax.net.ssl.trustStore", userhome + "/fhstore")
-  
+
   def tryLogin(userName: String, passWord: String) =
-    if (productive) tryLoginLDAP(userName, passWord)
+    if (useLDAPAuth) tryLoginLDAP(userName, passWord)
     else {
-      S.setSessionAttribute("fullname", "TestUser")
+      S.setSessionAttribute("fullname", userName)
       S.setSessionAttribute("email", "testuser@nonvalid")
       true
     }
@@ -61,45 +60,64 @@ trait LDAPAuth extends Loggable with Config {
    * Trying to get auth from the LDAP
    * @param userName the login
    * @param passWord the password
+   * @param ldapServer the ldapServer, should be ldap1 (default param) or zefi
    * @return Boolean
    */
-  def tryLoginLDAP(userName: String, passWord: String): Boolean = {
-    logger info userName + " is trying to log in!"
-    var base = ""
-    if (userName.equals("denison")) base = "ou=students,dc=fh-sm,dc=de"
-    else base = "ou=people,dc=fh-sm,dc=de"
-    val dn = "uid=" + userName + "," + base
-        // ou=people benoetigt fuer professoren
-        // ou=students nur studenten
-        // val base ="ou=people,dc=fh-sm,dc=de"
-    	  // since we want to use SSL we have to go to port 636 on the LDAP server
-    val ldapURL = "ldaps://ldap1.fh-schmalkalden.de:636"
+  def tryLoginLDAP(
+    userName: String,
+     passWord: String,
+     ldapServer: String = "ldap1"
+  ): Boolean = {
+    logger info userName + " is trying to log into "+ldapServer+"!"
+    val (ldapURL, dn) =
+      if (ldapServer == "ldap1") {
+        ("ldaps://ldap1.fh-schmalkalden.de:636"
+        ,"uid=" + userName + "," +
+         (if (userName.equals("denison")) "ou=students,dc=fh-sm,dc=de"
+          else "ou=people,dc=fh-sm,dc=de"))
+      } else if (ldapServer == "zefi") {
+        ("ldaps://zefi.fh-schmalkalden.de:636"
+         ,"uid="+userName+",ou=people,ou=in,dc=fh-schmalkalden,dc=de")
+      } else {
+        return false
+      }
 
     env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory")
     env.put(Context.PROVIDER_URL, ldapURL)
-   	env.put(Context.SECURITY_AUTHENTICATION, "simple")
-   	env.put(Context.SECURITY_PRINCIPAL, dn)
-   	env.put(Context.SECURITY_CREDENTIALS, passWord)
+    env.put(Context.SECURITY_AUTHENTICATION, "simple")
+    env.put(Context.SECURITY_PRINCIPAL, dn)
+    env.put(Context.SECURITY_CREDENTIALS, passWord)
     env.put(Context.SECURITY_PROTOCOL, "SSL")
-        
+
     try {
       val ctx: DirContext = new InitialDirContext(env)
-      S.setSessionAttribute("fullname", getFullname(ctx, dn))
-      S.setSessionAttribute("email", emailValidator(getEmail(ctx, dn), userName))
+      if (ldapServer == "zefi") {
+        val attrs: Attributes = ctx.getAttributes(dn)
+        val gidNumber = attrs.get("gidNumber").get(0)
+        // only staff can log in
+        if (gidNumber != "1001") return false
+      }
+      val attrs: Attributes = ctx.getAttributes(dn)
+      S.setSessionAttribute("fullname", getFullname(attrs, ldapServer))
+      S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName))
       logger info userName + " logged in successfully!"
       true
     } catch {
-      case e: AuthenticationException => e
-        logger error e.printStackTrace.toString
-        S error "Error: Bitte richtige FHS-ID und Passwort angeben"
-        S redirectTo "/user_mgt/login"
-        false
-      case b: NamingException => b
+      case e: AuthenticationException =>
+        if (ldapServer == "ldap1")
+          tryLoginLDAP(userName, passWord, "zefi")
+        else {
+          logger error e.printStackTrace.toString
+          S error "Error: Bitte richtige FHS-ID und Passwort angeben"
+          S redirectTo "/user_mgt/login"
+          false
+        }
+      case b: NamingException =>
         logger error b.printStackTrace.toString
         S error "Error: I can't see LDAP, please contact a SPIRIT-Admin"
         S redirectTo "/user_mgt/login"
         false
-      case c: TimeLimitExceededException => c
+      case c: TimeLimitExceededException =>
         logger error c.printStackTrace.toString
         S error "Error: LDAP is taking long, please contact a SPIRIT-Admin"
         S redirectTo "/user_mgt/login"
@@ -108,47 +126,48 @@ trait LDAPAuth extends Loggable with Config {
         false
     }
   }
-  
+
   /**
    * Checks if we have to build "fhsid@fh-sm.de" or if there was found an _.____@fh-sm.de
    */
   private def emailValidator(email: String, userName:String): String = email match {
-    case "" => "spirit@informatik.fh-schmalkalden.de"
+    case "" => userName+"@fh-sm.de" // does not work for students
     case _ => email
   }
 
   /**
-   * looks up the email from the given user
-   * @param ctx the Directory Context
-   * @param dn the username
+   * looks up the email from the given user, there is no email in zefi
+   * @param attrs the attributes
    * @return String either email or empty String
    */
-  private def getEmail(ctx: DirContext, dn: String): String = {
-    val attrs: Attributes = ctx.getAttributes(dn)
-    val idEnum = attrs.getIDs
-    var email = ""
-    idEnum foreach { x =>
-      if(x == "mail" && attrs.get(x).get(0).toString.matches("[a-zA-Z][.].\\w.*@fh-sm.de") || attrs.get(x).get(0).toString.matches("[a-zA-Z][.].\\w.*@stud.fh-sm.de")) {
-          email = attrs.get(x).get(0).toString
-      }
+  private def getEmail(attrs: Attributes): String = {
+    val ids = attrs.getIDs.toList
+    def getAttrValList(id: String): List[String] =
+      if (ids contains id)
+        for (i <- 0 to attrs.get(id).size - 1)
+          yield attrs.get(id).get(i).toString
+      else
+        Nil: List[String]
+    val emails = getAttrValList("mail") map { _.toString } filter {
+      email => email.matches("[a-zA-Z][.].\\w.*@fh-sm.de") ||
+               email.matches("[a-zA-Z][.].\\w.*@stud.fh-sm.de")
     }
-    email
+    if (emails isEmpty) "" else emails.head
   }
 
   /**
-   * @param ctx the Directory Context
-   * @param dn the username
+   * @param attrs the attributes
    * @return String built with title and last name
-   * @TODO Employees don't have a personalTitle in the LDAP Directory, this SUCKS !!!!! 
+   * @TODO Employees don't have a personalTitle in the LDAP Directory
    */
-  private def getFullname(ctx: DirContext, dn: String): String = {
-    val attrs: Attributes = ctx.getAttributes(dn)
-    val idEnum = attrs.getIDs
-    var title_name = ""
-    idEnum foreach { x =>
-      if (x == "sn") title_name = attrs.get(x).get(0).toString
-      if (x == "personalTitle" && attrs.get(x).get(0).toString != "") title_name = attrs.get(x).get(0).toString + " " + title_name
-    }
-    title_name
+  private def getFullname(attrs: Attributes, ldapServer: String): String = {
+    val ids = attrs.getIDs.toList
+    def getAttrVal(id: String) =
+      if (ids contains id) attrs.get(id).get(0).toString else ""
+    if (ldapServer == "ldap1")
+      (getAttrVal("personalTitle") + " " + getAttrVal("sn")).trim
+    else // zefi
+      getAttrVal("displayName")
   }
+
 }
