@@ -83,9 +83,9 @@ class WriteNews extends Loggable with Config with SpiritHelpers with EntryPrevie
         count.save
       
       logger info "Entry was created by " + User.currentUserId.openOr("")
-      // if(sendEmail && semester.nonEmpty){
-      //   MailHandler.send(TextileParser.toHtml(post).toString, subject, loadEmails(semester.split(" ")))
-      // }
+      if(sendEmail && semester.nonEmpty){
+        MailHandler.send(TextileParser.toHtml(post).toString, subject, loadEmails(semester.split(" ")))
+      }
       if (tweet) Spreader ! Tweet(subject, semester.split(" ").map(" #"+_).mkString , nr)
       redirectTo("/index")
     }
