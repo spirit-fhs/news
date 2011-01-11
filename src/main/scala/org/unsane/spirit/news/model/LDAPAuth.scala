@@ -48,13 +48,40 @@ trait LDAPAuth extends Loggable with Config {
   private val userhome = System.getProperty("user.dir")
   System.setProperty("javax.net.ssl.trustStore", userhome + "/fhstore")
 
-  def tryLogin(userName: String, passWord: String) =
-    if (useLDAPAuth) tryLoginLDAP(userName, passWord)
+  def tryLogin(userName: String, passWord: String): Boolean = {
+    // allow additional users in setting.properties
+    val additionalUsers = loadProps("users").split(';').map{_.trim}
+    if (additionalUsers contains userName) {
+      logger info "found "+userName+" in additional users."
+      val userInfo = loadProps(userName).split(';').map{_.trim}
+      if (userInfo.length >= 3) {
+        if (userInfo(2) == md5SumString(passWord)) {
+          S.setSessionAttribute("fullname", userInfo(0))
+          S.setSessionAttribute("email", userInfo(1))
+          logger info "password is fine for "+userInfo(0)+
+                " <"+userInfo(1)+">"
+          return true
+        }
+      }
+    }
+    if (useLDAPAuth) {
+      tryLoginLDAP(userName, passWord)
+    }
     else {
       S.setSessionAttribute("fullname", userName)
       S.setSessionAttribute("email", "testuser@nonvalid")
       true
     }
+  }
+
+  // taken from http://code-redefined.blogspot.com/2009/05/md5-sum-in-scala.html
+  private def md5SumString(str: String) : String = {
+    import java.security.MessageDigest
+    val md5 = MessageDigest.getInstance("MD5")
+    md5.reset()
+    md5.update(str.getBytes)
+    md5.digest().map(0xFF & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
+  }
 
   /**
    * Trying to get auth from the LDAP
