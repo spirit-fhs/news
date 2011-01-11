@@ -84,23 +84,31 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
                     semester: String,
                     lifecycle: String) {
     val date = df.format(new java.util.Date)
-    val newNr = if(EntryCounter.findAll.isEmpty) "1" else EntryCounter.findAll.head.counter.toString
+    val newNr =
+      if (tweet && tweetUpdate)
+        if(EntryCounter.findAll.isEmpty) "1"
+        else EntryCounter.findAll.head.counter.toString
+      else oldNr
     Entry.find(oldEntry.asDBObject).open_!.delete_!
     logger info "Entry was deleted by " + User.currentUserId.openOr("")
     val entry = Entry.createRecord
-        entry.name.set( User.currentUserId.open_!.toString )
-        entry.subject.set( subject )
-        entry.news.set ( post )
-        entry.semester.set ( semester )
-        entry.writer.set ( S.getSessionAttribute("fullname").open_!.toString )
-        entry.date.set ( date )
-        entry.nr.set ( newNr )
-        entry.lifecycle.set ( lifecycle )
-        entry.save
+    entry.name.set( User.currentUserId.open_!.toString )
+    entry.subject.set( subject )
+    entry.news.set ( post )
+    entry.semester.set ( semester )
+    entry.writer.set ( S.getSessionAttribute("fullname").open_!.toString )
+    entry.date.set ( date )
+    entry.nr.set ( newNr )
+    entry.lifecycle.set ( lifecycle )
+    entry.save
 
-    val count = if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
-        count.counter.set( (newNr.toInt + 1).toString )
-        count.save
+    if (newNr != oldNr) {
+      val count =
+        if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord
+        else EntryCounter.findAll.head
+      count.counter.set( (newNr.toInt + 1).toString )
+      count.save
+    }
 
     logger debug "Semesters: " + semester
     logger info "Entry was created by " + User.currentUserId.openOr("")
