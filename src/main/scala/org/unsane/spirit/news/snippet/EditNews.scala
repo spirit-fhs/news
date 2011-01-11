@@ -105,7 +105,7 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
     logger debug "Semesters: " + semester
     logger info "Entry was created by " + User.currentUserId.openOr("")
     logger info "Entry was updated by " + User.currentUserId.openOr("")
-    // if (sendEmail) MailHandler.send(TextileParser.toHtml(post).toString, subject, semester split (" "))
+    if (sendEmail) MailHandler.send(TextileParser.toHtml(post).toString, subject, semester split (" "))
     if (tweet && tweetUpdate) Spreader ! Tweet("[Update] " + subject, semester.split(" ").map(" #"+_).mkString , newNr)
     S notice "Ihr update wurde gespeichert"
     S redirectTo "/index"
