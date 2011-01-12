@@ -40,23 +40,26 @@ import net.liftweb.http.S
 import net.liftweb.common.Loggable
 
 /**
- * Sending an email to the Array that will be given to send() and sends an email to the actual sender!
+ * Sending an email to the Array that will be given to send()
+ * and sends an email to the actual sender!
  */
 object MailHandler extends Loggable {
 
-  // TODO enhance context with FOOTER !!!!!!! before release!!!!!
-  lazy val footer = "<br><br><br>" +
-                  "----------------------------------------------------------<br>" +
-                  "Sent over FhS_Spirit!<br>" +
-                  "<a href=\"http://spirit.fh-schmalkalden.de/\">http://spirit.fh-schmalkalden.de/</a><br>" +
-                  "Follow @<a href=\"http://www.twitter.com/fhs_spirit\">FhS_Spirit</a> on Twitter<br>"
-                  "Visit <a href=\"http://www.facebook.com/pages/FhS-Spirit/171882629503842\">FhS Spirit</a> on Facebook<br>"
+  lazy val footer =
+    """<br><br><br>
+      |----------------------------------------------------------<br>
+      |Sent over FhS_Spirit!<br>
+      |<a href="http://spirit.fh-schmalkalden.de/">
+      |  http://spirit.fh-schmalkalden.de/</a><br>
+      |Follow @<a href="http://www.twitter.com/fhs_spirit">
+      |  FhS_Spirit</a> on Twitter<br>
+      |Visit <a href=http://www.facebook.com/fhs.spirit>
+      |  FhS Spirit</a> on Facebook<br>""".stripMargin
 
   /**
    * send takes the post and sends it to the receipients via email
    * @param context the actual post that was written
    * @param subject the subject of that post
-   * @todo Return value that gives notification if sending was good & add Mailing list Array
    */
   def send(context: String, subject: String, adresses: Array[String]) = {
     logger info User.currentUserId.open_! + " is using the email function!"
@@ -64,8 +67,6 @@ object MailHandler extends Loggable {
     val props = new Properties
     props.setProperty("mail.transport.protocol", "smtp")
     props.setProperty("mail.host", "smtp.fh-schmalkalden.de")
-    //props.setProperty("mail.user", "");
-    //props.setProperty("mail.password", "");
 
     val mailSession = Session.getDefaultInstance(props, null)
     val transport = mailSession.getTransport
@@ -74,17 +75,22 @@ object MailHandler extends Loggable {
     msg.setSubject(subjectMatcher(subject), "UTF-8")
     msg.setContent(context + footer, "text/html; charset=UTF-8")
 
-    adresses foreach { email =>
-      logger info "Sending to " + email
-      msg.addRecipient(Message.RecipientType.TO,new InternetAddress(email))
-    }
+    msg.addRecipients(Message.RecipientType.TO,
+       adresses map { email =>
+         logger info "Sending to " + email
+         new InternetAddress(email).asInstanceOf[javax.mail.Address]
+       })
 
-    msg.addRecipient(Message.RecipientType.TO,new InternetAddress(S.getSessionAttribute("email").open_!))
-    msg.setFrom(new InternetAddress(S.getSessionAttribute("email").open_!.toString, S.getSessionAttribute("fullname").open_!.toString))
+    msg.addRecipient(Message.RecipientType.CC,
+      new InternetAddress(S.getSessionAttribute("email").open_!))
+
+    msg.setFrom(new InternetAddress(S.getSessionAttribute("email").open_!.toString,
+                 S.getSessionAttribute("fullname").open_!.toString))
 
     try {
       transport.connect
       transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.TO))
+      transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.CC))
       transport.close
       logger info "email was sent successfully!"
       S notice "eMail wurde gesendet!"
