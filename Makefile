@@ -28,7 +28,9 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Pulling code from Github"
 	git pull origin master
 	@echo "==> Running SBT to package the code for deployment"
-	$(SBT_CMD) clean update compile prepare-webapp package
+	$(SBT_CMD) clean update compile prepare-webapp
+	rm target/scala_2.8.0/webapp/WEB-INF/lib/activation-1.1.jar
+	$(SBT_CMD) package
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
 	wget -N http://spiritdev.fh-schmalkalden.de/root.war
