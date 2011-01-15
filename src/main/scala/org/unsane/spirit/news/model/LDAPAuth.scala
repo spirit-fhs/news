@@ -46,7 +46,7 @@ trait LDAPAuth extends Loggable with Config {
       loadProps("UseLDAPAuth") == "yes"
   private val env = new Hashtable[String,String]
   private val userhome = System.getProperty("user.dir")
-  System.setProperty("javax.net.ssl.trustStore", userhome + "/fhstore")
+
 
   def tryLogin(userName: String, passWord: String) =
     if (useLDAPAuth) tryLoginLDAP(userName, passWord)
@@ -90,6 +90,7 @@ trait LDAPAuth extends Loggable with Config {
     env.put(Context.SECURITY_PROTOCOL, "SSL")
 
     try {
+      System.setProperty("javax.net.ssl.trustStore", userhome + "/sslstore")
       val ctx: DirContext = new InitialDirContext(env)
       if (ldapServer == "zefi") {
         val attrs: Attributes = ctx.getAttributes(dn)
@@ -104,8 +105,9 @@ trait LDAPAuth extends Loggable with Config {
       true
     } catch {
       case e: AuthenticationException =>
-        if (ldapServer == "ldap1")
+        if (ldapServer == "ldap1") {
           tryLoginLDAP(userName, passWord, "zefi")
+        }
         else {
           logger error e.printStackTrace.toString
           S error "Error: Bitte richtige FHS-ID und Passwort angeben"
@@ -114,6 +116,8 @@ trait LDAPAuth extends Loggable with Config {
         }
       case b: NamingException =>
         logger error b.printStackTrace.toString
+        logger error b.getExplanation
+        logger error b.getRootCause.getMessage
         S error "Error: I can't see LDAP, please contact a SPIRIT-Admin"
         S redirectTo "/user_mgt/login"
         false
