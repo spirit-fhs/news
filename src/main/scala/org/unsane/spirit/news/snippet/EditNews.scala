@@ -54,12 +54,12 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
 
   private val tweet = loadProps("Tweet") == "yes"
 
-  /** 
+  /**
    * Views the list of entries from the current user for editing or deleting them.
    */
   def view (xhtml : NodeSeq) : NodeSeq = {
     val news = Entry.findAll("name" -> User.currentUserId.open_!.toString)
-    
+
     news.flatMap(v =>
       <tr><td>{v.nr.value.toString}</td><td>{v.writer.value.toString}</td>
       <td>{v.subject.value.toString}</td><td>{v.date.value.toString.substring(4, 11) + ". " + v.date.value.toString.substring(17, 22)}</td>
@@ -69,7 +69,7 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
 
   /**
    * Takes the given parameters, searches for the entry with the given number and saves the new entry with new number.
-   * Would like to use old number, but we would have problem tweeting this with Twitter! 
+   * Would like to use old number, but we would have problem tweeting this with Twitter!
    * @param post the changed post
    * @param nr the entry number
    * @param subject the post subject
@@ -84,33 +84,42 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
                     semester: String,
                     lifecycle: String) {
     val date = df.format(new java.util.Date)
-    val newNr = if(EntryCounter.findAll.isEmpty) "1" else EntryCounter.findAll.head.counter.toString
+    val newNr =
+      if (tweet && tweetUpdate)
+        if(EntryCounter.findAll.isEmpty) "1"
+        else EntryCounter.findAll.head.counter.toString
+      else oldNr
     Entry.find(oldEntry.asDBObject).open_!.delete_!
     logger info "Entry was deleted by " + User.currentUserId.openOr("")
     val entry = Entry.createRecord
-        entry.name.set( User.currentUserId.open_!.toString )
-        entry.subject.set( subject )
-        entry.news.set ( post )
-        entry.semester.set ( semester )
-        entry.writer.set ( S.getSessionAttribute("fullname").open_!.toString )
-        entry.date.set ( date )
-        entry.nr.set ( newNr )
-        entry.lifecycle.set ( lifecycle )
-        entry.save
+    entry.name.set( User.currentUserId.open_!.toString )
+    entry.subject.set( subject )
+    entry.news.set ( post )
+    entry.semester.set ( semester )
+    entry.writer.set ( S.getSessionAttribute("fullname").open_!.toString )
+    entry.date.set ( date )
+    entry.nr.set ( newNr )
+    entry.lifecycle.set ( lifecycle )
+    entry.save
 
-    val count = if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
-        count.counter.set( (newNr.toInt + 1).toString )
-        count.save
+    if (newNr != oldNr) {
+      val count =
+        if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord
+        else EntryCounter.findAll.head
+      count.counter.set( (newNr.toInt + 1).toString )
+      count.save
+    }
 
     logger debug "Semesters: " + semester
     logger info "Entry was created by " + User.currentUserId.openOr("")
     logger info "Entry was updated by " + User.currentUserId.openOr("")
-    if (sendEmail) MailHandler.send(TextileParser.toHtml(post).toString, subject, semester split (" "))
+    if (sendEmail) MailHandler.send(TextileParser.toHtml(post).toString,
+      "[Update] " + subject, loadEmails(semester split (" ")))
     if (tweet && tweetUpdate) Spreader ! Tweet("[Update] " + subject, semester.split(" ").map(" #"+_).mkString , newNr)
     S notice "Ihr update wurde gespeichert"
     S redirectTo "/index"
   }
-  
+
   /**
    * Searches for the entry with the given number an deletes the post
    * @param Entry
@@ -161,7 +170,7 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
   }
 
   /**
-   * Creates the view for validating the deletion of an entry 
+   * Creates the view for validating the deletion of an entry
    */
   def confirmDelete(xhtml: Node): NodeSeq = {
     try {

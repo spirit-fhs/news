@@ -70,7 +70,8 @@ class SemSearcher extends SpiritHelpers with Config with Loggable {
         news.flatMap(entry =>
           bind("entry", xhtml,
 	          "writer" -> entry.writer.value.toString,
-            "subject" -> entry.subject.value.toString,
+            "subject" -> <a href={"/entry/"+entry.nr.value.toString}>
+                 {entry.subject.value.toString}</a>,
             "nr" -> entry.nr.value.toString,
             "lifecycle" -> entry.lifecycle.value.toString,
             "date" -> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)),

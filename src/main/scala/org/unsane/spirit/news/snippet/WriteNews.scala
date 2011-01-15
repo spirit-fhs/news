@@ -37,9 +37,6 @@ import scala.xml.{XML, NodeSeq}
 import net.liftweb.util.Helpers._
 import net.liftweb.http._
 import S._
-import js._
-import JsCmds._
-import JE._
 
 import net.liftweb.http.SHtml._
 import net.liftweb.textile._
