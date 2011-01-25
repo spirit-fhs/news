@@ -37,6 +37,7 @@ import scala.xml._
 import net.liftweb.util.Helpers._
 import net.liftweb.textile._
 import model.Entry
+import net.liftweb.common.Loggable
 
 /**
  * @author Marcus Denison
@@ -52,13 +53,19 @@ object ViewNews {
   }
 }
 
-class ViewNews extends SpiritHelpers {
+class ViewNews extends SpiritHelpers with Loggable {
 
   /**
    * Binds all entries!
    */
   def view (xhtml : NodeSeq) : NodeSeq = {
     val news2 = Entry.findAll.reverse
+
+    logger info news2.toString
+
+    news2 foreach { current =>
+      logger info (current.nr.value.toString)
+    }
     
     news2.flatMap(entry =>
       bind("entry", xhtml,
