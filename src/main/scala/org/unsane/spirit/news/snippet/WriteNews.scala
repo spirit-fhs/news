@@ -47,8 +47,6 @@ import java.text._
 import model._
 import scala.xml._
 
-
-
 /**
  * WriteNews lets you write entries and send them directly to the FhS mailinglists via SPIRIT.
  * @author Marcus Denison
@@ -90,10 +88,6 @@ class WriteNews extends Loggable with Config with SpiritHelpers with EntryPrevie
   bind("form", xhtml,
     "subject" -> text("", subject = _, "cols" -> "80"),
     "date" -> text(todayText format today, lifecycle = _, "cols" -> "80", "id" -> "datepicker"),
-    // Next three lines might be depreceated!!!!
-    //"day" -> text(day format today, lifecycle += _ + ".", "size" -> "2"),
-    //"month" -> text(month format today, lifecycle += _ + ".", "size" -> "2"),
-    //"year" -> text(year format today, lifecycle += _, "size" -> "4"),
     "email" -> checkbox(false, if (_) sendEmail = true),
     "textarea" -> textarea("", news = _, "rows" -> "12", "cols" -> "80", "style" -> "width:100%", "id" -> "entry"),
     "submit" -> submit("Senden",
@@ -104,58 +98,9 @@ class WriteNews extends Loggable with Config with SpiritHelpers with EntryPrevie
       semester)))
   }
 
-  /**
-   * Builds the CheckboxList.
-   * @todo need to build it a little different so the View is more flexible
-   */
-  def makeBaICheckboxList(xhtml: NodeSeq): NodeSeq = {
-    loadSemesters("BaI") flatMap { sem =>
-      bind("BaI", xhtml,
-        "label" -> sem,
-        "checkbox" -> checkbox(false, if (_) semester += sem + " ")
-      )
-    }
-  }
-
-  def makeBaWICheckboxList (xhtml: NodeSeq): NodeSeq = {
-    loadSemesters("BaWI") flatMap { sem =>
-      bind("BaWI", xhtml,
-        "label" -> sem,
-        "checkbox" -> checkbox(false, if (_) semester += sem + " ")
-      )
-    }
-  }
-
-  def makeMuMaCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    loadSemesters("BaMuMa") flatMap { sem =>
-      bind("MuMa", xhtml,
-        "label" -> sem,
-        "checkbox" -> checkbox(false, if (_) semester += sem + " ")
-      )
-    }
-  }
-
-  def makeITSCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    loadSemesters("BaITS") flatMap { sem =>
-      bind("ITS", xhtml,
-        "label" -> sem,
-        "checkbox" -> checkbox(false, if (_) semester += sem + " ")
-      )
-    }
-  }
-
-  def makeMaCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    loadSemesters("Ma") flatMap { sem =>
-      bind("Ma", xhtml,
-        "label" -> sem,
-        "checkbox" -> checkbox(false, if (_) semester += sem + " ")
-      )
-    }
-  }
-
-  def makeOtherCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    loadSemesters("Other") flatMap { sem =>
-      bind("Other", xhtml,
+  def makeCheckboxList(xhtml: NodeSeq): NodeSeq = {
+    loadSemesters(S.attr("semester").open_!) flatMap { sem =>
+      bind("List", xhtml,
         "label" -> sem,
         "checkbox" -> checkbox(false, if (_) semester += sem + " ")
       )
