@@ -61,8 +61,8 @@ class SemSearcher extends SpiritHelpers with Config with Loggable {
       }
 
       logger info ("Searching for " + S.param("semsearch").openOr("empty") + "!")
-      val news = Entry.findAll.reverse.filter { x =>
-          x.semester.toString.split(" ").contains(S.param("semsearch").openOr(("NOT"))) || x.semester.toString.split(" ").contains("semester")
+      val news = Entry.findAll.reverse.filter { entry =>
+        entry.contains(S.param("semsearch").open_!) || entry.contains("semester")
       }
 
       if (news.isEmpty) S redirectTo ("/index")

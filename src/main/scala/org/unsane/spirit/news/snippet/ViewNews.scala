@@ -39,7 +39,6 @@ import net.liftweb.textile._
 import model.Entry
 import net.liftweb.common.Loggable
 
-
 /**
  * @author Marcus Denison
  */
@@ -61,7 +60,7 @@ class ViewNews extends SpiritHelpers with Loggable {
    */
   def view (xhtml : NodeSeq) : NodeSeq = {
     val news2 = Entry.findAll.sortWith(
-      (e1, e2) => (e1.nr.value.toInt > e2.nr.value.toInt)
+      (entry1, entry2) => (entry1 > entry2)
     )
 
     logger info news2.toString

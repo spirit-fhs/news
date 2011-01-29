@@ -58,7 +58,9 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
    * Views the list of entries from the current user for editing or deleting them.
    */
   def view (xhtml : NodeSeq) : NodeSeq = {
-    val news = Entry.findAll("name" -> User.currentUserId.open_!.toString)
+    val news = Entry.findAll("name" -> User.currentUserId.open_!.toString).sortWith(
+      (entry1, entry2) => (entry1 > entry2)
+    )
 
     news.flatMap(v =>
       <tr><td>{v.nr.value.toString}</td><td>{v.writer.value.toString}</td>
@@ -195,62 +197,67 @@ class EditNews extends Loggable with SpiritHelpers with Config with EntryPreview
    * @todo need to build it a little different so the View is more flexible
    */
   def makeBaICheckboxList(xhtml: NodeSeq): NodeSeq = {
-    val semester = CurrentEntry.open_!.semester.value.toString.split(" ")
+    val entry = CurrentEntry.open_!
     loadSemesters("BaI") flatMap { sem =>
-      println(semester.mkString(" ") + " : " + sem)
       bind("BaI", xhtml,
         "label" -> sem,
-        if(semester.contains(sem)) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ") else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
+        if(entry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
+        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
       )
     }
   }
 
   def makeBaWICheckboxList (xhtml: NodeSeq): NodeSeq = {
-    val semester = CurrentEntry.open_!.semester.value.toString.split(" ")
+    val entry = CurrentEntry.open_!
     loadSemesters("BaWI") flatMap { sem =>
       bind("BaWI", xhtml,
         "label" -> sem,
-        if(semester.contains(sem)) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ") else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
+        if(entry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
+        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
       )
     }
   }
 
   def makeMuMaCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    val semester = CurrentEntry.open_!.semester.value.toString.split(" ")
+    val entry = CurrentEntry.open_!
     loadSemesters("BaMuMa") flatMap { sem =>
       bind("MuMa", xhtml,
         "label" -> sem,
-        if(semester.contains(sem)) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ") else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
+        if(entry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
+        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
       )
     }
   }
 
   def makeITSCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    val semester = CurrentEntry.open_!.semester.value.toString.split(" ")
+    val entry = CurrentEntry.open_!
     loadSemesters("BaITS") flatMap { sem =>
       bind("ITS", xhtml,
         "label" -> sem,
-        if(semester.contains(sem)) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ") else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
+        if(entry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
+        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
       )
     }
   }
 
   def makeMaCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    val semester = CurrentEntry.open_!.semester.value.toString.split(" ")
+    val entry = CurrentEntry.open_!
     loadSemesters("Ma") flatMap { sem =>
       bind("Ma", xhtml,
         "label" -> sem,
-        if(semester.contains(sem)) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ") else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
+        if(entry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
+        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
       )
     }
   }
 
   def makeOtherCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    val semester = CurrentEntry.open_!.semester.value.toString.split(" ")
+    val entry = CurrentEntry.open_!
     loadSemesters("Other") flatMap { sem =>
       bind("Other", xhtml,
         "label" -> sem,
-        if(semester.contains(sem)) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ") else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
+        if(entry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
+        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
       )
     }
   }

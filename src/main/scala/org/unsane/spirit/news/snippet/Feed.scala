@@ -48,7 +48,9 @@ object Feed {
 class Feed {
 
 	// latest messages first
-	def news = Entry.findAll.reverse
+	def news = Entry.findAll.sortWith(
+    (entry1, entry2) => (entry1 > entry2)
+  )
 	def url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
 
   def semesterChanger(input: String): String = {
