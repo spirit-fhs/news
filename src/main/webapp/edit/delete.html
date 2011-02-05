@@ -1,11 +1,10 @@
 <lift:surround with="default" at="content">
 		<h2>Confirm Delete!</h2>
-		<lift:EditNews.confirmDelete form="POST">
-			Verfasser : <test:verfasser /><br /> 
-			Nr: <test:Nr /><br />
-			Betreff : <test:subject /><br />			
-			News: <test:textarea /><br />
-			<test:submit />
-		</lift:EditNews.confirmDelete>
+		<lift:CRUDEntry.delete form="POST">
+			Verfasser : <del:verfasser /><br />
+			Nr: <del:Nr /><br />
+			Betreff : <del:subject /><br />
+			News: <del:textarea /><br />
+			<del:submit /><del:cancel />
+		</lift:CRUDEntry.delete>
 </lift:surround>
-

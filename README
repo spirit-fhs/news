@@ -43,3 +43,11 @@ $ sbt
 
 Then open http://localhost:8080/ in your favourite browser.
 
+Testing:
+
+$ sbt
+> test
+
+This will run the Specs from NewsSpec.scala, you will need a running MongoDB for them. 
+Please be aware that this test will drop the Databases for Spirit-News when it is done.
+

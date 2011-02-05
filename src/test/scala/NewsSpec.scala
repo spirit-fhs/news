@@ -32,57 +32,109 @@
  */
 package org.unsane.spirit.news
 
-import org.specs.Specification
-import model.Config
+import org.specs._
+import model._
+import snippet._
+import net.liftweb.http.{S, LiftSession}
+import net.liftweb.mapper.BaseMetaMapper
+import net.liftweb.util._
+import net.liftweb.common._
+import net.liftweb.mongodb._
+import specification.Contexts
 
-object NewsSpec extends Specification with Config {
 
-  "Spirit News" should {
-    "loadEmails config correctly" in {
-      val I = loadEmails(Array("I1", "I2", "I3", "I4", "I5", "I6"))
-      val WI = loadEmails(Array("WI1", "WI2", "WI3", "WI4", "WI5", "WI6"))
-      val MM = loadEmails(Array("MM6", "MM5", "MM4", "MM3", "MM2", "MM1"))
-      val IS = loadEmails(Array("IS1", "IS2", "IS3", "IS4", "IS5", "IS6"))
-      val MAI = loadEmails(Array("MAI1", "MAI2", "MAI3", "MAI4"))
-      val others = loadEmails(Array("semester", "alte_semester", "alte_i", "alte_wi"))
+object NewsSpec extends Specification with Config with Contexts {
 
-      others(0).mustEqual("semester@informatik.fh-schmalkalden.de")
-      others(1).mustEqual("alte_semester@informatik.fh-schmalkalden.de")
-      others(2).mustEqual("alte_i@informatik.fh-schmalkalden.de")
-      others(3).mustEqual("alte_wi@informatik.fh-schmalkalden.de")
-      
-      I(0).mustEqual("I1@informatik.fh-schmalkalden.de")
-      I(1).mustEqual("I2@informatik.fh-schmalkalden.de")
-      I(2).mustEqual("I3@informatik.fh-schmalkalden.de")
-      I(3).mustEqual("I4@informatik.fh-schmalkalden.de")
-      I(4).mustEqual("I5@informatik.fh-schmalkalden.de")
-      I(5).mustEqual("I6@informatik.fh-schmalkalden.de")
+  /* Defining our Database for Testing */
+  MongoDB.defineDbAuth(DefaultMongoIdentifier,
+    MongoAddress(MongoHost("127.0.0.1", 27017), "spirit_news"),
+    "spirit_news",
+    "spirit_news")
 
-      WI(5).mustEqual("WI6@informatik.fh-schmalkalden.de")
-      WI(4).mustEqual("WI5@informatik.fh-schmalkalden.de")
-      WI(3).mustEqual("WI4@informatik.fh-schmalkalden.de")
-      WI(2).mustEqual("WI3@informatik.fh-schmalkalden.de")
-      WI(1).mustEqual("WI2@informatik.fh-schmalkalden.de")
-      WI(0).mustEqual("WI1@informatik.fh-schmalkalden.de")
+  /* Line 54 - 81 is from the Lift Wiki! https://www.assembla.com/wiki/show/liftweb/Unit_Testing_Snippets_With_A_Logged_In_User! THANKS!*/
+  val session = new LiftSession("", StringHelpers.randomString(20), Empty)
 
-      MM(5).mustEqual("MM1@informatik.fh-schmalkalden.de")
-      MM(4).mustEqual("MM2@informatik.fh-schmalkalden.de")
-      MM(3).mustEqual("MM3@informatik.fh-schmalkalden.de")
-      MM(2).mustEqual("MM4@informatik.fh-schmalkalden.de")
-      MM(1).mustEqual("MM5@informatik.fh-schmalkalden.de")
-      MM(0).mustEqual("MM6@informatik.fh-schmalkalden.de")
+  def inSession(a: => Any) = {
+    S.initIfUninitted(session) { a }
+  }
 
-      IS(5).mustEqual("IS6@informatik.fh-schmalkalden.de")
-      IS(4).mustEqual("IS5@informatik.fh-schmalkalden.de")
-      IS(3).mustEqual("IS4@informatik.fh-schmalkalden.de")
-      IS(2).mustEqual("IS3@informatik.fh-schmalkalden.de")
-      IS(1).mustEqual("IS2@informatik.fh-schmalkalden.de")
-      IS(0).mustEqual("IS1@informatik.fh-schmalkalden.de")
+  def loginUser = inSession {
+    User.logUserIdIn("SpecUser")
+  }
 
-      MAI(0).mustEqual("MAI1@informatik.fh-schmalkalden.de")
-      MAI(1).mustEqual("MAI2@informatik.fh-schmalkalden.de")
-      MAI(2).mustEqual("MAI3@informatik.fh-schmalkalden.de")
-      MAI(3).mustEqual("MAI4@informatik.fh-schmalkalden.de")
+  /* Defining what we'll do before and after an example.*/
+  new SpecContext {
+    beforeExample {
+      val count = if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
+      count.counter.set( "0" )
+      count.save
+      Entry.findAll.foreach(_.delete_!)
+      loginUser
+    }
+    afterExample {
+     val count = if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
+     count.counter.set( "0" )
+     count.save
+     Entry.findAll.foreach(_.delete_!)
+    }
+    aroundExpectations(inSession(_))
+  }
+
+  "CrudEntry" should {
+    val CrudCreate = new CRUDEntry
+    CrudCreate.CrudEntry.lifecycle.set("10.10.2012")
+    CrudCreate.CrudEntry.news.set("Test News")
+    CrudCreate.CrudEntry.subject.set("NewsSpec")
+
+    val CrudUpdate = new CRUDEntry
+
+    "create and store one Entry." in {
+      CrudCreate.create()
+      Entry.findAll.filter(e =>
+        e.nr.value.toInt == (EntryCounter.findAll.head.counter.value.toInt - 1)
+      ).size mustEqual 1
+    }
+
+    "read all entries for the SpecsUser." in {
+      Entry.findAll.filter(e =>
+        e hasSameAuthor User.currentUserId.open_!
+      ).forall(_.name.value mustEqual User.currentUserId.open_!) mustBe true
+    }
+
+    "delete all entries from the SpecUser." in {
+      Entry.findAll.filter(e =>
+        e hasSameAuthor User.currentUserId.open_!
+      ).foreach(e => e.delete_!)
+
+      Entry.findAll.filter(e =>
+        e hasSameAuthor User.currentUserId.open_!
+      ).size mustEqual 0
+    }
+
+    "update an existing Entry with inc its number (Needed for Twitter)." in {
+      CrudCreate.create()
+
+      val oldEntry = Entry.findAll.head
+      val oldNr = oldEntry.nr.value.toInt + 1
+
+      CrudUpdate.CurrentEntry(Full(oldEntry))
+      CrudUpdate.tweetUpdate = true
+      CrudUpdate.update()
+
+      Entry.findAll.head.nr.value mustEqual oldNr.toString
+    }
+
+    "update an existing Entry without inc its number (If not Tweeting Update)." in {
+      CrudCreate.create()
+
+      val oldEntry = Entry.findAll.head
+      val oldNr = oldEntry.nr.value.toInt
+
+      CrudUpdate.CurrentEntry(Full(oldEntry))
+      CrudUpdate.tweetUpdate = false
+      CrudUpdate.update()
+
+      Entry.findAll.head.nr.value mustEqual oldNr.toString
     }
   }
 }

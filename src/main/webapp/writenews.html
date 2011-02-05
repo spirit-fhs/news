@@ -2,58 +2,58 @@
 
     
 	<h2>News schreiben</h2>
-	<lift:WriteNews.writeNews form ="POST">
+	<lift:CRUDEntry.view form ="POST">
 
 		Name:<br />  <lift:NewsSnippets.hello /> <br />
-		Verf&auml;llt am:<br /> <form:date /><br />
-		Betreff:<br />    <form:subject /><br />
+		Verf&auml;llt am:<br /> <CRUDView:date /><br />
+		Betreff:<br />    <CRUDView:subject /><br />
 		Semester:(Die Auswahl entspricht dem Aktuellen Mail Verteiler!)<br /> 
 
         <table style="table-layout:fixed" width="80%">
             <tr>
             <td style="width:5%">
-                <lift:WriteNews.makeCheckboxList semester="Other">
+                <lift:CRUDEntry.makeCheckboxList semester="Other">
                 <List:checkbox /> <List:label /><br/>
-                </lift:WriteNews.makeCheckboxList>
+                </lift:CRUDEntry.makeCheckboxList>
             </td>
             <td style="width:3%">
-                <lift:WriteNews.makeCheckboxList semester="BaI">
+                <lift:CRUDEntry.makeCheckboxList semester="BaI">
                 <List:checkbox /> <List:label /><br/>
-                </lift:WriteNews.makeCheckboxList>
+                </lift:CRUDEntry.makeCheckboxList>
             </td>
             <td style="width:3%">
-                <lift:WriteNews.makeCheckboxList semester="BaWI">
+                <lift:CRUDEntry.makeCheckboxList semester="BaWI">
                 <List:checkbox /> <List:label /><br/>
-                </lift:WriteNews.makeCheckboxList>
+                </lift:CRUDEntry.makeCheckboxList>
             </td>
             <td style="width:3%">
-                <lift:WriteNews.makeCheckboxList semester="BaMuMa">
+                <lift:CRUDEntry.makeCheckboxList semester="BaMuMa">
                 <List:checkbox /> <List:label /><br/>
-                </lift:WriteNews.makeCheckboxList>
+                </lift:CRUDEntry.makeCheckboxList>
             </td>
             <td style="width:3%">
-                <lift:WriteNews.makeCheckboxList semester="BaITS">
+                <lift:CRUDEntry.makeCheckboxList semester="BaITS">
                 <List:checkbox /> <List:label /><br/>
-                </lift:WriteNews.makeCheckboxList>
+                </lift:CRUDEntry.makeCheckboxList>
             </td>
             <td style="width:3%">
-                <lift:WriteNews.makeCheckboxList semester="Ma">
+                <lift:CRUDEntry.makeCheckboxList semester="Ma">
                 <List:checkbox /> <List:label /><br/>
-                </lift:WriteNews.makeCheckboxList>
+                </lift:CRUDEntry.makeCheckboxList>
             </td>
 
         </tr>
 </table>
     <hr />
-	<form:email />  E-Mail senden <br />
-	<table width="100%"><tr><td width="75%"><form:textarea /></td><td width="25%"><lift:NewsSnippets:code /></td></tr></table>
-     <form:submit />
+	<CRUDView:email />  E-Mail senden <br />
+	<table width="100%"><tr><td width="75%"><CRUDView:textarea /></td><td width="25%"><lift:NewsSnippets:code /></td></tr></table>
+     <CRUDView:submit />
      <br /><br />
-     </lift:WriteNews.writeNews>
+     </lift:CRUDEntry.view>
 
-     <lift:WriteNews.mkPreview>
+     <lift:CRUDEntry.mkPreview>
         <json:script/>
        <button json:onclick="onclick">Vorschau</button>
        <div id="entry_preview"></div>
-     </lift:WriteNews.mkPreview>
+     </lift:CRUDEntry.mkPreview>
 </lift:surround>
