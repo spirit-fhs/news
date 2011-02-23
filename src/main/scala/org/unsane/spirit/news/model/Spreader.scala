@@ -38,6 +38,7 @@ import twitter._
 import oauth._
 import scala.actors._
 import Http._
+import net.liftweb.common.Loggable
 
 /* This is one cool feature!
  * Spreader takes the Entry number, gets a TinyURL for this.
@@ -47,7 +48,7 @@ import Http._
 
 case class Tweet(subject: String, semester: String, number: String)
 
-object Spreader extends Actor with Config {
+object Spreader extends Actor with Config with Loggable {
   private val consumer = new Consumer(loadProps("Consumer"), loadProps("ConsumerSecret"))
   private val token = new Token(loadProps("Token"), loadProps("TokenSecret"))
 
@@ -74,7 +75,8 @@ object Spreader extends Actor with Config {
             val tinyurl = http(longUrl.as_str)
             http(Status.update(mkTweet(subject, tinyurl, semester), consumer, token).>|)
           } catch {
-            case e => e.printStackTrace
+            case e =>
+              logger error e.toString
           }
       }
     }

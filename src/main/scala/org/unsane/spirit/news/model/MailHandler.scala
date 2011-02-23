@@ -96,7 +96,7 @@ object MailHandler extends Loggable {
       S notice "eMail wurde gesendet!"
     } catch {
       case e =>
-        logger info e.toString
+        logger warn e.toString
         S error "Mail konnte nicht versendet werden! "
     }
 

@@ -50,6 +50,7 @@ import mongodb._
 class Boot extends Loggable with Config {
   def boot {
 
+
     val productive = loadProps("Productive") == "yes"
     val tweet = loadProps("Tweet") == "yes"
 
@@ -104,25 +105,25 @@ class Boot extends Loggable with Config {
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             Menu(Loc("Stundenplan", List("stundenplan", "index"), "Stundenplan" ),
-              Menu(Loc("Informatik", List("stundenplan", "BaI"), "BaI"),
+              Menu(Loc("Informatik", List("stundenplan", "BaI" + loadProps("Semester")), "BaI"),
                 Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0))),
-                Menu(Loc("Informatik_3", List("stundenplan", schedule_i(1)), schedule_i(1))),
-                Menu(Loc("Informatik_5", List("stundenplan", schedule_i(2)), schedule_i(2)))),
-              Menu(Loc("WInformatik", List("stundenplan", "BaWI"), "BaWI"),
+                Menu(Loc("Informatik_2", List("stundenplan", schedule_i(1)), schedule_i(1))),
+                Menu(Loc("Informatik_3", List("stundenplan", schedule_i(2)), schedule_i(2)))),
+              Menu(Loc("WInformatik", List("stundenplan", "BaWI" + loadProps("Semester")), "BaWI"),
                 Menu(Loc("WInformatik_1", List("stundenplan", schedule_wi(0)), schedule_wi(0))),
-                Menu(Loc("WInformatik_3", List("stundenplan", schedule_wi(1)), schedule_wi(1))),
-                Menu(Loc("WInformatik_5", List("stundenplan", schedule_wi(2)), schedule_wi(2)))),
-              Menu(Loc("Muma", List("stundenplan", "BaMM"), "BaMM"),
+                Menu(Loc("WInformatik_2", List("stundenplan", schedule_wi(1)), schedule_wi(1))),
+                Menu(Loc("WInformatik_3", List("stundenplan", schedule_wi(2)), schedule_wi(2)))),
+              Menu(Loc("Muma", List("stundenplan", "BaMM" + loadProps("Semester")), "BaMM"),
                 Menu(Loc("Muma_1", List("stundenplan", schedule_muma(0)), schedule_muma(0))),
-                Menu(Loc("Muma_3", List("stundenplan", schedule_muma(1)), schedule_muma(1))),
-                Menu(Loc("Muma_5", List("stundenplan", schedule_muma(2)), schedule_muma(2)))),
-              Menu(Loc("ITS", List("stundenplan", "BaIS"), "BaIS"),
+                Menu(Loc("Muma_2", List("stundenplan", schedule_muma(1)), schedule_muma(1))),
+                Menu(Loc("Muma_3", List("stundenplan", schedule_muma(2)), schedule_muma(2)))),
+              Menu(Loc("ITS", List("stundenplan", "BaIS" + loadProps("Semester")), "BaIS"),
                 Menu(Loc("ITS_1", List("stundenplan", schedule_its(0)), schedule_its(0))),
-                Menu(Loc("ITS_3", List("stundenplan", schedule_its(1)), schedule_its(1))),
-                Menu(Loc("ITS_5", List("stundenplan", schedule_its(2)), schedule_its(2)))),
-              Menu(Loc("Master", List("stundenplan", "MaI"), "MaI"),
+                Menu(Loc("ITS_2", List("stundenplan", schedule_its(1)), schedule_its(1))),
+                Menu(Loc("ITS_3", List("stundenplan", schedule_its(2)), schedule_its(2)))),
+              Menu(Loc("Master", List("stundenplan", "MaI" + loadProps("Semester")), "MaI"),
                 Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0))),
-                Menu(Loc("MA_3", List("stundenplan", schedule_ma(1)), schedule_ma(1))))) ::
+                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1))))) ::
             Menu(Loc("404", List("404"), "404", Hidden)) ::
             Menu(Loc("Groups", List("groups"), "Gruppen")) ::
             Menu(Loc("Blocks", List("blocks"), "Blöcke")) ::

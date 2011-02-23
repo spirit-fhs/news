@@ -101,9 +101,13 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
 
     logger info "Entry was created by " + User.currentUserId.openOr("")
     if(sendEmail && changedSemester.nonEmpty){
+      logger info "News should be sent via eMail!"
       MailHandler.send(TextileParser.toHtml(CrudEntry.news.value.toString).toString, CrudEntry.subject.value, loadEmails(changedSemester.split(" ")))
     }
-    if (tweet) Spreader ! Tweet(CrudEntry.subject.value, changedSemester.split(" ").map(" #"+_).mkString , nr)
+    if (tweet) {
+      logger info "News should be spread via Twitter!"
+      Spreader ! Tweet(CrudEntry.subject.value, changedSemester.split(" ").map(" #"+_).mkString , nr)
+    }
   }
 
   /**
@@ -185,8 +189,14 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
       "email" -> checkbox(false, if(_) sendEmail = true),
       if(newEntry) "twitter" -> ""
       else "twitter" -> checkbox(true, if(_) tweetUpdate = true),
-      if(newEntry) "submit" -> submit("Senden", () => { create(); S.redirectTo("/index") })
-      else "submit" -> submit("Update", () => { update(); S.redirectTo("/index") })
+      if(newEntry) "submit" -> submit("Senden", () => {
+        create()
+        S.redirectTo("/index")
+      })
+      else "submit" -> submit("Update", () => {
+        update()
+        S.redirectTo("/index")
+      })
     )
   }
 

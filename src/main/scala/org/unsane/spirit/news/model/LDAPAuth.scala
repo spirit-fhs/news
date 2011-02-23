@@ -95,7 +95,7 @@ trait LDAPAuth extends Loggable with Config {
      passWord: String,
      ldapServer: String = "ldap1"
   ): Boolean = {
-    logger info userName + " is trying to log into "+ldapServer+"!"
+    logger warn userName + " is trying to log into "+ldapServer+"!"
     val (ldapURL, dn) =
       if (ldapServer == "ldap1") {
         ("ldaps://ldap1.fh-schmalkalden.de:636"
