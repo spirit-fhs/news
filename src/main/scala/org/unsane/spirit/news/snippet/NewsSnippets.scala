@@ -55,18 +55,20 @@ class NewsSnippets {
   def code = {
     <span>
       <table>
-        <tr><td><strong>Formatierung:</strong>
-		    <br />**bold text**
-		    <br />__italic text__
-		    <br />*_  bold italic text  _*
-		    <br />{"%{color:red}Text in red %"}
-        <br /><strong>Aufz&auml;hlung:</strong>
-		    <br />* bulleted list
-		    <br />
-		    <br />* bulleted list
-		    <br />** 2-level
-        <br /><strong>Links:</strong>
-        <br />"Link to FhS": http://www.fh-schmalkalden.de</td></tr>
+        <tr>
+          <td style="border:0"><strong>Formatierung:</strong>
+		      <br />**bold text**
+		      <br />__italic text__
+		      <br />*_  bold italic text  _*
+		      <br />{"%{color:red}Text in red %"}
+          <br /><strong>Aufz&auml;hlung:</strong>
+		      <br />* bulleted list
+		      <br />
+		      <br />* bulleted list
+		      <br />** 2-level
+          <br /><strong>Links:</strong>
+          <br />"Link to FhS": http://www.fh-schmalkalden.de</td>
+        </tr>
       </table>
     </span>
   }

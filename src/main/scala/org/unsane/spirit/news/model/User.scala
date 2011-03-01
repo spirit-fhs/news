@@ -70,10 +70,10 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
       <h3>{"Derzeit ist der Login nur für Mitarbeiter!"}</h3>
       <form method="post" action={S.uri} name="login">
       <table>
-        <tr><td colspan="2">{S.??("log.in")}</td></tr>
-        <tr><td>{S.??("FHS-ID")}</td><td><user:user /></td></tr>
-        <tr><td>{S.??("password")}</td><td><user:password /></td></tr>
-        <tr><td><user:submit /></td></tr>
+        <tr><td style="border:0;colspan:2">{S.??("log.in")}</td></tr>
+        <tr><td style="border:0">{S.??("FHS-ID")}</td><td style="border:0"><user:user /></td></tr>
+        <tr><td style="border:0">{S.??("password")}</td><td style="border:0"><user:password /></td></tr>
+        <tr><td style="border:0"><user:submit /></td></tr>
       </table>
       </form>
       <script type="text/javascript" language="JavaScript">

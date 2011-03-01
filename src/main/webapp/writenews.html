@@ -9,34 +9,34 @@
 		Betreff:<br />    <CRUDView:subject /><br />
 		Semester:(Die Auswahl entspricht dem Aktuellen Mail Verteiler!)<br /> 
 
-        <table style="table-layout:fixed" width="80%">
+        <table style="table-layout:fixed;border:0" width="80%">
             <tr>
-            <td style="width:5%">
+            <td style="width:5%;border:0">
                 <lift:CRUDEntry.makeCheckboxList semester="Other">
                 <List:checkbox /> <List:label /><br/>
                 </lift:CRUDEntry.makeCheckboxList>
             </td>
-            <td style="width:3%">
+            <td style="width:3%;border:0">
                 <lift:CRUDEntry.makeCheckboxList semester="BaI">
                 <List:checkbox /> <List:label /><br/>
                 </lift:CRUDEntry.makeCheckboxList>
             </td>
-            <td style="width:3%">
+            <td style="width:3%;border:0">
                 <lift:CRUDEntry.makeCheckboxList semester="BaWI">
                 <List:checkbox /> <List:label /><br/>
                 </lift:CRUDEntry.makeCheckboxList>
             </td>
-            <td style="width:3%">
+            <td style="width:3%;border:0">
                 <lift:CRUDEntry.makeCheckboxList semester="BaMuMa">
                 <List:checkbox /> <List:label /><br/>
                 </lift:CRUDEntry.makeCheckboxList>
             </td>
-            <td style="width:3%">
+            <td style="width:3%;border:0">
                 <lift:CRUDEntry.makeCheckboxList semester="BaITS">
                 <List:checkbox /> <List:label /><br/>
                 </lift:CRUDEntry.makeCheckboxList>
             </td>
-            <td style="width:3%">
+            <td style="width:3%;border:0">
                 <lift:CRUDEntry.makeCheckboxList semester="Ma">
                 <List:checkbox /> <List:label /><br/>
                 </lift:CRUDEntry.makeCheckboxList>
@@ -46,7 +46,12 @@
 </table>
     <hr />
 	<CRUDView:email />  E-Mail senden <br />
-	<table width="100%"><tr><td width="75%"><CRUDView:textarea /></td><td width="25%"><lift:NewsSnippets:code /></td></tr></table>
+	<table style="table-layout:fixed;width:100%;border=0">
+      <tr>
+        <td style="width:75%;border:0"><CRUDView:textarea /></td>
+        <td style="width:25%;border:0"><lift:NewsSnippets:code /></td>
+      </tr>
+    </table>
      <CRUDView:submit />
      <br /><br />
      </lift:CRUDEntry.view>

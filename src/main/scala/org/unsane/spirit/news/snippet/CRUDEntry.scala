@@ -76,11 +76,14 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     Entry.findAll("name" -> User.currentUserId.open_!.toString).sortWith(
       (entry1, entry2) => (entry1 > entry2)
     ).flatMap(v =>
-      <tr><td>{v.nr.value.toString}</td><td>{v.writer.value.toString}</td>
-      <td>{v.subject.value.toString}</td><td>{v.date.value.toString.substring(4, 11) + ". " +
-                                              v.date.value.toString.substring(17, 22)}</td>
-      <td>{link("/edit/edit", () => CurrentEntry(Full(v)), Text("Edit"))}</td>
-      <td>{link("/edit/delete", () => CurrentEntry(Full(v)), Text("Delete"))}</td></tr> )
+      <tr>
+        <td style="border:0">{v.nr.value.toString}</td>
+        <td style="border:0">{v.writer.value.toString}</td>
+        <td style="border:0">{v.subject.value.toString}</td>
+        <td style="border:0">{v.date.value.toString.substring(4, 11) + ". " + v.date.value.toString.substring(17, 22)}</td>
+        <td style="border:0">{link("/edit/edit", () => CurrentEntry(Full(v)), Text("Edit"))}</td>
+        <td style="border:0">{link("/edit/delete", () => CurrentEntry(Full(v)), Text("Delete"))}</td>
+      </tr>)
   }
 
   /**

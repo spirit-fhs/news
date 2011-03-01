@@ -32,7 +32,6 @@ package org.unsane.spirit.news.model
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import org.unsane.spirit.news.model.Entry
 import java.util._
 import java.text._
 
