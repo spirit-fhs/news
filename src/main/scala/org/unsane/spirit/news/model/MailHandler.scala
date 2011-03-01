@@ -92,12 +92,13 @@ object MailHandler extends Loggable {
       transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.TO))
       transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.CC))
       transport.close
-      logger info "email was sent successfully!"
+      logger info "Mail was sent successfully!"
       S notice "eMail wurde gesendet!"
     } catch {
       case e =>
-        logger warn e.toString
-        S error "Mail konnte nicht versendet werden! "
+        logger warn "Mail was not sent correctly!"
+        logger warn e.printStackTrace.toString
+        S error "eMail konnte nicht versendet werden! "
     }
 
   }
@@ -107,7 +108,7 @@ object MailHandler extends Loggable {
    * @param subject
    * @return String
    */
-  private def subjectMatcher(subject: String): String = subject match{
+  private def subjectMatcher(subject: String): String = subject match {
     case "" => "Neuigkeiten auf SPIRIT!"
     case _ => subject
   }

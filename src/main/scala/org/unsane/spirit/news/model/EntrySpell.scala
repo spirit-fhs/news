@@ -1,3 +1,5 @@
+package org.unsane.spirit.news.model
+
 /**
  * Copyright (c) 2010 spirit-fhs
  *
@@ -30,8 +32,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.unsane.spirit.news.snippet
-
 import org.unsane.spirit.news.model.Entry
 import java.util._
 import java.text._

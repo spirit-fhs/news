@@ -200,5 +200,4 @@ trait LDAPAuth extends Loggable with Config {
     else // zefi
       getAttrVal("displayName")
   }
-
 }

@@ -47,9 +47,9 @@ object ViewNews {
   /**
    * semesterChanger is only changing the output from semester -> Alle, cause it looks nicer on the webpage! 
    */
-  def semesterChanger(input: String): String = {
-    if(input.startsWith("semester ")) { "Alle" }
-    else { input }
+  def semesterChanger(input: String): String = input match {
+    case semester if(semester startsWith "semester ") => "Alle"
+    case _ => input
   }
 }
 
@@ -59,17 +59,9 @@ class ViewNews extends SpiritHelpers with Loggable {
    * Binds all entries!
    */
   def view (xhtml : NodeSeq) : NodeSeq = {
-    val news2 = Entry.findAll.sortWith(
+    Entry.findAll.sortWith(
       (entry1, entry2) => (entry1 > entry2)
-    )
-
-    logger info news2.toString
-
-    news2 foreach { current =>
-      logger info (current.nr.value.toString)
-    }
-
-    news2.flatMap(entry =>
+    ).flatMap(entry =>
       bind("entry", xhtml,
 	      "writer" -> entry.writer.value.toString,
         "subject" -> <a href={"/entry/"+entry.nr.value.toString}>

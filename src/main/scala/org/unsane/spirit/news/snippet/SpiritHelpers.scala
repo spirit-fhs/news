@@ -67,7 +67,6 @@ trait SpiritHelpers {
     Entry.findAll.filter(i => formatter.parse(i.lifecycle.value.toString).before(today))
             .foreach {
             o => o.delete_!
-            println(o.lifecycle.toString)
             }
   }
 

@@ -48,6 +48,8 @@ import model._
 
 class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPreview {
 
+  object CurrentEntry extends RequestVar[Box[Entry]](Empty)
+
   /**
    * CrudEntry is either a new Entry or a an existing Entry to be Updated!
    */
@@ -164,7 +166,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
       )
     } catch {
       case e =>
-        logger info e.printStackTrace.toString
+        logger warn e.printStackTrace.toString
         S notice "You shouldn't do this!"
         S redirectTo "/index"
     }
@@ -215,8 +217,6 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   }
 
   var tweetUpdate = false
-  object CurrentEntry extends RequestVar[Box[Entry]](Empty)
-
   private lazy val date = df.format(new Date)
   private val lifecycleFormat = new SimpleDateFormat ("dd.MM.yyyy")
   private var sendEmail = false

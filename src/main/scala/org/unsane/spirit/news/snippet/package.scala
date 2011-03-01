@@ -32,8 +32,7 @@
  */
 package org.unsane.spirit.news
 
-import model.Entry
-import snippet.EntrySpell
+import model.{ Entry, EntrySpell }
 
 package object snippet {
 

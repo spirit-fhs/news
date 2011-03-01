@@ -18,7 +18,8 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
     "junit" % "junit" % "4.5" % "test->default",
     "org.scala-tools.testing" %% "specs" % "1.6.7" % "test->default",
     "org.mockito" % "mockito-all" % "1.8.0" % "test",
-    "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default"
-
+    "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default",
+    "ch.qos.logback" % "logback-classic" % "0.9.26"
   ) ++ super.libraryDependencies
 }
+
