@@ -53,6 +53,7 @@ class Boot extends Loggable with Config {
 
     val productive = loadProps("Productive") == "yes"
     val tweet = loadProps("Tweet") == "yes"
+    val showschedule = loadProps("ShowSchedule") == "yes"
 
     // Opens connection to MongoDB with user/pass "spirit_news"
     MongoDB.defineDbAuth(DefaultMongoIdentifier,
@@ -100,10 +101,8 @@ class Boot extends Loggable with Config {
     val schedule_ma = loadSchedule("MA")
 
     // TODO Build Menu some different way, a cleaner way!?
-    val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home")) ::
-            Menu(Loc("Feed", List("feed"), "feed", Hidden )) ::
-            Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
-            Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
+    lazy val schedule: Menu = {
+          if(showschedule) {
             Menu(Loc("Stundenplan", List("stundenplan", "index"), "Stundenplan" ),
               Menu(Loc("Informatik", List("stundenplan", "BaI" + loadProps("Semester")), "BaI"),
                 Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0))),
@@ -123,10 +122,34 @@ class Boot extends Loggable with Config {
                 Menu(Loc("ITS_3", List("stundenplan", schedule_its(2)), schedule_its(2)))),
               Menu(Loc("Master", List("stundenplan", "MaI" + loadProps("Semester")), "MaI"),
                 Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0))),
-                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1))))) ::
-            Menu(Loc("404", List("404"), "404", Hidden)) ::
-            Menu(Loc("Groups", List("groups"), "Gruppen")) ::
-            Menu(Loc("Blocks", List("blocks"), "Blöcke")) ::
+                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1)))))
+            } else {
+              Menu(Loc("Stundenplan", List("stundenplan", "na"), "Stundenplan" ))
+            }
+    }
+
+    lazy val groups: Menu = {
+            if(showschedule)
+              Menu(Loc("Groups", List("groups"), "Gruppen"))
+            else
+              Menu(Loc("Groups", List("stundenplan", "na"), "Gruppen"))
+    }
+
+    lazy val blocks: Menu = {
+            if(showschedule)
+              Menu(Loc("Blocks", List("blocks"), "Blöcke"))
+            else
+              Menu(Loc("Blocks", List("stundenplan", "na"), "Blocks"))
+    }
+
+
+    val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home")) ::
+            Menu(Loc("Feed", List("feed"), "feed", Hidden )) ::
+            Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
+            Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
+            schedule ::
+            groups ::
+            blocks ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
@@ -136,6 +159,8 @@ class Boot extends Loggable with Config {
               User.sitemap
             else
               User.sitemap)
+
+
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
     DayChecker.start()
