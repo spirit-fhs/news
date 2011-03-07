@@ -86,14 +86,14 @@ trait SpiritHelpers {
         date
       } else {
         val returnDate = checkDate.format(exceptionDate.getTime + 1209600000)
-        S notice "Ihr Datum war vor dem Heutigen, der Beitrag wird in 14 Tagen gelöscht!"
+        S warning "Ihr Datum war vor dem Heutigen, der Beitrag wird in 14 Tagen gelöscht!"
         returnDate
       }
         
     } catch {
         case pe: java.text.ParseException => pe
           val returnDate = checkDate.format(exceptionDate.getTime + 1209600000)
-          S notice "Ihr Beitrag verfaellt aumatisch in 14 Tagen, da das Datum nicht gültig war!"
+          S warning "Ihr Beitrag verfaellt aumatisch in 14 Tagen, da das Datum nicht gültig war!"
           returnDate
       }
       

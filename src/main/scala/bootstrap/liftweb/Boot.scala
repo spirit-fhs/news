@@ -68,7 +68,6 @@ class Boot extends Loggable with Config {
       case "blueprint" :: _ => true
     }
 
-    LiftRules.noticesAutoFadeOut.default.set((noticeType: NoticeType.Value) => Full((4 seconds, 4 seconds)))
     LiftRules.addToPackages("org.unsane.spirit.news")
     LiftRules.dispatch.prepend(NamedPF("Login Validation") {
       case Req("login_required" :: page , extension, _)
