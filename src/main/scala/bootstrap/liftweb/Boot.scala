@@ -121,34 +121,22 @@ class Boot extends Loggable with Config {
                 Menu(Loc("ITS_3", List("stundenplan", schedule_its(2)), schedule_its(2)))),
               Menu(Loc("Master", List("stundenplan", "MaI" + loadProps("Semester")), "MaI"),
                 Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0))),
-                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1)))))
+                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1)))),
+              Menu(Loc("Groups", List("groups"), "Gruppen")),
+              Menu(Loc("Blocks", List("blocks"), "Blöcke")),
+              Menu(Loc("Abkuerzungen", List("stundenplan", "abkuerzungen"), "Abkuerzungen")),
+              Menu(Loc("Hilfe", List("stundenplan", "hilfe"), "Hilfe"))
+            )
             } else {
               Menu(Loc("Stundenplan", List("stundenplan", "na"), "Stundenplan" ))
             }
     }
-
-    lazy val groups: Menu = {
-            if(showschedule)
-              Menu(Loc("Groups", List("groups"), "Gruppen"))
-            else
-              Menu(Loc("Groups", List("stundenplan", "na"), "Gruppen"))
-    }
-
-    lazy val blocks: Menu = {
-            if(showschedule)
-              Menu(Loc("Blocks", List("blocks"), "Blöcke"))
-            else
-              Menu(Loc("Blocks", List("stundenplan", "na"), "Blocks"))
-    }
-
 
     val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home")) ::
             Menu(Loc("Feed", List("feed"), "feed", Hidden )) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             schedule ::
-            groups ::
-            blocks ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
