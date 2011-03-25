@@ -1,10 +1,8 @@
 <lift:surround with="default" at="content">
-
-
 	<h2>News schreiben</h2>
 	<lift:CRUDEntry.view form ="POST">
 
-		Name:<br />  <lift:NewsSnippets.hello /> <br />
+		Name:<br />  <CRUDView:verfasser /> <br />
 		Verf&auml;llt am:<br /> <CRUDView:date /><br />
 		Betreff:<br />    <CRUDView:subject /><br />
 		Semester:(Die Auswahl entspricht dem Aktuellen Mail Verteiler!)<br />

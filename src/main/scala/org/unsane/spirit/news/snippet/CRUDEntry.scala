@@ -96,7 +96,6 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     CrudEntry.date.set( date )
     CrudEntry.name.set( User.currentUserId.openOr("Oops!") )
     CrudEntry.semester.set ( changedSemester )
-    CrudEntry.writer.set ( S.getSessionAttribute("fullname").openOr("Oops!") )
     CrudEntry.nr.set ( nr )
     CrudEntry.save
 
@@ -190,7 +189,8 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
                              "rows" -> "12", "cols" -> "80",
                              "style" -> "width:100%", "id" -> "entry"),
       "subject" -> text(CrudEntry.subject.value, CrudEntry.subject.set(_)),
-      "verfasser" -> S.getSessionAttribute("fullname").open_!.toString,
+      "verfasser" -> text(if(CrudEntry.writer.value == "") S.getSessionAttribute("fullname").openOr("")
+                      else CrudEntry.writer.value, CrudEntry.writer.set(_)),
       "email" -> checkbox(false, if(_) sendEmail = true),
       if(newEntry) "twitter" -> ""
       else "twitter" -> checkbox(true, if(_) tweetUpdate = true),
