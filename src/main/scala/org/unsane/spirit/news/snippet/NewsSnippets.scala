@@ -34,10 +34,47 @@ package org.unsane.spirit.news
 package snippet
 
 import java.text.SimpleDateFormat
-import java.util.Date
 import net.liftweb.http.{S}
+import java.util.{GregorianCalendar, Date, Calendar}
 
 class NewsSnippets {
+
+  lazy val now = new GregorianCalendar
+
+  lazy val simpleFormatWeek = new SimpleDateFormat
+  lazy val simpleFormatDay = new SimpleDateFormat
+
+  simpleFormatWeek.applyPattern("ww")
+  simpleFormatDay.applyPattern("EEEE")
+
+  lazy val weekString = simpleFormatWeek.format(now.getTime)
+  lazy val dayString = simpleFormatDay.format(now.getTime)
+
+  var weekNr = try {
+      weekString.toInt
+    } catch {
+      case _ =>
+        0
+    }
+
+  /**
+   * Creating a nice String for Students to see what day it is
+   * and what kind of week.
+   */
+  def week = weekNr match {
+    case 0 =>
+      <span></span>
+    case a if(weekNr % 2 == 0) =>
+       <h3>
+         <span style="color:#FF0000">Es ist {dayString} und eine Gerade Woche!</span>
+       </h3>
+    case b if(weekNr % 2 != 0) =>
+       <h3>
+         <span style="color:#0000FF">Es ist {dayString} und eine Ungerade Woche!</span>
+       </h3>
+    case _ =>
+      <span></span>
+  }
 
   /**
    * time creates the current date
