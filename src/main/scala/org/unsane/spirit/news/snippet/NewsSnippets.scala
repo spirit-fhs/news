@@ -66,11 +66,11 @@ class NewsSnippets {
       <span></span>
     case a if(weekNr % 2 == 0) =>
        <h3>
-         <span style="color:#FF0000">Es ist {dayString} und eine Gerade Woche!</span>
+         <span style="color:#a52a2a">Es ist {dayString} und eine gerade Woche.</span>
        </h3>
     case b if(weekNr % 2 != 0) =>
        <h3>
-         <span style="color:#0000FF">Es ist {dayString} und eine Ungerade Woche!</span>
+         <span style="color:#2d71ff">Es ist {dayString} und eine ungerade Woche.</span>
        </h3>
     case _ =>
       <span></span>
