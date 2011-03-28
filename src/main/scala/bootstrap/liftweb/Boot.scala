@@ -77,6 +77,7 @@ class Boot extends Loggable with Config {
 
     val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
     val loggedOut = If(() => User.notLoggedIn_?, () => RedirectResponse("/index"))
+    val onlyWS = If(() => loadProps("Semester") == "WS", () => RedirectResponse("/index"))
 
     LiftRules.uriNotFound.prepend(NamedPF("404handler"){
           case (req,failure) =>
@@ -100,6 +101,7 @@ class Boot extends Loggable with Config {
     val schedule_ma = loadSchedule("MA")
 
     // TODO Build Menu some different way, a cleaner way!?
+
     lazy val schedule: Menu = {
           if(showschedule) {
             Menu(Loc("Stundenplan", List("stundenplan", "index"), "Stundenplan" ),
@@ -121,7 +123,7 @@ class Boot extends Loggable with Config {
                 Menu(Loc("ITS_3", List("stundenplan", schedule_its(2)), schedule_its(2)))),
               Menu(Loc("Master", List("stundenplan", "MaI" + loadProps("Semester")), "MaI"),
                 Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0))),
-                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1)))),
+                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1), onlyWS))),
               Menu(Loc("Groups", List("groups"), "Gruppen")),
               Menu(Loc("Blocks", List("blocks"), "Blöcke")),
               Menu(Loc("Abkuerzungen", List("stundenplan", "abkuerzungen"), "Abkuerzungen")),
