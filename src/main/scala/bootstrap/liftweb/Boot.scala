@@ -125,7 +125,8 @@ class Boot extends Loggable with Config {
                 Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0))),
                 Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1), onlyWS))),
               Menu(Loc("Groups", List("groups"), "Gruppen")),
-              Menu(Loc("Blocks", List("blocks"), "Blöcke")),
+              Menu(Loc("Blocks", List("blocks"), "Blöcke", Hidden)),
+              Menu(Loc("ExtBlocks", ExtLink("/blocks") , "Blöcke")),
               Menu(Loc("Abkuerzungen", List("stundenplan", "abkuerzungen"), "Abkuerzungen")),
               Menu(Loc("Hilfe", List("stundenplan", "hilfe"), "Hilfe"))
             )
