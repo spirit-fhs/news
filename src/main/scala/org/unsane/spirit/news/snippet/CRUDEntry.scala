@@ -97,6 +97,14 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     CrudEntry.name.set( User.currentUserId.openOr("Oops!") )
     CrudEntry.semester.set ( changedSemester )
     CrudEntry.nr.set ( nr )
+    if (CrudEntry.subject.value.trim.isEmpty) {
+      CrudEntry.subject.set(
+        CrudEntry.news.value./:(("", 0)) {(o, i) =>
+          if (o._2 > 20) o
+          else (o._1 + i, o._2 + 1)
+        }._1 + "...")
+      logger warn "Setting subject cause it was empty!"
+    }
     CrudEntry.save
 
     val count = if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
@@ -104,7 +112,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
       count.save
 
     logger info "Entry was created by " + User.currentUserId.openOr("")
-    if(sendEmail && changedSemester.nonEmpty){
+    if (sendEmail && changedSemester.nonEmpty){
       logger info "News should be sent via eMail!"
       MailHandler.send(TextileParser.toHtml(CrudEntry.news.value.toString).toString, CrudEntry.subject.value, loadEmails(changedSemester.split(" ")))
     }
