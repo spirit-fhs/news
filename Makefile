@@ -33,7 +33,8 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	$(SBT_CMD) compile prepare-webapp package
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
-	wget -N http://spiritdev.fh-schmalkalden.de/root.war
+	wget -N http://spiritdev.fh-schmalkalden.de/news/news.war
+	mv news.war root.war 
 endif
 	@echo "==> $(WAR_FILE) prepared, now type 'make install'"
 
@@ -44,18 +45,34 @@ ifeq ($(HOSTNAME),$(PROD_HOST))
 	@read input
 endif
 	@echo "==> Copying war file to /usr/share/jetty/webapps/"
+ifeq ($(HOSTNAME),$(PROD_HOST))
 	cp $(WAR_FILE) $(JETTY_DIR)/webapps/root.war
+endif
+ifeq ($(HOSTNAME),$(DEV_HOST))
+	cp $(WAR_FILE) $(JETTY_DIR)/webapps/news.war
+endif
 ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Copying settings to jetty folder"
 	cp settings.properties $(JETTY_DIR)
 endif
+ifeq ($(HOSTNAME),$(DEV_HOST))
+	@echo "==> Deleting and creating news dir in webapps"
+	rm -r $(JETTY_DIR)/webapps/news
+	mkdir $(JETTY_DIR)/webapps/news
+	@echo "==> Copying news.war into webapps/news folder and extracting it"
+	cp $(JETTY_DIR)/webapps/news.war /usr/share/jetty/webapps/news
+	cd $(JETTY_DIR)/webapps/news/ && jar xf news.war
+	@echo "==> type 'make jetty-restart'"
+endif
+ifeq ($(HOSTNAME),$(PROD_HOST))
 	@echo "==> Deleting and creating root dir in webapps"
 	rm -r $(JETTY_DIR)/webapps/root
 	mkdir $(JETTY_DIR)/webapps/root
-	@echo "==> Copying root.war into webapps/root folder and extracing it"
+	@echo "==> Copying root.war into webapps/root folder and extracting it"
 	cp $(JETTY_DIR)/webapps/root.war /usr/share/jetty/webapps/root
 	cd $(JETTY_DIR)/webapps/root/ && jar xf root.war
 	@echo "==> type 'make jetty-restart'"
+endif
 
 jetty-restart:
 	@echo "==> Restarting jetty"
