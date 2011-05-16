@@ -160,9 +160,13 @@ trait LDAPAuth extends Loggable with Config {
 
   /**
    * Checks if we have to build "fhsid@fh-sm.de" or if there was found an _.____@fh-sm.de
+   * @todo If the String is emtpy, we need to return an not-valid String in order to disable
+   * the email function. How should this be solved?
+   * This is only a quickfix, should be fixed a more proper way in the future!!!!!
    */
   private def emailValidator(email: String, userName:String): String = email match {
-    case "" => userName+"@fh-sm.de" // does not work for students
+    // case "" => userName+"@fh-sm.de" // does not work for students
+    case "" => "not-valid"
     case _ => email
   }
 

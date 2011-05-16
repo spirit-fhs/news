@@ -199,7 +199,10 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
       "subject" -> text(CrudEntry.subject.value, CrudEntry.subject.set(_)),
       "verfasser" -> text(if(CrudEntry.writer.value == "") S.getSessionAttribute("fullname").openOr("")
                       else CrudEntry.writer.value, CrudEntry.writer.set(_)),
-      "email" -> checkbox(false, if(_) sendEmail = true),
+      "email" -> checkbox(false,
+                          if(_) sendEmail = true,
+                          if (S.getSessionAttribute("email").open_! == "not-valid") "disabled" -> "disabled"
+                          else "enabled" -> "enabled"),
       if(newEntry) "twitter" -> ""
       else "twitter" -> checkbox(true, if(_) tweetUpdate = true),
       if(newEntry) "submit" -> submit("Senden", () => {
