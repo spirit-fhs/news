@@ -1,0 +1,87 @@
+#lift__noticesContainer___notice {
+    background-color: green;
+}
+
+#lift__noticesContainer___warning {
+    background-color: yellow;
+}
+
+#lift__noticesContainer___error {
+    background-color: red;
+}
+.sidebar ul {
+    margin:0;
+    padding:0;
+    border-bottom:1px solid #ccc;
+}
+
+.sidebar ul li {
+    margin:0;
+    padding:0;
+    list-style:none;
+    border:1px solid #ccc;
+    border-bottom:none;
+}
+
+.sidebar ul li ul li {
+    margin:0;
+    padding:0;
+    border-style: none;
+    list-style-type: square;
+    list-style-position: inside;
+    padding-left: 30px;
+}
+
+.sidebar ul li ul li a {
+    display: inline;
+}
+
+.sidebar ul li ul {
+    margin: 0;
+    border-bottom: none;
+}
+
+.sidebar ul li ul li span {
+    display:inline;
+    padding:0px;
+}
+
+.sidebar ul li a {
+    display:block;
+    padding:3px;
+    text-indent:32px;
+    text-decoration:none;
+}
+
+.sidebar ul li span {
+    display:block;
+    padding:3px;
+    text-indent:32px;
+    text-decoration:none;
+}
+
+.sidebar ul li a:hover {
+	background-color: #00386A;/*#0f327a*/
+       color: white;
+}
+
+.lift_error {
+  color: red;
+}
+
+.lift_warning {
+  color: yellow;
+}
+
+.lift_notice {
+}
+
+table.gadgets {
+	border: none;
+}
+
+table.gadgets td {
+	border: 0px none;
+  padding: 5px 5px;
+	text-align: center;
+}
