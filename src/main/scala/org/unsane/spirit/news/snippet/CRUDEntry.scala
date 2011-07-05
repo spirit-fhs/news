@@ -98,11 +98,11 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     CrudEntry.semester.set ( changedSemester )
     CrudEntry.nr.set ( nr )
     if (CrudEntry.subject.value.trim.isEmpty) {
-      CrudEntry.subject.set(
+      CrudEntry.subject.set((
         CrudEntry.news.value./:(("", 0)) {(o, i) =>
           if (o._2 > 20) o
           else (o._1 + i, o._2 + 1)
-        }._1 + "...")
+        }._1 + "...").replace("\n"," "))
       logger warn "Setting subject cause it was empty!"
     }
     CrudEntry.save
