@@ -28,4 +28,15 @@ trait EntryPreview {
       "script" -> Script(jsonPreview.jsCmd),
       AttrBindParam("onclick", Text(jsonPreview.call("preview", ElemById("entry")~>Value).toJsCmd), "onclick"))
   }
+
+  /**
+   * Creates the Preview Button.
+   */
+  def createPreviewButton = {
+    <div class="lift:CRUDEntry.mkPreview">
+      <json:script></json:script>
+      <button json:onclick="onclick">Vorschau</button>
+       <div id="entry_preview"></div>
+    </div>
+  }
 }

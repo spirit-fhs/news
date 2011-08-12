@@ -55,21 +55,21 @@ object ViewNews {
 
 class ViewNews extends SpiritHelpers with Loggable {
 
-  /**
-   * Binds all entries!
-   */
-  def view (xhtml : NodeSeq) : NodeSeq = {
-    Entry.findAll.sortWith(
-      (entry1, entry2) => (entry1 > entry2)
-    ).flatMap(entry =>
-      bind("entry", xhtml,
-	      "writer" -> entry.writer.value.toString,
-        "subject" -> <a href={"/entry/"+entry.nr.value.toString}>
-                 {entry.subject.value.toString}</a>,
-        "nr" -> entry.nr.value.toString,
-        "lifecycle" -> entry.lifecycle.value.toString,
-        "date" -> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)),
-        "semester" -> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")),
-        "news" -> TextileParser.toHtml(entry.news.value.toString)))
+
+  def render = {
+
+    ".entry" #> Entry.findAll.sortWith(
+        (entry1, entry2) => (entry1 > entry2)
+      ).map( entry =>
+       ".writer"    #> entry.writer.value.toString &
+       ".subject"   #> <a href={"/entry/"+entry.nr.value.toString}>
+                       {entry.subject.value.toString}</a> &
+       ".nr"        #> entry.nr.value.toString &
+       ".lifecycle" #> entry.lifecycle.value.toString &
+       ".date"      #> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)) &
+       ".semester"  #> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")) &
+       ".news"      #> TextileParser.toHtml(entry.news.value.toString))
+
   }
+
 }

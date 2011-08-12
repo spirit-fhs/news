@@ -1,23 +1,32 @@
-<lift:surround with="default" at="content">
-	<lift:ViewNews.view>
-		<table class="news" width="100%" border="0" cellspacing="0"
-			cellpadding="0">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Aktuelles</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+      <div class="lift:ViewNews">
+      <table class="entry" width="100%" border="0" cellspacing="0" cellpadding="0">
 			<thead>
 				<tr>
-					<th width="100%" colspan="4">Betreff: <entry:subject /></th>
+					<th width="100%" colspan="4">Betreff: <div class="subject"></div></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>Semester: <entry:semester /></td>
-					<td>Verfasser: <entry:writer /></td>
-					<td>Vom: <entry:date /></td>
-					<td>Nr: <entry:nr /></td>
+					<td>Semester: <div class="semester"></div></td>
+					<td>Verfasser: <div class="writer"></div></td>
+					<td>Vom: <div class="date"></div></td>
+					<td>Nr: <div class="nr"></div></td>
 				</tr>
 				<tr>
-					<td colspan="4"><entry:news /></td>
+					<td colspan="4"><div class="news"></div></td>
 				</tr>
 			</tbody>
 		</table>
-	</lift:ViewNews.view>
-</lift:surround>
+      </div>
+    </div>
+  </body>
+</html>
+

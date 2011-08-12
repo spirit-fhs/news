@@ -38,6 +38,7 @@ import net.liftweb.util.Helpers._
 import net.liftweb.http.{S}
 import net.liftweb.http.SHtml._
 import net.liftweb.http._
+import js.JsCmds._
 import net.liftweb.common._
 import net.liftweb.textile._
 import java.text._
@@ -45,6 +46,7 @@ import java.util.Date
 import java.util.Locale
 import net.liftweb.json.JsonDSL._
 import model._
+import net.liftweb.util.Props
 
 class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPreview {
 
@@ -73,7 +75,15 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * Lists all Entries for the logged in User!
    */
   def viewUserEntries(xhtml: NodeSeq): NodeSeq = {
-    Entry.findAll("name" -> User.currentUserId.open_!.toString).sortWith(
+    <table>
+     <tr>
+       <th>Nr:</th>
+       <th>Verfasser:</th>
+       <th>Betreff:</th>
+       <th>Vom:</th>
+       <th>Optionen:</th>
+     </tr>
+    { Entry.findAll("name" -> User.currentUserId.open_!.toString).sortWith(
       (entry1, entry2) => (entry1 > entry2)
     ).flatMap(v =>
       <tr>
@@ -83,7 +93,8 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
         <td style="border:0">{v.date.value.toString.substring(4, 11) + ". " + v.date.value.toString.substring(17, 22)}</td>
         <td style="border:0">{link("/edit/edit", () => CurrentEntry(Full(v)), Text("Edit"))}</td>
         <td style="border:0">{link("/edit/delete", () => CurrentEntry(Full(v)), Text("Delete"))}</td>
-      </tr>)
+      </tr>) }
+    </table>
   }
 
   /**
@@ -158,22 +169,20 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   /**
    * This Views a Confirmscreen, if a User really wants to delete his Entry.
    */
-  def delete(xhtml: Node): NodeSeq = {
+  def delete = {
     try {
-      bind("del", xhtml,
-        "textarea" -> CrudEntry.news.value,
-        "subject" -> CrudEntry.subject.value,
-        "verfasser" -> CrudEntry.writer.value,
-        "Nr" -> CrudEntry.nr.value,
-        "submit" -> submit("Löschen", () => {
-          logger info "Entry Nr: " + CrudEntry.nr.value +
-                      " was deleted by " + User.currentUserId.openOr("")
-          CrudEntry.delete_!
-          S notice "Ihr Eintrag wurde gelöscht"
-          S redirectTo "/index" }),
-        "cancel" -> submit("Abbrechen", () => S.redirectTo("/edit/editieren"))
+      "name=textarea" #> CrudEntry.news.value &
+      "name=subject" #> CrudEntry.subject.value &
+      "name=verfasser" #> CrudEntry.writer.value &
+      "name=nr" #> CrudEntry.nr.value &
+      "type=submit" #> submit("Löschen", () => {
+        logger info "Entry Nr: " + CrudEntry.nr.value +
+                    " was deleted by " + User.currentUserId.openOr("")
+        CrudEntry.delete_!
+        S notice "Ihr Eintrag wurde gelöscht"
+        S redirectTo "/index" }) &
+      "type=cancel" #> submit("Abbrechen", () => S.redirectTo("/edit/editieren"))
 
-      )
     } catch {
       case e =>
         logger warn e.printStackTrace.toString
@@ -185,49 +194,45 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   /**
    * Building the input Forms, with either empty forms or getting the values from an existing Entry.
    */
-  def view(xhtml: NodeSeq): NodeSeq = {
+  def view = {
 
-    bind("CRUDView", xhtml,
-      "date"  -> text(if(CrudEntry.lifecycle.value == "") lifecycleFormat.format(new Date)
-                      else CrudEntry.lifecycle.value,
-                      date => CrudEntry.lifecycle.set( dateValidator(date) ),
-                      "cols" -> "80", "id" -> "datepicker"),
-      "textarea" -> textarea(CrudEntry.news.value.toString,
-                             CrudEntry.news.set(_),
-                             "rows" -> "12", "cols" -> "80",
-                             "style" -> "width:100%", "id" -> "entry"),
-      "subject" -> text(CrudEntry.subject.value, CrudEntry.subject.set(_)),
-      "verfasser" -> text(if(CrudEntry.writer.value == "") S.getSessionAttribute("fullname").openOr("")
-                      else CrudEntry.writer.value, CrudEntry.writer.set(_)),
-      "email" -> checkbox(false,
-                          if(_) sendEmail = true,
-                          if (S.getSessionAttribute("email").open_! == "not-valid") "disabled" -> "disabled"
-                          else "enabled" -> "enabled"),
-      if(newEntry) "twitter" -> ""
-      else "twitter" -> checkbox(true, if(_) tweetUpdate = true),
-      if(newEntry) "submit" -> submit("Senden", () => {
-        create()
-        S.redirectTo("/index")
-      })
-      else "submit" -> submit("Update", () => {
-        update()
-        S.redirectTo("/index")
-      })
-    )
+    "name=date"  #> text(if(CrudEntry.lifecycle.value == "") lifecycleFormat.format(new Date)
+                    else CrudEntry.lifecycle.value,
+                    date => CrudEntry.lifecycle.set( dateValidator(date) ),
+                    "cols" -> "80", "id" -> "datepicker") &
+    "name=textarea" #> textarea(CrudEntry.news.value.toString,
+                           CrudEntry.news.set(_),
+                           "rows" -> "12", "cols" -> "80",
+                           "style" -> "width:100%", "id" -> "entry") &
+    "name=subject" #> text(CrudEntry.subject.value, CrudEntry.subject.set(_)) &
+    "name=verfasser" #> text(if(CrudEntry.writer.value == "") S.getSessionAttribute("fullname").openOr("")
+                    else CrudEntry.writer.value, CrudEntry.writer.set(_)) &
+    "name=email" #> checkbox(false,
+                        if(_) sendEmail = true,
+                        if (S.getSessionAttribute("email").open_! == "not-valid") "disabled" -> "disabled"
+                        else "enabled" -> "enabled") &
+    "name=twitter" #> checkbox(true, if(_) tweetUpdate = true) &
+    (if (newEntry) "type=submit" #> submit("Senden", () => {
+      create()
+      S.redirectTo("/index")
+    })
+    else "type=submit" #> submit("Update", () => {
+      update()
+      S.redirectTo("/index")
+    }))
+
   }
 
   /**
    * Building the Checkboxes for the Mailinglists.
    * If Crudentry contains any semester, the checkbox is set to true.
    */
-  def makeCheckboxList(xhtml: NodeSeq): NodeSeq = {
-    loadSemesters(S.attr("semester").open_!) flatMap { sem =>
-      bind("List", xhtml,
-        "label" -> sem,
-        if(CrudEntry contains sem) "checkbox" -> checkbox(true, if (_) changedSemester += sem + " ")
-        else "checkbox" -> checkbox(false, if (_) changedSemester += sem + " ")
-      )
-    }
+  def makecheckboxlist(in: NodeSeq): NodeSeq = {
+      (".checkbox_row" #> loadSemesters(S.attr("semester").open_!).toList.map ( sem =>
+          ".title" #> sem &
+          (if (CrudEntry contains sem) ".checkbox" #> checkbox(true, if (_) changedSemester += sem + " ")
+          else ".checkbox" #> checkbox(false, if (_) changedSemester += sem + " "))
+      )).apply(in)
   }
 
   var tweetUpdate = false

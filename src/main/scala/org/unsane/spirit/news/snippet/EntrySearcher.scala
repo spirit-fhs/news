@@ -51,19 +51,20 @@ class EntrySearcher extends SpiritHelpers {
   /**
    * Binds exactly the one found entry with /entry/<search number>.
    */
-  def view (xhtml : NodeSeq) : NodeSeq = {
+  def view = {
     try {
       val news = Entry.find("nr" -> S.param("entrynr").openOr(("NAN")))
       if (news.isEmpty) S redirectTo ("/index")
       else
-        bind("entry", xhtml,
-          "writer" -> news.open_!.writer.toString,
-          "subject" -> news.open_!.subject.toString,
-          "nr" -> news.open_!.nr.toString,
-          "lifecycle" -> news.open_!.lifecycle.toString,
-          "date" -> Text(news.open_!.date.toString.substring(4, 11) + ". " + news.open_!.date.toString.substring(17, 22)),
-          "semester" -> sem2link(ViewNews.semesterChanger(news.open_!.semester.value.toString).split(" ")),
-          "news" -> TextileParser.toHtml(news.open_!.news.toString))
+        ".entry" #> news.map ( entry =>
+          ".writer"    #> entry.writer.value.toString &
+          ".subject"   #> <a href={"/entry/"+entry.nr.value.toString}>
+                       {entry.subject.value.toString}</a> &
+          ".nr"        #> entry.nr.value.toString &
+          ".lifecycle" #> entry.lifecycle.value.toString &
+          ".date"      #> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)) &
+          ".semester"  #> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")) &
+          ".news"      #> TextileParser.toHtml(entry.news.value.toString))
     }
     catch {
       case _ => S redirectTo ("/index")

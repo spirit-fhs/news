@@ -1,8 +1,3 @@
-$(function() {
-        $( "#datepicker" ).datepicker($.datepicker.regional['de']);
-});
-
-
 var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-20869340-1']);
   _gaq.push(['_gat._anonymizeIp']);

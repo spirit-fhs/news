@@ -1,63 +1,84 @@
-<lift:surround with="default" at="content">
-	<h2>News schreiben</h2>
-	<lift:CRUDEntry.view form ="POST">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Aktuelles</title>
 
-		Name:<br />  <CRUDView:verfasser /> <br />
-		Verf&auml;llt am:<br /> <CRUDView:date /><br />
-		Betreff:<br />    <CRUDView:subject /><br />
-		Semester:(Die Auswahl entspricht dem Aktuellen Mail Verteiler!)<br />
 
-        <table style="table-layout:fixed;border:0" width="80%">
-            <tr>
-            <td style="width:5%;border:0">
-                <lift:CRUDEntry.makeCheckboxList semester="Other">
-                <List:checkbox /> <List:label /><br/>
-                </lift:CRUDEntry.makeCheckboxList>
-            </td>
-            <td style="width:3%;border:0">
-                <lift:CRUDEntry.makeCheckboxList semester="BaI">
-                <List:checkbox /> <List:label /><br/>
-                </lift:CRUDEntry.makeCheckboxList>
-            </td>
-            <td style="width:3%;border:0">
-                <lift:CRUDEntry.makeCheckboxList semester="BaWI">
-                <List:checkbox /> <List:label /><br/>
-                </lift:CRUDEntry.makeCheckboxList>
-            </td>
-            <td style="width:3%;border:0">
-                <lift:CRUDEntry.makeCheckboxList semester="BaMuMa">
-                <List:checkbox /> <List:label /><br/>
-                </lift:CRUDEntry.makeCheckboxList>
-            </td>
-            <td style="width:3%;border:0">
-                <lift:CRUDEntry.makeCheckboxList semester="BaITS">
-                <List:checkbox /> <List:label /><br/>
-                </lift:CRUDEntry.makeCheckboxList>
-            </td>
-            <td style="width:3%;border:0">
-                <lift:CRUDEntry.makeCheckboxList semester="Ma">
-                <List:checkbox /> <List:label /><br/>
-                </lift:CRUDEntry.makeCheckboxList>
-            </td>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+    <link type="text/css" href="/spirit_style/jquery/css/cupertino/jquery-ui-1.8.10.custom.css" rel="Stylesheet" />
+    <script type="text/javascript" src="/spirit_style/jquery/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/spirit_style/jquery/jquery-ui-1.8.10.custom.min.js"></script>
+    <script type="text/javascript" src="/spirit_style/jquery/jquery.ui.datepicker-de.js"></script>
+    <script type="text/javascript" src="/spirit_style/css/datepicker.js"></script>
+    <h2>News verfassen:</h2>
+            <form class="lift:CRUDEntry.view" id="myform" action="">
+                Name:<br>             <input name="verfasser"><br>
+                Verf&auml;llt am:<br> <input name="date"><br>
+                Betreff:<br>          <input name="subject"><br>
+                Semester:(Die Auswahl entspricht dem Aktuellen Mail Verteiler!)
+                <table width="80%" >
+                    <tr>
+                        <td class="lift:CRUDEntry.makecheckboxlist?semester=Other" style="width:3%;border:0">
+                        <div class="checkbox_row">
+                            <div class="checkbox">Enabled</div>
+                            <div class="title">Semester</div>
+                        </div>
+                        </td>
+                        <td class="lift:CRUDEntry.makecheckboxlist?semester=BaI" style="width:3%;border:0">
+                        <div class="checkbox_row">
+                            <div class="checkbox">Enabled</div>
+                            <div class="title">Semester</div>
+                        </div>
+                        </td>
+                        <td class="lift:CRUDEntry.makecheckboxlist?semester=BaWI" style="width:3%;border:0">
+                        <div class="checkbox_row">
+                            <div class="checkbox">Enabled</div>
+                            <div class="title">Semester</div>
+                        </div>
+                        </td>
+                        <td class="lift:CRUDEntry.makecheckboxlist?semester=BaMuMa" style="width:3%;border:0">
+                        <div class="checkbox_row">
+                            <div class="checkbox">Enabled</div>
+                            <div class="title">Semester</div>
+                        </div>
+                        </td>
+                        <td class="lift:CRUDEntry.makecheckboxlist?semester=BaITS" style="width:3%;border:0">
+                        <div class="checkbox_row">
+                            <div class="checkbox">Enabled</div>
+                            <div class="title">Semester</div>
+                        </div>
+                        </td>
+                        <td class="lift:CRUDEntry.makecheckboxlist?semester=Ma" style="width:3%;border:0">
+                        <div class="checkbox_row">
+                            <div class="checkbox">Enabled</div>
+                            <div class="title">Semester</div>
+                        </div>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <input name="email"> News als E-Mail verteilen.<br>
+                <input name="twitter"> News über Twitter verteilen.
+                <br><br>
+                <table style="table-layout:fixed;width:100%;border=0">
+                  <tr>
+                    <td style="width:75%;border:0"><input name="textarea" style="width:100%"></td>
+                    <td style="width:25%;border:0"><div class="lift:NewsSnippets.code"></div></td>
+                  </tr>
+                </table>
+                <input value="Senden" type="submit" name="do_submit" id="do_submit">
 
-        </tr>
-</table>
-    <hr />
-	<CRUDView:email />  E-Mail senden <br />
-    <CRUDView:twitter />Update über Twitter und Facebook verteilen<br />
-	<table style="width:100%;border=0">
-      <tr>
-        <td style="width:75%;border:0"><CRUDView:textarea /></td>
-        <td style="width:25%;border:0"><lift:NewsSnippets:code /></td>
-      </tr>
-    </table>
-     <CRUDView:submit />
-     <br /><br />
-     </lift:CRUDEntry.view>
+            </form>
+            <br>
+            <div class="lift:CRUDEntry.createPreviewButton"></div>
 
-     <lift:CRUDEntry.mkPreview>
-        <json:script/>
-       <button json:onclick="onclick">Vorschau</button>
-       <div id="entry_preview"></div>
-     </lift:CRUDEntry.mkPreview>
-</lift:surround>
+
+        </div>
+    </div>
+  </body>
+</html>
+
+

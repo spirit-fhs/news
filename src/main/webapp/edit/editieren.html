@@ -1,18 +1,19 @@
-<lift:surround with="default" at="content">
-  <head><title>Editieren der News!</title></head>
-	<p>Editieren</p>
- 
-   <table>
-       <tr>
-           <th>Nr:</th>
-           <th>Verfasser:</th>
-           <th>Betreff:</th>
-           <th>Vom:</th>
-           <th>Optionen:</th>
-       </tr>
-  <lift:CRUDEntry.viewUserEntries />
-  </table>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Editieren der News!</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+    <p>Editieren</p>
+        <div class="lift:CRUDEntry.viewUserEntries">
 
-</lift:surround>
+        </div>
+    </div>
+  </body>
+</html>
+
+
 
 

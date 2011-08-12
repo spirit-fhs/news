@@ -61,14 +61,8 @@ class Boot extends Loggable with Config {
       "spirit_news",
       "spirit_news")
 
-    // Need this for the resource stuff !!
-    ResourceServer.allow {
-      case "jquery" :: _ => true
-      case "images" :: _ => true
-      case "blueprint" :: _ => true
-    }
-
     LiftRules.addToPackages("org.unsane.spirit.news")
+
     LiftRules.dispatch.prepend(NamedPF("Login Validation") {
       case Req("login_required" :: page , extension, _)
         if (!LoginUtil.isLogged) =>
@@ -153,6 +147,18 @@ class Boot extends Loggable with Config {
 
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
+
+    LiftRules.ajaxStart =
+      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
+
+    LiftRules.ajaxEnd =
+      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
+
+    LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
+
+    LiftRules.htmlProperties.default.set((r: Req) =>
+      new Html5Properties(r.userAgent))
+
     DayChecker.start()
     if (tweet) Spreader.start()
     if (loadProps("ircConnect").equals("true")){

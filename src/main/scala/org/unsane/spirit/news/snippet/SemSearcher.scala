@@ -52,7 +52,7 @@ class SemSearcher extends SpiritHelpers with Config with Loggable {
   /**
    * Binds all entries found with /semsearch/<search string>.
    */
-  def view (xhtml : NodeSeq) : NodeSeq = {
+  def view = {
     try {
       val validSearch = loadSemesters("BaI") :: loadSemesters("BaWI") :: loadSemesters("BaMuMa") :: loadSemesters("BaITS") :: loadSemesters("Ma") :: loadSemesters("Other") :: Nil
       if(!validSearch.flatten.contains(S.param("semsearch").openOr(""))) {
@@ -69,16 +69,17 @@ class SemSearcher extends SpiritHelpers with Config with Loggable {
 
       if (news.isEmpty) S redirectTo ("/index")
       else
-        news.flatMap(entry =>
-          bind("entry", xhtml,
-	          "writer" -> entry.writer.value.toString,
-            "subject" -> <a href={"/entry/"+entry.nr.value.toString}>
-                 {entry.subject.value.toString}</a>,
-            "nr" -> entry.nr.value.toString,
-            "lifecycle" -> entry.lifecycle.value.toString,
-            "date" -> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)),
-            "semester" -> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")),
-            "news" -> TextileParser.toHtml(entry.news.value.toString)))
+        ".entry" #> news.sortWith(
+          (entry1, entry2) => (entry1 > entry2)
+        ).map( entry =>
+          ".writer"    #> entry.writer.value.toString &
+          ".subject"   #> <a href={"/entry/"+entry.nr.value.toString}>
+                       {entry.subject.value.toString}</a> &
+          ".nr"        #> entry.nr.value.toString &
+          ".lifecycle" #> entry.lifecycle.value.toString &
+          ".date"      #> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)) &
+          ".semester"  #> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")) &
+          ".news"      #> TextileParser.toHtml(entry.news.value.toString))
     }
     catch {
       case _ => S redirectTo ("/index")

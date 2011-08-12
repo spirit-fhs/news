@@ -1,10 +1,22 @@
-<lift:surround with="default" at="content">
-		<h2>Confirm Delete!</h2>
-		<lift:CRUDEntry.delete form="POST">
-			Verfasser : <del:verfasser /><br />
-			Nr: <del:Nr /><br />
-			Betreff : <del:subject /><br />
-			News: <del:textarea /><br />
-			<del:submit /><del:cancel />
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Aktuelles</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+      <form class="lift:CRUDEntry.delete" id="myform" action="">
+      		Verfasser : <div name="verfasser"></div><br>
+			Nr: <div name="nr"></div><br>
+			Betreff : <div name="subject"></div><br>
+			News: <div name="textarea"></div><br>
+            <input value="Senden" type="submit" name="do_submit" id="do_submit"><br>
+			<input value="Cancel" type="cancel" name="do_cancel" id="do_cancel">
 		</lift:CRUDEntry.delete>
-</lift:surround>
+       </form>
+    </div>
+  </body>
+</html>
+
+
