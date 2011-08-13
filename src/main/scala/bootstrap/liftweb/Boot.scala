@@ -35,15 +35,15 @@ package bootstrap.liftweb
 import org.unsane.spirit.news._
 import model._
 import fun._
-import snippet._
+import snippet.Feed
 
 import net.liftweb._
-import util._
 import http._
 import sitemap._
 import Loc._
 
 import common._
+import util._
 import util.Helpers._
 import mongodb._
 
@@ -130,7 +130,6 @@ class Boot extends Loggable with Config {
     }
 
     val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home")) ::
-            Menu(Loc("Feed", List("feed"), "feed", Hidden )) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             schedule ::
@@ -144,7 +143,10 @@ class Boot extends Loggable with Config {
             else
               User.sitemap)
 
-
+    LiftRules.dispatch.append {
+      case Req("feed" :: _, _, GetRequest) =>
+        () => Feed.renderRSS
+    }
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
 

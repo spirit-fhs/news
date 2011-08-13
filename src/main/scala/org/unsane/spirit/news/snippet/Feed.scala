@@ -38,23 +38,31 @@ import net.liftweb.util.Helpers._
 import net.liftweb.textile._
 import model.Entry
 import net.liftweb.http._
+import net.liftweb.common.{Full, Empty, Box}
+import collection.mutable.ArrayBuffer
 
-object Feed {
-}
-
-/** Class for creating a RSS feed for current news 
+/** Class for creating a RSS feed for current news
  * @author Tobias Gaertner	
  */
-class Feed {
+object Feed extends SpiritHelpers {
 
-	// latest messages first
-	def news = Entry.findAll.sortWith(
+  val xmlHead = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+  def feedAsArray = (xmlHead + createFeed.toString).getBytes("UTF-8")
+
+  object CurrentFeed extends RequestVar[Box[LiftResponse]](Empty)
+
+  def renderRSS = {
+    CurrentFeed(returnAsFeed(feedAsArray, "feed.rss"))
+  }
+
+  def news = Entry.findAll.sortWith(
     (entry1, entry2) => (entry1 > entry2)
   )
-	def url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
+
+  def url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
 
   def semesterChanger(input: String): String = {
-    if(input.startsWith("semester ")) { "Alle" }
+    if (input.startsWith("semester ")) { "Alle" }
     else { input }
   }
 
@@ -73,17 +81,20 @@ class Feed {
     else { input }
   }
 
-/** creates RSS2 feed with latest messages
- * @return XML structure for feed */
-	def createRss2Feed(): NodeSeq = {
-		<rss version="2.0">
+  /**
+   * creates RSS2 feed with latest messages
+   * @return XML structure for feed
+   */
+	def createFeed = {
+
+    <rss version="2.0">
 			<channel>
 				<title>Spirit @ FH-Schmalkalden - RSS Feed</title>
 				<link>{url}</link>
 				<description>RSS Feed für die aktuellen Meldungen am Fachbereich Informatik</description>
 				<language>de-de</language>
 				<image>
-				  <url>{url}/classpath/images/logo_spirit.jpg</url>
+				  <url>{url}/spirit_style/images/logo_spirit.png</url>
 				  <title>Spirit</title>
 				  <link>{url}</link>
 				</image>

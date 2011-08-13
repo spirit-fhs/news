@@ -35,17 +35,43 @@ package snippet
 
 import model.{ Entry, Config }
 import scala.xml._
-import net.liftweb.http.S
 import net.liftweb.util.Helpers._
 import net.liftweb.http.SHtml._
 import java.util._
 import java.text._
 import scala.collection._
+import net.liftweb.common.Box
+import net.liftweb.http.{LiftResponse, S}
+import net.liftweb.common.Full
+import net.liftweb.http.StreamingResponse
 
 /**
  * @author Marcus Denison
  */
 trait SpiritHelpers {
+
+  /**
+   * Generating the headers for the returnAsFeed method.
+   */
+  private def headers(in: Array[Byte], filename: String) = {
+      ("Content-type" -> "text/rss+xml; charset=utf-8") ::
+      ("Content-length" -> in.length.toString) :: Nil
+  }
+
+  /**
+   * For the creation of an RSS Feed
+   * @param in The RSSFeed as an Array[Byte].
+   * @param filename The filename which will be viewed to the User.
+   * @return The LiftResponse which will be returned to the User.
+   */
+  def returnAsFeed(in: Array[Byte], filename: String): Box[LiftResponse] = {
+    Full(StreamingResponse(
+      new java.io.ByteArrayInputStream(in),
+      () => {},
+      in.length,
+      headers(in, filename), Nil, 200)
+    )
+  }
 
   /**
    * Renders links for the semesters so each semester can be clicked in the index, semsearcher and entry.
