@@ -39,7 +39,6 @@ import net.liftweb.textile._
 import model.Entry
 import net.liftweb.http._
 import net.liftweb.common.{Full, Empty, Box}
-import collection.mutable.ArrayBuffer
 
 /** Class for creating a RSS feed for current news
  * @author Tobias Gaertner	
@@ -49,10 +48,8 @@ object Feed extends SpiritHelpers {
   val xmlHead = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
   def feedAsArray = (xmlHead + createFeed.toString).getBytes("UTF-8")
 
-  object CurrentFeed extends RequestVar[Box[LiftResponse]](Empty)
-
   def renderRSS = {
-    CurrentFeed(returnAsFeed(feedAsArray, "feed.rss"))
+    returnAsFeed(feedAsArray)
   }
 
   def news = Entry.findAll.sortWith(
@@ -90,23 +87,23 @@ object Feed extends SpiritHelpers {
     <rss version="2.0">
 			<channel>
 				<title>Spirit @ FH-Schmalkalden - RSS Feed</title>
-				<link>{url}</link>
+				<link>{ url }</link>
 				<description>RSS Feed für die aktuellen Meldungen am Fachbereich Informatik</description>
 				<language>de-de</language>
 				<image>
-				  <url>{url}/spirit_style/images/logo_spirit.png</url>
+				  <url>{ url }/spirit_style/images/logo_spirit.png</url>
 				  <title>Spirit</title>
-				  <link>{url}</link>
+				  <link>{ url }</link>
 				</image>
 				<ttl>60</ttl>
-				{news.map{entry =>
+				{ news.map { entry =>
 					(<item>
-						<title>{entry.subject.value.toString} ({semesterChanger(entry.semester.value.toString)})</title>
-						<description>{TextileParser toHtml entry.news.value.toString toString}</description>
-						<link>{url}/entry/{entry.nr.value.toString}</link>
-						<author>{entry.writer.value.toString}</author>
-						<guid>{entry.nr.value.toString}</guid>
-						<pubDate>{entry.date.value.toString}</pubDate>
+						<title>{ entry.subject.value } ({ semesterChanger(entry.semester.value) })</title>
+						<description>{ TextileParser.toHtml(entry.news.value) }</description>
+						<link>{ url}/entry/{entry.nr.value }</link>
+						<author>{ entry.writer.value }</author>
+						<guid>{ entry.nr.value }</guid>
+						<pubDate>{ entry.date.value }</pubDate>
 					</item>)
 				}}
 			</channel>

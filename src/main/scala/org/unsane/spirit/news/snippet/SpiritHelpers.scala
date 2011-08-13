@@ -53,23 +53,22 @@ trait SpiritHelpers {
   /**
    * Generating the headers for the returnAsFeed method.
    */
-  private def headers(in: Array[Byte], filename: String) = {
-      ("Content-type" -> "text/rss+xml; charset=utf-8") ::
-      ("Content-length" -> in.length.toString) :: Nil
+  private def headers(length: String) = {
+    ("Content-type" -> "text/rss+xml; charset=utf-8") ::
+    ("Content-length" -> length) :: Nil
   }
 
   /**
    * For the creation of an RSS Feed
    * @param in The RSSFeed as an Array[Byte].
-   * @param filename The filename which will be viewed to the User.
    * @return The LiftResponse which will be returned to the User.
    */
-  def returnAsFeed(in: Array[Byte], filename: String): Box[LiftResponse] = {
+  def returnAsFeed(in: Array[Byte]): Box[LiftResponse] = {
     Full(StreamingResponse(
       new java.io.ByteArrayInputStream(in),
       () => {},
       in.length,
-      headers(in, filename), Nil, 200)
+      headers(in.length.toString), Nil, 200)
     )
   }
 
