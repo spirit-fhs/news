@@ -143,10 +143,8 @@ class Boot extends Loggable with Config {
             else
               User.sitemap)
 
-    LiftRules.dispatch.append {
-      case Req("feed" :: _, _, GetRequest) =>
-        () => Feed.renderRSS
-    }
+    // This takes care of the RSS Feed.
+    LiftRules.statelessDispatchTable.append(Feed)
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
 

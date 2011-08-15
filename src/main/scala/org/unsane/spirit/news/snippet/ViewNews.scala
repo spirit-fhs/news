@@ -42,17 +42,6 @@ import net.liftweb.common.Loggable
 /**
  * @author Marcus Denison
  */
-object ViewNews {
-  
-  /**
-   * semesterChanger is only changing the output from semester -> Alle, cause it looks nicer on the webpage! 
-   */
-  def semesterChanger(input: String): String = input match {
-    case semester if(semester startsWith "semester ") => "Alle"
-    case _ => input
-  }
-}
-
 class ViewNews extends SpiritHelpers with Loggable {
 
 
@@ -67,7 +56,7 @@ class ViewNews extends SpiritHelpers with Loggable {
        ".nr"        #> entry.nr.value.toString &
        ".lifecycle" #> entry.lifecycle.value.toString &
        ".date"      #> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)) &
-       ".semester"  #> sem2link(ViewNews.semesterChanger(entry.semester.value.toString).split(" ")) &
+       ".semester"  #> sem2link(semesterChanger(entry.semester.value.toString).split(" ")) &
        ".news"      #> TextileParser.toHtml(entry.news.value.toString))
 
   }

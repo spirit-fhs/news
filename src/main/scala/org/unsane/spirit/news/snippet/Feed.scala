@@ -33,56 +33,29 @@
 package org.unsane.spirit.news
 package snippet
 
-import scala.xml._
-import net.liftweb.util.Helpers._
-import net.liftweb.textile._
-import model.Entry
 import net.liftweb.http._
-import net.liftweb.common.{Full, Empty, Box}
+import net.liftweb.http.rest._
+import org.unsane.spirit.news.model.Entry
+import net.liftweb.textile.TextileParser
 
-/** Class for creating a RSS feed for current news
- * @author Tobias Gaertner	
- */
-object Feed extends SpiritHelpers {
+object Feed extends RestHelper with SpiritHelpers {
 
-  val xmlHead = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-  def feedAsArray = (xmlHead + createFeed.toString).getBytes("UTF-8")
-
-  def renderRSS = {
-    returnAsFeed(feedAsArray)
+  serve {
+    case "feed" :: _ XmlGet _=> createFeed
   }
 
-  def news = Entry.findAll.sortWith(
-    (entry1, entry2) => (entry1 > entry2)
-  )
 
-  def url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
-
-  def semesterChanger(input: String): String = {
-    if (input.startsWith("semester ")) { "Alle" }
-    else { input }
-  }
-
-  def shorten(input: String, nr: String): String = {
-		val more = "... <a href=\""+ url +"/entry/"+ nr +"\">weiterlesen</a>"
-    if (input.length() > 512) {
-			//cut long text
-			if (input.length() > input.indexOf(" ", 512)) {
-				//at next space
-				input.substring(0, input.indexOf(" ", 512)) + more
-			} else {
-				//or after 512 characters
-				input.substring(0, 512) + more
-			}
- 		}
-    else { input }
-  }
+  lazy val url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
 
   /**
    * creates RSS2 feed with latest messages
    * @return XML structure for feed
    */
-	def createFeed = {
+  def createFeed = {
+
+    val news = Entry.findAll.sortWith(
+      (entry1, entry2) => (entry1 > entry2)
+    )
 
     <rss version="2.0">
 			<channel>
@@ -109,5 +82,6 @@ object Feed extends SpiritHelpers {
 			</channel>
 		</rss>
 	}
+
 
 }

@@ -50,26 +50,9 @@ import net.liftweb.http.StreamingResponse
  */
 trait SpiritHelpers {
 
-  /**
-   * Generating the headers for the returnAsFeed method.
-   */
-  private def headers(length: String) = {
-    ("Content-type" -> "text/rss+xml; charset=utf-8") ::
-    ("Content-length" -> length) :: Nil
-  }
-
-  /**
-   * For the creation of an RSS Feed
-   * @param in The RSSFeed as an Array[Byte].
-   * @return The LiftResponse which will be returned to the User.
-   */
-  def returnAsFeed(in: Array[Byte]): Box[LiftResponse] = {
-    Full(StreamingResponse(
-      new java.io.ByteArrayInputStream(in),
-      () => {},
-      in.length,
-      headers(in.length.toString), Nil, 200)
-    )
+  def semesterChanger(input: String): String = input match {
+    case semester if(semester startsWith "semester ") => "Alle"
+    case _ => input
   }
 
   /**
