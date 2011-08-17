@@ -35,6 +35,7 @@ package bootstrap.liftweb
 import org.unsane.spirit.news._
 import model._
 import fun._
+import rest.RestApi
 import snippet.Feed
 
 import net.liftweb._
@@ -87,6 +88,8 @@ class Boot extends Loggable with Config {
       case RewriteRequest(ParsePath("semsearch" :: semsearch :: Nil,_,_,_),_,_) =>
         RewriteResponse("semsearch" :: Nil, Map("semsearch" -> semsearch))
     }
+
+    LiftRules.statelessDispatchTable.append(RestApi)
 
     val schedule_i = loadSchedule("I")
     val schedule_wi = loadSchedule("WI")
@@ -164,5 +167,8 @@ class Boot extends Loggable with Config {
     if (loadProps("ircConnect").equals("true")){
       SpiritBot.connect
     }
+
+
+
   }
 }

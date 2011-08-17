@@ -42,8 +42,16 @@ import net.liftweb.common._
 import net.liftweb.mongodb._
 import specification.Contexts
 
+import net.liftweb.record.field.StringField
+import net.liftweb.json.JsonAST._
+import net.liftweb.json.Extraction._
+import net.liftweb.json.Printer._
+
+
 
 object NewsSpec extends Specification with Config with Contexts {
+
+  //implicit val formats = net.liftweb.json.DefaultFormats
 
   /* Defining our Database for Testing */
   MongoDB.defineDbAuth(DefaultMongoIdentifier,
@@ -93,6 +101,10 @@ object NewsSpec extends Specification with Config with Contexts {
       Entry.findAll.filter(e =>
         e.nr.value.toInt == (EntryCounter.findAll.head.counter.value.toInt - 1)
       ).size mustEqual 1
+    }
+
+    "toJSON one Entry." in {
+
     }
 
     "read all entries for the SpecsUser." in {
