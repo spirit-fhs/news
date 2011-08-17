@@ -44,7 +44,6 @@ object Feed extends RestHelper with SpiritHelpers {
     case "feed" :: _ XmlGet _=> createFeed
   }
 
-
   lazy val url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
 
   /**
@@ -72,7 +71,7 @@ object Feed extends RestHelper with SpiritHelpers {
 				{ news.map { entry =>
 					(<item>
 						<title>{ entry.subject.value } ({ semesterChanger(entry.semester.value) })</title>
-						<description>{ TextileParser.toHtml(entry.news.value) }</description>
+						<description>{ TextileParser.paraFixer(TextileParser.toHtml(entry.news.value)) }</description>
 						<link>{ url}/entry/{entry.nr.value }</link>
 						<author>{ entry.writer.value }</author>
 						<guid>{ entry.nr.value }</guid>
