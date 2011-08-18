@@ -35,25 +35,20 @@ package rest
 
 import org.unsane.spirit.news
 import model._
-import net.liftweb.http.js._
+
 import net.liftweb.json.JsonDSL._
-import net.liftweb.util.Helpers._
-import net.liftweb.textile._
-import java.text._
-import dispatch.json.JsArray
-import net.liftweb.http.JsonResponse
+import net.liftweb.json.JsonAST.JValue
+import net.liftweb.common.Box
+import net.liftweb.json.JArray
 
 object Response {
 
-  def getAllNews() {}
+  def getAllNews() : JArray = {
+    JArray(Entry.findAll.map(_.asJValue))
+  }
 
-  def getOneNews(id: String): Option[JsObj] = {
-    val news = Entry.find("nr" -> id)
-
-    if(news.isEmpty)
-      None
-    else
-      Some(Entry.asJSON(news.openTheBox))
+  def getOneNews(id: String): Box[JValue] = {
+    Entry.find("nr" -> id).map{x => x.asJValue}
   }
 
 }

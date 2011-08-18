@@ -41,7 +41,7 @@ import net.liftweb.json.JsonDSL._
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.http._
 import net.liftweb.json._
-import net.liftweb.common.Loggable
+import net.liftweb.common.{Full, Loggable}
 
 object RestApi extends RestHelper with Loggable {
 
@@ -60,7 +60,7 @@ object RestApi extends RestHelper with Loggable {
      * get all News
      */
     case "news" :: Nil Get req => {
-      JsonResponse(("news" -> "all News"), Nil, Nil, 200)
+      JsonResponse(Response.getAllNews(), Nil, Nil, 200)
     }
 
     /**
@@ -70,8 +70,8 @@ object RestApi extends RestHelper with Loggable {
       val response = Response.getOneNews(id.toString())
 
       response match {
-        case None => JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
-        case Some(x) => JsonResponse(x, Nil, Nil, 200)
+        case Full(x) => JsonResponse(x, Nil, Nil, 200)
+        case _ => JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
       }
 
     }
