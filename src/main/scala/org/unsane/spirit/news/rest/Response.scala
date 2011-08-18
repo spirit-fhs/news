@@ -33,48 +33,27 @@
 package org.unsane.spirit.news
 package rest
 
-import org.unsane.spirit
-import model.Entry
-
-import net.liftweb.util.Helpers._
+import org.unsane.spirit.news
+import model._
+import net.liftweb.http.js._
 import net.liftweb.json.JsonDSL._
-import net.liftweb.http.rest.RestHelper
-import net.liftweb.http._
-import net.liftweb.json._
-import net.liftweb.common.Loggable
+import net.liftweb.util.Helpers._
+import net.liftweb.textile._
+import java.text._
+import dispatch.json.JsArray
+import net.liftweb.http.JsonResponse
 
-object RestApi extends RestHelper with Loggable {
+object Response {
 
-  logger info "Rest is now online"
+  def getAllNews() {}
 
-  serve {
+  def getOneNews(id: String): JsObj = {
+    val news = Entry.find("nr" -> id)
 
-    /**
-     * this is a test, looking that REST-Api is doing his job
-     */
-    case "test" :: Nil Get req => {
-      JsonResponse(("test" -> "test!"), Nil, Nil, 200)
-    }
-
-    /**
-     * get all News
-     */
-    case "news" :: Nil Get req => {
-      JsonResponse(("news" -> "all News"), Nil, Nil, 200)
-    }
-
-    /**
-     * get one News
-      */
-    case "news" :: AsLong(id) :: Nil Get req => {
-      val response = Response.getOneNews(id.toString())
-
-      if(response != null)
-        JsonResponse(response, Nil, Nil, 200)
-      else
-        JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
-    }
-
+    if(news.isEmpty)
+      null
+    else
+      Entry.asJSON(news.openTheBox)
   }
 
 }
