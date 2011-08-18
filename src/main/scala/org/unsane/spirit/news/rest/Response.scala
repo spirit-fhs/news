@@ -47,13 +47,13 @@ object Response {
 
   def getAllNews() {}
 
-  def getOneNews(id: String): JsObj = {
+  def getOneNews(id: String): Option[JsObj] = {
     val news = Entry.find("nr" -> id)
 
     if(news.isEmpty)
-      null
+      None
     else
-      Entry.asJSON(news.openTheBox)
+      Some(Entry.asJSON(news.openTheBox))
   }
 
 }

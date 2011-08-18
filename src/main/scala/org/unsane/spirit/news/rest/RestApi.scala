@@ -69,10 +69,11 @@ object RestApi extends RestHelper with Loggable {
     case "news" :: AsLong(id) :: Nil Get req => {
       val response = Response.getOneNews(id.toString())
 
-      if(response != null)
-        JsonResponse(response, Nil, Nil, 200)
-      else
-        JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
+      response match {
+        case None => JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
+        case Some(x) => JsonResponse(x, Nil, Nil, 200)
+      }
+
     }
 
   }
