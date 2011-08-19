@@ -73,15 +73,12 @@ object Response {
     else {
       var news = Entry.findAll
 
-      val semesterParam = params.get("semester")
-      val dateParam = params.get("date")
-
-      news = semesterParam match {
+      news = params.get("semester") match {
         case Some(x) => filterSemester(news, x.head)
         case _ => news
       }
 
-      news = dateParam match {
+      news = params.get("date") match {
         case Some(x) => filterDate(news, x.head)
         case _ => news
       }
