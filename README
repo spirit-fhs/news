@@ -54,7 +54,7 @@ Please be aware that this test will drop the Databases for Spirit-News when it i
 
 REST-Service:
 
-Their are two URL you can get News:
+There are two URL you can get News:
 
 /news      <- to get All News
 
