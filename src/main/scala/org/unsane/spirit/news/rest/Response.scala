@@ -40,11 +40,56 @@ import net.liftweb.json.JsonDSL._
 import net.liftweb.json.JsonAST.JValue
 import net.liftweb.common.Box
 import net.liftweb.json.JArray
+import net.liftweb.common.Loggable
+
+import java.util.{GregorianCalendar,Date, Locale}
+import java.text.SimpleDateFormat
 
 object Response {
 
-  def getAllNews() : JArray = {
-    JArray(Entry.findAll.map(_.asJValue))
+  private[this] def afterDate(date1Param: String, date2Param: String): Boolean = {
+
+    val sdf1 = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
+    val date1 = sdf1.parse(date1Param)
+
+    val sdf2 = new SimpleDateFormat("yyyyMMdd", Locale.US)
+    val date2 = sdf2.parse(date2Param)
+
+    date1.after(date2)
+  }
+
+  private[this] def filterSemester(entries: List[Entry], key: String): List[Entry] = {
+    entries.filter{entry => entry.semester.value contains key}
+  }
+
+  private[this] def filterDate(entries: List[Entry], key: String): List[Entry] = {
+    entries.filter{entry => afterDate(entry.date.value,key)}
+  }
+
+  def getAllNews(params: Map[String, List[String]]) : JArray = {
+
+    if(params.isEmpty)
+      JArray(Entry.findAll.map(_.asJValue))
+    else {
+      var news = Entry.findAll
+
+      val semesterParam = params.get("semester")
+      val dateParam = params.get("date")
+
+      news = semesterParam match {
+        case Some(x) => filterSemester(news, x.head)
+        case _ => news
+      }
+
+      news = dateParam match {
+        case Some(x) => filterDate(news, x.head)
+        case _ => news
+      }
+
+      JArray(news.map(_.asJValue))
+    }
+
+
   }
 
   def getOneNews(id: String): Box[JValue] = {
