@@ -56,28 +56,28 @@ object Feed extends RestHelper with SpiritHelpers {
       (entry1, entry2) => (entry1 > entry2)
     )
 
-    <rss version="2.0">
-			<channel>
-				<title>Spirit @ FH-Schmalkalden - RSS Feed</title>
-				<link>{ url }</link>
-				<description>RSS Feed für die aktuellen Meldungen am Fachbereich Informatik</description>
-				<language>de-de</language>
-				<image>
-				  <url>{ url }/spirit_style/images/logo_spirit.png</url>
-				  <title>Spirit</title>
-				  <link>{ url }</link>
-				</image>
-				<ttl>60</ttl>
-				{ news.map { entry =>
-					(<item>
-						<title>{ entry.subject.value } ({ semesterChanger(entry.semester.value) })</title>
-						<description>{ TextileParser.paraFixer(TextileParser.toHtml(entry.news.value)) }</description>
-						<link>{ url}/entry/{entry.nr.value }</link>
-						<author>{ entry.writer.value }</author>
-						<guid>{ entry.nr.value }</guid>
-						<pubDate>{ entry.date.value }</pubDate>
-					</item>)
-				}}
+     <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+       <channel>
+			 <title>Spirit @ FH-Schmalkalden - RSS Feed</title>
+			 <link>{ url }</link>
+			 <description>RSS Feed für die aktuellen Meldungen am Fachbereich Informatik</description>
+       <atom:link href={url + "/feed.xml"} rel="self" type="application/rss+xml" />
+			 <language>de-de</language>
+			 <image>
+			   <url>{ url }/spirit_style/images/logo_spirit.png</url>
+				 <title>Spirit @ FH-Schmalkalden - RSS Feed</title>
+				 <link>{ url }</link>
+			 </image>
+			 <ttl>60</ttl>
+			 { news.map { entry =>
+			   (<item>
+				  <title>{ entry.subject.value } ({ semesterChanger(entry.semester.value) })</title>
+					<description>{ TextileParser.toHtml(entry.news.value).toString }</description>
+					<link>{ url}/entry/{entry.nr.value }</link>
+					<guid isPermaLink="false">{ entry.nr.value }</guid>
+					<pubDate>{ entry.date.value }</pubDate>
+				  </item>)
+			}}
 			</channel>
 		</rss>
 	}
