@@ -51,7 +51,7 @@ import net.liftweb.http.StreamingResponse
 trait SpiritHelpers {
 
   def semesterChanger(input: String): String = input match {
-    case semester if(semester startsWith "semester ") => "Alle"
+    case semester if (semester startsWith "semester ") => "Alle"
     case _ => input
   }
 
@@ -60,10 +60,23 @@ trait SpiritHelpers {
    * User will be forwarded to /semsearch/<semester>. 
    */
   def sem2link(semesterArray: Array[String]): NodeSeq = {
-    val renderedLinks = semesterArray map { currentSem =>
-      link(currentSem, () => S redirectTo "/semsearch/" + currentSem, <span class="semester_space">{ currentSem }</span> )
+    val count = semesterArray.length
+
+    val links = semesterArray map { currentSem =>
+      if (count < 9) {
+        link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
+          <span class="semester_space">{ currentSem }</span> )
+      } else {
+        if (semesterArray.indexOf(currentSem) == (count / 2).toInt) {
+          link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
+            <span class="semester_space">{ currentSem }</span> <br/> )
+        } else {
+          link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
+            <span class="semester_space">{ currentSem }</span> )
+        }
+      }
     }
-    renderedLinks.toSeq.flatten
+    links.toSeq.flatten
   }
 
   /**
