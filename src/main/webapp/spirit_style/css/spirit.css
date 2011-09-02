@@ -114,7 +114,8 @@ header,section,footer,aside,nav,article {
 }
 .entrySemester{
 	float:left;
-	width:380px;
+	width:370px;
+	padding-right: 10px;
 }
 .entrySemester span {
     margin-right:2px;
