@@ -63,18 +63,8 @@ trait SpiritHelpers {
     val count = semesterArray.length
 
     val links = semesterArray map { currentSem =>
-      if (count < 9) {
         link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
-          <span class="semester_space">{ currentSem }</span> )
-      } else {
-        if (semesterArray.indexOf(currentSem) == (count / 2).toInt) {
-          link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
-            <span class="semester_space">{ currentSem }</span> <br/> )
-        } else {
-          link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
-            <span class="semester_space">{ currentSem }</span> )
-        }
-      }
+          <span>{ currentSem } </span> )
     }
     links.toSeq.flatten
   }

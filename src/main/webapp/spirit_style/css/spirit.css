@@ -86,12 +86,12 @@ table.gadgets td {
 	text-align: center;
 }
 
-/*HTML5 Artikel*/
+/*new HTML5 styling*/
 header,section,footer,aside,nav,article {
 	display: block;
 }
 
-/***  News***/
+/*** Entry ***/
 .entry{
 	background-color: #ffffff;
 	width:100%;
@@ -114,6 +114,11 @@ header,section,footer,aside,nav,article {
 }
 .entrySemester{
 	float:left;
+	width:380px;
+}
+.entrySemester span {
+    margin-right:2px;
+    padding:0;
 }
 .entryId{
 	float:right;
