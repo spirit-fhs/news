@@ -36,28 +36,62 @@ package snippet
 import scala.xml._
 import net.liftweb.util.Helpers._
 import net.liftweb.textile._
-import model.Entry
-import net.liftweb.common.Loggable
+import net.liftweb.http.S
+import net.liftweb.json.JsonDSL._
+import model.{Config, Entry}
+import net.liftweb.common.{Empty, Box, Full, Loggable}
 
 /**
  * @author Marcus Denison
  */
-class ViewNews extends SpiritHelpers with Loggable {
+class ViewNews extends SpiritHelpers with Loggable with Config {
 
+  /**
+   * Pattern Matching if a search has begun.
+   * If not, all News will be returned.
+   */
+  lazy val news: List[Entry] = S.param("search") match {
+
+    case Full(s) =>
+      logger info ("Searching for " + s + "!")
+      val validSearch =
+        loadSemesters("BaI") :: loadSemesters("BaWI") ::
+        loadSemesters("BaMuMa") :: loadSemesters("BaITS") ::
+        loadSemesters("Ma") :: loadSemesters("Other") :: Nil
+
+      if (validSearch.flatten.contains(s)) {
+        Entry.findAll.filter { entry =>
+          entry.contains(s) || entry.contains("semester")
+        }.sortWith(
+          (entry1, entry2) => (entry1 > entry2)
+        )
+      } else {
+          Entry.find("nr" -> s) match {
+            case Full(x) => List(x)
+            case _ => Entry.findAll.sortWith(
+                        (entry1, entry2) => (entry1 > entry2)
+                      )
+          }
+        }
+
+    case _ =>
+      Entry.findAll.sortWith(
+        (entry1, entry2) => (entry1 > entry2)
+      )
+  }
 
   def render = {
 
-    ".entry" #> Entry.findAll.sortWith(
-        (entry1, entry2) => (entry1 > entry2)
-      ).map( entry =>
-       ".writer"    #> entry.writer.value.toString &
-       ".subject"   #> <a href={"/entry/"+entry.nr.value.toString}>
-                       {entry.subject.value.toString}</a> &
-       ".nr"        #> entry.nr.value.toString &
-       ".lifecycle" #> entry.lifecycle.value.toString &
-       ".date"      #> Text(entry.date.value.toString.substring(4, 11) + ". " + entry.date.value.toString.substring(17, 22)) &
-       ".semester"  #> sem2link(semesterChanger(entry.semester.value.toString).split(" ")) &
-       ".news"      #> TextileParser.toHtml(entry.news.value.toString))
+   ".entry" #> news.map( entry =>
+     ".writer"    #> entry.writer.value.toString &
+     ".subject"   #> <a href={"/entry/"+entry.nr.value.toString}>
+                     {entry.subject.value.toString}</a> &
+     ".nr"        #> entry.nr.value.toString &
+     ".lifecycle" #> entry.lifecycle.value.toString &
+     ".date"      #> Text(entry.date.value.toString.substring(4, 11) + ". " +
+                          entry.date.value.toString.substring(17, 22)) &
+     ".semester"  #> sem2link(semesterChanger(entry.semester.value.toString).split(" ")) &
+     ".news"      #> TextileParser.toHtml(entry.news.value.toString))
 
   }
 

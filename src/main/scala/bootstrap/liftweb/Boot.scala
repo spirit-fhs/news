@@ -81,12 +81,12 @@ class Boot extends Loggable with Config {
 
     LiftRules.statefulRewrite.append {
       case RewriteRequest(ParsePath("entry" :: entrynr :: Nil,_,_,_),_,_) =>
-        RewriteResponse("entry" :: Nil, Map("entrynr" -> entrynr))
+        RewriteResponse("index" :: Nil, Map("search" -> entrynr))
     }
 
     LiftRules.statefulRewrite.append {
       case RewriteRequest(ParsePath("semsearch" :: semsearch :: Nil,_,_,_),_,_) =>
-        RewriteResponse("semsearch" :: Nil, Map("semsearch" -> semsearch))
+        RewriteResponse("index" :: Nil, Map("search" -> semsearch))
     }
 
     LiftRules.statelessDispatchTable.append(RestApi)
@@ -132,7 +132,8 @@ class Boot extends Loggable with Config {
             }
     }
 
-    val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home")) ::
+    val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home", Hidden)) ::
+            Menu(Loc("ExtHome", ExtLink("/index") , "Home")) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             schedule ::

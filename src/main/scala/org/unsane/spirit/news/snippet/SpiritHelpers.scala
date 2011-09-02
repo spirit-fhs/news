@@ -60,8 +60,6 @@ trait SpiritHelpers {
    * User will be forwarded to /semsearch/<semester>. 
    */
   def sem2link(semesterArray: Array[String]): NodeSeq = {
-    val count = semesterArray.length
-
     val links = semesterArray map { currentSem =>
         link(currentSem, () => S redirectTo "/semsearch/" + currentSem,
           <span>{ currentSem } </span> )
