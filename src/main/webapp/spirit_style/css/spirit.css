@@ -85,3 +85,58 @@ table.gadgets td {
   padding: 5px 5px;
 	text-align: center;
 }
+
+/*HTML5 Artikel*/
+header,section,footer,aside,nav,article {
+	display: block;
+}
+
+/***  News***/
+.entry{
+	background-color: #ffffff;
+	width:100%;
+	margin-bottom:15px;
+}
+.entry header{
+	background-color: #C3D9FF;
+	border-left: 1px solid; 
+	border-top: 1px solid; 
+	border-right: 1px solid;
+	border-color: #C3D9FF;
+	padding: 2px 5px;
+}
+.entryBody{
+	border-left: 1px solid; 
+	border-right: 1px solid;
+	border-bottom: 1px solid;
+	border-color: #d6d6d6;
+	padding: 5px;
+}
+.entrySemester{
+	float:left;
+}
+.entryId{
+	float:right;
+	width:55px;
+}
+.entryOwner{
+	width: 250px;
+	float:right;
+}
+.entrySubject{
+	float:left;
+	width: 85%;
+}
+.entrySubject h1{
+	font-size:11pt;
+	font-weight: bold;
+}
+.entryDate{
+	float:right;
+	padding-top:3px;
+	width: 65px;
+}
+.entryContent{
+	margin-top: 10px;
+	font-size:10pt;
+}

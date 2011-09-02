@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <meta charset="UTF-8"/>
     <title>Aktuelles</title>
   </head>
   <body class="lift:content_id=main">
     <div id="main" class="lift:surround?with=default;at=content">
       <div class="lift:EntrySearcher.view">
-      <table class="entry" width="100%" border="0" cellspacing="0" cellpadding="0">
-			<thead>
-				<tr>
-					<th width="100%" colspan="4">Betreff: <div class="subject"></div></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Semester: <div class="semester"></div></td>
-					<td>Verfasser: <div class="writer"></div></td>
-					<td>Vom: <div class="date"></div></td>
-					<td>Nr: <div class="nr"></div></td>
-				</tr>
-				<tr>
-					<td colspan="4"><div class="news"></div></td>
-				</tr>
-			</tbody>
-		</table>
+         <article class="entry">
+            <header>
+               <div class="entrySemester">Semester: <div class="semester"></div></div>
+               <div class="entryId">Nr: <div class="nr"></div></div>
+               <div class="entryOwner">Verfasser: <div class="writer"></div></div>
+               <div class="clear"></div>
+            </header>
+            <div class="entryBody">
+               <div class="entrySubject"><h1><div class="subject"></div></h1></div>
+               <div class="entryDate"><div class="date"></div></div>
+               <div class=clear></div>
+               <div class="entryContent"><div class="news"></div></div>
+            </div>
+         </article>
       </div>
     </div>
   </body>
