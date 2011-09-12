@@ -80,6 +80,15 @@ trait Config {
     props getProperty prop
   }
 
+   // taken from http://code-redefined.blogspot.com/2009/05/md5-sum-in-scala.html
+  def md5SumString(str: String) : String = {
+    import java.security.MessageDigest
+    val md5 = MessageDigest.getInstance("MD5")
+    md5.reset()
+    md5.update(str.getBytes)
+    md5.digest().map(0xFF & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
+  }
+
   private val props = new Properties
   private val configFile = System.getProperty("user.dir") + "/settings.properties"
 }

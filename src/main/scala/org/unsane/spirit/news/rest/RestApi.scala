@@ -40,14 +40,27 @@ import net.liftweb.util.Helpers._
 import net.liftweb.json.JsonDSL._
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.http._
-import net.liftweb.json._
+import net.liftweb.json
 import net.liftweb.common.{Full, Loggable}
+import lib.Schedule
 
 object RestApi extends RestHelper with Loggable {
 
-  logger info "Rest is now online"
+  logger info "Rest is now online."
 
   serve {
+
+    /**
+     * Rest Interface in order to put the JSON schedule into the DB.
+     */
+    case "scheduleapi" :: "fileupload" ::  _ JsonPut jsonfile -> _ => {
+      logger.warn("Fileupload is used. Please check if the Schedule is fine!")
+      Schedule.import2DatabaseQueue(json.compact(json.render(jsonfile))) match {
+        case true => JsonResponse(("upload" -> "true!"), Nil, Nil, 200)
+        case false => JsonResponse(("upload" -> "false!"), Nil, Nil, 200)
+      }
+
+    }
 
     /**
      * this is a test, looking that REST-Api is doing his job

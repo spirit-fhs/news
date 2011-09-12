@@ -1,0 +1,44 @@
+/*** Schedule ***/
+table {
+	background-color: #ffffff;
+	width:100%;
+	margin-bottom:15px;
+	font-size:10pt;
+}
+
+table th {
+	background-color: #C3D9FF;
+	border-left: 1px solid;
+	border-top: 1px solid;
+	border-right: 1px solid;
+	border-color: #C3D9FF;
+	padding: 2px 5px;
+}
+
+table td {
+	border-color: #d6d6d6;
+	padding-right: 10px;
+	width: 180px;
+}
+
+.first {
+    border-color: #d6d6d6;
+	padding-right: 10px;
+	width: 50px;
+}
+
+table td pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    border:1px solid #000000;
+    left:10px;top:50px;
+}
+
+table caption {
+    background-color: #ffffff;
+	margin-bottom:15px;
+	font-size:14pt;
+}

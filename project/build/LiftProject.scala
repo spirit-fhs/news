@@ -15,6 +15,8 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
     "net.liftweb" %% "lift-mapper" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-mongodb" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-mongodb-record" % liftVersion % "compile->default" withSources,
+    "net.liftweb" %% "lift-record" % liftVersion % "compile->default" withSources,
+    "net.liftweb" %% "lift-json" % liftVersion % "compile->default" withSources,
     "junit" % "junit" % "4.5" % "test->default",
     "org.scala-tools.testing" %% "specs" % "1.6.7" % "test->default",
     "org.mockito" % "mockito-all" % "1.8.0" % "test",

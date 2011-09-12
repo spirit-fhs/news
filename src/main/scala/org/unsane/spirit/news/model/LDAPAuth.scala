@@ -74,15 +74,6 @@ trait LDAPAuth extends Loggable with Config {
     }
   }
 
-  // taken from http://code-redefined.blogspot.com/2009/05/md5-sum-in-scala.html
-  private def md5SumString(str: String) : String = {
-    import java.security.MessageDigest
-    val md5 = MessageDigest.getInstance("MD5")
-    md5.reset()
-    md5.update(str.getBytes)
-    md5.digest().map(0xFF & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
-  }
-
   /**
    * Trying to get auth from the LDAP
    * @param userName the login

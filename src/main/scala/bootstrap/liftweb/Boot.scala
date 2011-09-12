@@ -40,6 +40,7 @@ import snippet.Feed
 
 import net.liftweb._
 import http._
+import auth.{AuthRole, userRoles, HttpBasicAuthentication}
 import sitemap._
 import Loc._
 
@@ -52,9 +53,33 @@ class Boot extends Loggable with Config {
   def boot {
 
 
+    // Protecting file upload for schedule
+    val roles = AuthRole("Upload")
+
+    LiftRules.httpAuthProtectedResource.append {
+      case Req("scheduleapi" :: "fileupload" :: _, _, PutRequest) =>
+        roles.getRoleByName("Upload")
+    }
+
+    val jsonUser = loadProps("jsonUser")
+    val jsonPassword = loadProps("jsonPassword")
+    logger info (jsonUser +":"+ jsonPassword)
+
+    LiftRules.authentication = HttpBasicAuthentication("org.unsane.spirit") {
+     case (user, pw, req) =>
+      if (user == jsonUser && md5SumString(pw) == jsonPassword) {
+        userRoles(AuthRole("Upload"))
+        true
+      } else {
+        false
+      }
+
+    }
+
     val productive = loadProps("Productive") == "yes"
     val tweet = loadProps("Tweet") == "yes"
     val showschedule = loadProps("ShowSchedule") == "yes"
+    val scheduleAdmins = loadProps("scheduleAdmins").split(";")
 
     // Opens connection to MongoDB with user/pass "spirit_news"
     MongoDB.defineDbAuth(DefaultMongoIdentifier,
@@ -73,10 +98,11 @@ class Boot extends Loggable with Config {
     val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
     val loggedOut = If(() => User.notLoggedIn_?, () => RedirectResponse("/index"))
     val onlyWS = If(() => loadProps("Semester") == "WS", () => RedirectResponse("/index"))
+    val adminLoggedIn = If(() => scheduleAdmins contains User.currentUserId.openOr(""), () => RedirectResponse("/index"))
 
     LiftRules.uriNotFound.prepend(NamedPF("404handler"){
-          case (req,failure) =>
-            NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
+      case (req,failure) =>
+        NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
     })
 
     LiftRules.statefulRewrite.append {
@@ -138,6 +164,7 @@ class Boot extends Loggable with Config {
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             schedule ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
+            Menu(Loc("SchedulePreview", List("schedulepreview"), "Schedule Preview", adminLoggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
             Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
