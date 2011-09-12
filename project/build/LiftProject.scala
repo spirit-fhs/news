@@ -6,7 +6,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   val scalatools_release = "Scala Tools Releases" at
   "http://scala-tools.org/repo-releases"
-  val liftVersion = "2.4-M2"
+  val liftVersion = "2.4-M4"
 
   override def libraryDependencies = Set(
     "net.databinder" %% "dispatch" % "0.7.7", 
