@@ -30,6 +30,7 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Running SBT to package the code for deployment"
 	$(SBT_CMD) clean update
 	rm lib_managed/scala_2.8.1/compile/activation-1.1.jar
+	rm lib_managed/scala_2.8.1/compile/lift-json_2.8.0-2.1-M1.jar
 	$(SBT_CMD) compile prepare-webapp package
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
