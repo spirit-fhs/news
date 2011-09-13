@@ -7,7 +7,7 @@ HOSTNAME=	$(shell hostname -s)
 ifeq ($(HOSTNAME),$(PROD_HOST))
 	WAR_FILE=root.war
 else
-	WAR_FILE=./target/scala_2.9.1/spirit-news_2.9.1-1.0.war
+	WAR_FILE=./target/scala_2.8.1/spirit-news_2.8.1-1.0.war
 endif
 
 JETTY_DIR=	/usr/share/jetty/
@@ -29,7 +29,7 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	git pull origin master
 	@echo "==> Running SBT to package the code for deployment"
 	$(SBT_CMD) clean update
-	rm lib_managed/scala_2.9.1/compile/activation-1.1.jar
+	rm lib_managed/scala_2.8.1/compile/activation-1.1.jar
 	$(SBT_CMD) compile prepare-webapp package
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
