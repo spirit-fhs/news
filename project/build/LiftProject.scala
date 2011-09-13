@@ -9,7 +9,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val liftVersion = "2.4-M4"
 
   override def libraryDependencies = Set(
-    "net.databinder" %% "dispatch" % "0.7.8", 
+    "net.databinder" % "dispatch_2.8.1" % "0.8.1",
     "net.liftweb" %% "lift-textile" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-mapper" % liftVersion % "compile->default" withSources,

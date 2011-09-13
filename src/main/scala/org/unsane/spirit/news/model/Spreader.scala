@@ -72,7 +72,8 @@ object Spreader extends Actor with Config with Loggable {
           try {
             val http = new Http
             val longUrl = "http://is.gd/api.php?longurl=http://spirit.fh-schmalkalden.de/entry/" + nr
-            val tinyurl = http(longUrl.as_str)
+            val req = new Request(longUrl)
+            val tinyurl = http(req <:< Map("" -> "") as_str)
             http(Status.update(mkTweet(subject, tinyurl, semester), consumer, token).>|)
           } catch {
             case e =>
