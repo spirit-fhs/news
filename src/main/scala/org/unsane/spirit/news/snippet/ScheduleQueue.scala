@@ -9,6 +9,7 @@ import JsCmds._
 import JE._
 import org.unsane.spirit.news.model.{Config, ScheduleRecord, ScheduleRecordQueue}
 import xml.NodeSeq
+import net.liftweb.json.JsonDSL._
 
 class ScheduleQueue extends Config {
 
@@ -112,8 +113,10 @@ class ScheduleQueue extends Config {
     object six extends period("17.45-19.15", in)
     object seven extends period("19.30-21.00", in)
 
-    renderSchedule(week, classname, one, two, three, four, five, six, seven)
-
+    in match {
+      case Nil => <div></div>
+      case _ => renderSchedule(week, classname, one, two, three, four, five, six, seven)
+    }
   }
 
   def renderSchedule(week: String, classname: String, one: period, two: period, three: period,
@@ -189,7 +192,10 @@ class ScheduleQueue extends Config {
   }
 
   def process() = {
-    ScheduleRecord.findAll.map(_.delete_!)
+
+    ScheduleRecordQueue.findAll.map( x => x.className.value ).distinct.map { x =>
+      ScheduleRecord.findAll("className" -> x.toString()).map(_.delete_!)
+    }
 
     val old = ScheduleRecordQueue.findAll
     old map { x =>
@@ -198,7 +204,8 @@ class ScheduleQueue extends Config {
       newSched.save
     }
     old.map(_.delete_!)
-    S.notice("Neuen Stundenplan erfolgreich portiert!")
+
+    S.notice("Neuen Stundenpläne erfolgreich portiert!")
     S.redirectTo("/schedulepreview")
   }
 
@@ -210,7 +217,5 @@ class ScheduleQueue extends Config {
       case _ => ".preview" #> schedules_as_HTML.toList &
                 "type=submit" #> SHtml.submit("Veröffentlichen", () => process)
     }
-
-
   }
 }
