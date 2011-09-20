@@ -17,7 +17,10 @@ table th {
 
 table td {
 	border-color: #d6d6d6;
-	padding-right: 10px;
+	padding-right: 2px;
+	padding-left: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	width: 180px;
 }
 
@@ -35,6 +38,7 @@ table td pre {
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
     border:1px solid #000000;
     left:10px;top:50px;
+    font-size:14px;
 }
 
 table caption {

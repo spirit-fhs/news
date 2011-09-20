@@ -8,7 +8,6 @@ import xml.NodeSeq
 import net.liftweb.http.S
 import net.liftweb.common.Full
 
-
 /**
  * @TODO This is a WIP, still work to be done!
  */
@@ -37,7 +36,7 @@ class Schedule extends Config {
 
   val className = S.param("classname").openOr("").toLowerCase
 
-  val week = S.param("week").get.toLowerCase match {
+  val week = S.param("week").openOr("").toLowerCase match {
     case "u" => "g"
     case "g" => "u"
     case _ => ""
@@ -50,8 +49,16 @@ class Schedule extends Config {
     x.appointment.get.week.toLowerCase == week )
 
   def mkPrettyEvent(schedule: List[ScheduleRecord]): NodeSeq = {
+
     schedule map { x =>
-      <pre>{x.titleShort.get + " " +
+
+      val color = x.appointment.get.week match {
+        case "g" => "#a52a2a"
+        case "u" => "#2d71ff"
+        case _ => ""
+      }
+
+      <pre style={"color:" + color}>{x.titleShort.get + " " +
       x.eventType.get + "\n" +
       x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room + "\n" +
       (if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
