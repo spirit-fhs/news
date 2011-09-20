@@ -5,6 +5,7 @@ import net.liftweb.mongodb._
 import record.{MongoRecord, MongoId, MongoMetaRecord}
 import net.liftweb.mongodb.record.{ field => mongoField }
 import net.liftweb.record.field.{IntField, StringField}
+import net.liftweb.mongodb.record.field.MongoListField
 
 object ScheduleRecord extends ScheduleRecord with MongoMetaRecord[ScheduleRecord] {
 
@@ -19,7 +20,7 @@ class ScheduleRecord extends MongoRecord[ScheduleRecord] with MongoId[ScheduleRe
   object member extends mongoField.MongoCaseClassListField[ScheduleRecord, member](this)
   object titleLong extends StringField(this, 100)
   object titleShort extends StringField(this, 100)
-  object group extends StringField(this,100)
+  object group extends StringField(this, 100)
 }
 
 case class location(place: place, alternative: List[alternative])

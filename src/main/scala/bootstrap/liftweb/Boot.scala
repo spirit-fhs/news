@@ -166,6 +166,7 @@ class Boot extends Loggable with Config {
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
             Menu(Loc("SchedulePreview", List("schedulepreview"), "Schedule Preview", adminLoggedIn)) ::
+            Menu(Loc("schedule", List("schedule"), "schedule", Hidden)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
             Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
             (if (productive)

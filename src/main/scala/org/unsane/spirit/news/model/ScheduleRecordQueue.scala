@@ -4,6 +4,7 @@ import net.liftweb.mongodb._
 import record.{MongoRecord, MongoId, MongoMetaRecord}
 import net.liftweb.mongodb.record.{ field => mongoField }
 import net.liftweb.record.field.StringField
+import net.liftweb.mongodb.record.field.MongoListField
 
 object ScheduleRecordQueue extends ScheduleRecordQueue with MongoMetaRecord[ScheduleRecordQueue] {
 
@@ -18,7 +19,7 @@ class ScheduleRecordQueue extends MongoRecord[ScheduleRecordQueue] with MongoId[
   object member extends mongoField.MongoCaseClassListField[ScheduleRecordQueue, member](this)
   object titleLong extends StringField(this, 100)
   object titleShort extends StringField(this, 100)
-  object group extends StringField(this,100)
+  object group extends StringField(this, 100)
 
 }
 

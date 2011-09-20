@@ -35,34 +35,31 @@ class Schedule extends Config {
   }
 }
 
-  val className = S.param("className").openOr("")
+  val className = S.param("classname").openOr("").toLowerCase
 
-  //val schedule_i = loadSchedule("I").map(_.toLowerCase)
-  //val schedule_wi = loadSchedule("WI").map(_.toLowerCase)
-  //val schedule_its = loadSchedule("ITS").map(_.toLowerCase)
-  //val schedule_muma = loadSchedule("MUMA").map(_.toLowerCase)
-  //val schedule_ma = loadSchedule("MA").map(_.toLowerCase)
+  val week = S.param("week").get.toLowerCase match {
+    case "u" => "g"
+    case "g" => "u"
+    case _ => ""
+  }
 
-  val Straight = "g"
-  val NonStraight = "u"
+  val classSchedule = ScheduleRecord.findAll.filter {
+    x => x.className.value.toLowerCase == className }
 
-  val classSchedule = ScheduleRecord.findAll("className" -> className)
-
-  val weekScheduleStraight = classSchedule.filterNot( x =>
-    x.appointment.get.week.toLowerCase == NonStraight )
-  val weekScheduleNonStraight = classSchedule.filterNot( x =>
-    x.appointment.get.week.toLowerCase == Straight )
+  val in = classSchedule.filterNot( x =>
+    x.appointment.get.week.toLowerCase == week )
 
   def mkPrettyEvent(schedule: List[ScheduleRecord]): NodeSeq = {
     schedule map { x =>
       <pre>{x.titleShort.get + " " +
       x.eventType.get + "\n" +
       x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room + "\n" +
-      "Gruppe: " + x.group.get + "\n" + x.member.get.map(_.name).mkString(";")}</pre>
+      (if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
+       else "Gruppe: " + x.group.value.replaceAll("""\u00A0""", "") + "\n" ) +
+       x.member.get.map(_.name).mkString(" ")}</pre>
     }
   }
 
-  val in = weekScheduleStraight
   object one extends period("08.15-09.45", in)
   object two extends period("10.00-11.30", in)
   object three extends period("11.45-13.15", in)
@@ -110,5 +107,4 @@ class Schedule extends Config {
     ".sevenFriday" #> {mkPrettyEvent(seven.Friday)}
 
   }
-
 }
