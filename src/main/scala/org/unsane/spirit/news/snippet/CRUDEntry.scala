@@ -196,6 +196,12 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    */
   def view = {
 
+    emailing match {
+      case true =>
+      case false =>
+        S.warning("Bitte beachten sie, dass die E-Mail-Funktion erst ab dem 30.9 wieder zur Verfügung steht.")
+    }
+
     "name=date"  #> text(if(CrudEntry.lifecycle.value == "") lifecycleFormat.format(new Date)
                     else CrudEntry.lifecycle.value,
                     date => CrudEntry.lifecycle.set( dateValidator(date) ),
@@ -209,7 +215,8 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
                     else CrudEntry.writer.value, CrudEntry.writer.set(_)) &
     "name=email" #> checkbox(false,
                         if(_) sendEmail = true,
-                        if (S.getSessionAttribute("email").open_! == "not-valid") "disabled" -> "disabled"
+                        if (S.getSessionAttribute("email").openOr("") == "not-valid") "disabled" -> "disabled"
+                        else if (!emailing) "disabled" -> "disabled"
                         else "enabled" -> "enabled") &
     "name=twitter" #> checkbox(true, if(_) tweetUpdate = true) &
     (if (newEntry) "type=submit" #> submit("Senden", () => {
@@ -243,4 +250,5 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   private var newEntry = false
   private val df = new SimpleDateFormat ("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
   private var changedSemester = ""
+  private val emailing = loadProps("Emailing") == "yes"
 }
