@@ -45,7 +45,7 @@ import net.liftweb.common.Loggable
 import java.util.{GregorianCalendar,Date, Locale}
 import java.text.SimpleDateFormat
 
-object Response {
+object Response extends Loggable {
 
   private[this] def afterDate(date1Param: String, date2Param: String): Boolean = {
 
@@ -59,7 +59,8 @@ object Response {
   }
 
   private[this] def filterSemester(entries: List[Entry], key: String): List[Entry] = {
-    entries.filter{entry => entry.semester.value contains key}
+    entries.filter{entry => entry.semester.value.split(" ") contains key
+    }
   }
 
   private[this] def filterDate(entries: List[Entry], key: String): List[Entry] = {
