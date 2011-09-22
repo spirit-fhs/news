@@ -60,6 +60,7 @@ class Schedule extends Config {
 
       <div class={"event " + cycle}>
        <span class={"eventTitle"}>{x.titleShort.get + " " + x.eventType.get}</span>
+       <div style="clear:both"></div>
        {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
            else <div>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</div>)}
        <div style="float:left">{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</div>
