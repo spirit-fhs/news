@@ -64,7 +64,7 @@ class Schedule extends Config {
            else <div>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</div>)}
        <div style="float:left">{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</div>
        <div style="float:right">{x.member.get.map(_.name).mkString(" ")}</div>
-       <div style="clear:both">
+       <div style="clear:both"></div>
       </div>
     }
   }
