@@ -52,18 +52,21 @@ class Schedule extends Config {
 
     schedule map { x =>
 
-      val color = x.appointment.get.week match {
-        case "g" => "#a52a2a"
-        case "u" => "#2d71ff"
-        case _ => ""
+      val cycle = x.appointment.get.week match {
+        case "g" => "even"
+        case "u" => "odd"
+        case _ => "weekly"
       }
 
-      <pre style={"color:" + color}>{x.titleShort.get + " " +
-      x.eventType.get + "\n" +
-      x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room + "\n" +
-      (if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
-       else "Gruppe: " + x.group.value.replaceAll("""\u00A0""", "") + "\n" ) +
-       x.member.get.map(_.name).mkString(" ")}</pre>
+      <div class={"event " + cycle}>
+       <span class={"eventTitle"}>{x.titleShort.get + " " + x.eventType.get}</span>
+       <ul class={"detailList"}>
+        <li>{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</li>
+         {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
+            else <li>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</li>)}
+        <li>{x.member.get.map(_.name).mkString(" ")}</li>
+       </ul>
+      </div>
     }
   }
 

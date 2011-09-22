@@ -30,19 +30,36 @@ table td {
 	width: 50px;
 }
 
-table td pre {
-    white-space: pre-wrap;       /* css-3 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-    border:1px solid #000000;
-    left:10px;top:50px;
-    font-size:14px;
-}
-
 table caption {
     background-color: #ffffff;
 	margin-bottom:15px;
 	font-size:14pt;
+}
+
+.event{
+	border-radius:5px;
+	border:1px solid #D6D6D6;
+	padding: 3px;
+}
+
+.odd{
+	background-color:#C3D9FF;
+}
+
+.even{
+	background-color:#EE0000;
+	color: #ffffff;
+}
+
+.weekly{
+	background-color:#ffffff;	
+}
+.eventTitle{
+	font-size:10pt;
+	font-weight:bold
+}
+
+.detailList{
+	list-style-type:none;
+	margin-bottom:0px
 }
