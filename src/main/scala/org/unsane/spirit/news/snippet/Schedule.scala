@@ -60,12 +60,11 @@ class Schedule extends Config {
 
       <div class={"event " + cycle}>
        <span class={"eventTitle"}>{x.titleShort.get + " " + x.eventType.get}</span>
-       <ul class={"detailList"}>
-        <li>{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</li>
-         {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
-            else <li>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</li>)}
-        <li>{x.member.get.map(_.name).mkString(" ")}</li>
-       </ul>
+       {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
+           else <div>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</div>)}
+       <div style="float:left">{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</div>
+       <div style="float:right">{x.member.get.map(_.name).mkString(" ")}</div>
+       <div style="clear:both">
       </div>
     }
   }
