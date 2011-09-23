@@ -41,7 +41,9 @@ import net.liftweb.textile.TextileParser
 object Feed extends RestHelper with SpiritHelpers {
 
   serve {
-    case "feed" :: _ XmlGet _=> createFeed
+    case "feed" :: _ XmlGet _=>  {
+        XmlResponse(createFeed, "application/rss+xml").toResponse
+    }
   }
 
   lazy val url = S.hostAndPath //"http://spirit.fh-schmalkalden.de"
