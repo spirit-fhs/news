@@ -47,14 +47,22 @@ table caption {
 }
 
 .even{
-	background-color:#EE0000;
-	color: #ffffff;
+	background-color:#F9F29F;
 }
 
 .weekly{
 	background-color:#ffffff;	
 }
+
 .eventTitle{
 	font-size:10pt;
 	font-weight:bold
+}
+
+tr:nth-child(2n+1) {
+    background-color: #FFFFFF;
+}
+
+tr:nth-child(2n) {
+    background-color: #F2F2F2;
 }
