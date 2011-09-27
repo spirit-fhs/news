@@ -66,3 +66,9 @@ tr:nth-child(2n+1) {
 tr:nth-child(2n) {
     background-color: #F2F2F2;
 }
+.lecture, .tutorial{
+	float: right; 
+	background: url("../images/lecture.png") no-repeat scroll 0% 0% transparent; 
+	height: 20px; 
+	width: 20px;
+}

@@ -58,8 +58,13 @@ class Schedule extends Config {
         case _ => "weekly"
       }
 
+      val icon = x.eventType.get match {
+        case "Uebung" => "tutorial"
+        case _ => "lecture"
+      }
+      
       <div class={"event " + cycle}>
-       <span class={"eventTitle"}>{x.titleShort.get + " " + x.eventType.get}</span>
+       <span class={"eventTitle "}>{x.titleShort.get}</span><div class={icon}></div>
        <div style="clear:both"></div>
        {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
            else <div>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</div>)}
