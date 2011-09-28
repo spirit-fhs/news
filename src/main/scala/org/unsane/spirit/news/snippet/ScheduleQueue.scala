@@ -40,53 +40,26 @@ class ScheduleQueue extends Config {
   val schedule_muma = loadSchedule("MUMA").map(_.toLowerCase)
   val schedule_ma = loadSchedule("MA").map(_.toLowerCase)
 
-  val Straight = "g"
-  val NonStraight = "u"
-
   val classSchedule = ScheduleRecordQueue.findAll
 
-  val weekScheduleStraight = classSchedule.filterNot( x => x.appointment.get.week.toLowerCase == NonStraight )
-  val weekScheduleNonStraight = classSchedule.filterNot( x => x.appointment.get.week.toLowerCase == Straight )
-
-
   lazy val schedules_as_HTML = schedule_i.map(x =>
-    renderSchedules("Gerade", x, weekScheduleStraight.filter(
-      y => y.className.get.toLowerCase == x)
-    )
-  ) ++ schedule_i.map(x =>
-    renderSchedules("Ungerade", x, weekScheduleNonStraight.filter(
+    renderSchedules(x, classSchedule.filter(
       y => y.className.get.toLowerCase == x)
     )
   ) ++ schedule_wi.map(x =>
-    renderSchedules("Gerade", x, weekScheduleStraight.filter(
-      y => y.className.get.toLowerCase == x)
-    )
-  ) ++ schedule_wi.map(x =>
-    renderSchedules("Ungerade", x, weekScheduleNonStraight.filter(
+    renderSchedules(x, classSchedule.filter(
       y => y.className.get.toLowerCase == x)
     )
   ) ++ schedule_muma.map(x =>
-    renderSchedules("Gerade", x, weekScheduleStraight.filter(
-      y => y.className.get.toLowerCase == x)
-    )
-  ) ++ schedule_muma.map(x =>
-    renderSchedules("Ungerade", x, weekScheduleNonStraight.filter(
+    renderSchedules(x, classSchedule.filter(
       y => y.className.get.toLowerCase == x)
     )
   ) ++ schedule_its.map(x =>
-    renderSchedules("Gerade", x, weekScheduleStraight.filter(
-      y => y.className.get.toLowerCase == x)
-    )
-  ) ++ schedule_its.map(x =>
-    renderSchedules("Ungerade", x, weekScheduleNonStraight.filter(
+    renderSchedules(x, classSchedule.filter(
       y => y.className.get.toLowerCase == x)
     )
   ) ++ schedule_ma.map(x =>
-    renderSchedules("Gerade", x, weekScheduleStraight.filter(
-      y => y.className.get.toLowerCase == x)
-    )
-  ) ++ schedule_ma.map(x =>
-    renderSchedules("Ungerade", x, weekScheduleNonStraight.filter(
+    renderSchedules(x, classSchedule.filter(
       y => y.className.get.toLowerCase == x)
     )
   )
@@ -94,16 +67,26 @@ class ScheduleQueue extends Config {
   def mkPrettyEvent(schedule: List[ScheduleRecordQueue]): NodeSeq = {
 
     schedule map { x =>
-      <pre>{x.titleShort.get + " " +
-      x.eventType.get + "\n" +
-      x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room + "\n" +
-      "Gruppe: " + x.group.get + "\n" + x.member.get.map(_.name).mkString(";")}</pre>
+
+      val cycle = x.appointment.get.week match {
+        case "g" => "even"
+        case "u" => "odd"
+        case _ => "weekly"
+      }
+
+      <div class={"event " + cycle}>
+       <span class={"eventTitle"}>{x.titleShort.get + " " + x.eventType.get}</span>
+       <div style="clear:both"></div>
+       {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
+           else <div>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</div>)}
+       <div style="float:left">{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</div>
+       <div style="float:right">{x.member.get.map(_.name).mkString(" ")}</div>
+       <div style="clear:both"></div>
+      </div>
     }
-
-
   }
 
-  def renderSchedules(week: String, classname: String, in: List[ScheduleRecordQueue]) = {
+  def renderSchedules(classname: String, in: List[ScheduleRecordQueue]) = {
 
     object one extends period("08.15-09.45", in)
     object two extends period("10.00-11.30", in)
@@ -115,15 +98,16 @@ class ScheduleQueue extends Config {
 
     in match {
       case Nil => <div></div>
-      case _ => renderSchedule(week, classname, one, two, three, four, five, six, seven)
+      case _ => renderSchedule(classname, one, two, three, four, five, six, seven)
     }
   }
 
-  def renderSchedule(week: String, classname: String, one: period, two: period, three: period,
+  def renderSchedule(classname: String, one: period, two: period, three: period,
                      four: period, five: period, six: period,
                      seven: period) = {
-    <table>
-      <caption>{ classname + " " + week }</caption>
+
+  <table>
+    <caption>{ "Stundenplan für: " + classname }</caption>
   <tr>
     <th class="first">Uhrzeit</th>
     <th>{"Montag"}</th>
@@ -188,7 +172,7 @@ class ScheduleQueue extends Config {
     <td>{mkPrettyEvent(seven.Thursday)}</td>
     <td>{mkPrettyEvent(seven.Friday)}</td>
   </tr>
-</table>
+  </table>
   }
 
   def process() = {

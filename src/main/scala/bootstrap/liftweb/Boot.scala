@@ -49,6 +49,9 @@ import util._
 import util.Helpers._
 import mongodb._
 
+/**
+ * @todo Please refactor me!
+ */
 class Boot extends Loggable with Config {
   def boot {
 
@@ -162,10 +165,12 @@ class Boot extends Loggable with Config {
             Menu(Loc("ExtHome", ExtLink("/index") , "Home")) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
+            // Menu(Loc("Static", Link(List("static"), true, "/static/Stundenplan"), "Static Schedule")) ::
             schedule ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
-            Menu(Loc("SchedulePreview", List("schedulepreview"), "Schedule Preview", adminLoggedIn)) ::
+            Menu(Loc("ScheduleParser", List("scheduleAdmin", "index"), "Schedule Parsing", adminLoggedIn, Hidden)) ::
+            Menu(Loc("SchedulePreview", List("scheduleAdmin", "schedulepreview"), "Schedule Preview", adminLoggedIn)) ::
             Menu(Loc("schedule", List("schedule"), "schedule", Hidden)) ::
             Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
             Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
@@ -174,6 +179,12 @@ class Boot extends Loggable with Config {
               User.sitemap
             else
               User.sitemap)
+
+    //LiftRules.passNotFoundToChain = true
+    //LiftRules.liftRequest.append {
+    //  case Req("static" :: _, _, _) => false
+    //}
+
 
     // This takes care of the RSS Feed.
     LiftRules.statelessDispatchTable.append(Feed)
@@ -186,7 +197,7 @@ class Boot extends Loggable with Config {
     LiftRules.ajaxEnd =
       Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
 
-    LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
+    LiftRules.early.append(_.setCharacterEncoding("ISO-8859-1"))
 
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))
@@ -196,7 +207,6 @@ class Boot extends Loggable with Config {
     if (loadProps("ircConnect").equals("true")){
       SpiritBot.connect
     }
-
 
 
   }

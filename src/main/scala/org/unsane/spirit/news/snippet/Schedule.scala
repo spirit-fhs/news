@@ -85,6 +85,7 @@ class Schedule extends Config {
 
   def render = {
 
+    ".caption" #> className &
     ".oneMonday" #> {mkPrettyEvent(one.Monday)} &
     ".oneTuesday" #> {mkPrettyEvent(one.Tuesday)} &
     ".oneWednesday" #> {mkPrettyEvent(one.Wednesday)} &
