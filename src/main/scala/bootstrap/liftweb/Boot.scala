@@ -197,7 +197,7 @@ class Boot extends Loggable with Config {
     LiftRules.ajaxEnd =
       Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
 
-    LiftRules.early.append(_.setCharacterEncoding("ISO-8859-1"))
+    LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))
