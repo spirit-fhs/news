@@ -14,29 +14,29 @@ import net.liftweb.common.Full
 class Schedule extends Config {
 
   sealed abstract class period(time: String, schedule: List[ScheduleRecord]) {
-    val tmp = schedule.filter {
+    val periodSchedule = schedule.filter {
       x => x.appointment.get.time.trim().replaceAll(" ", "") == time
     }
-    val Monday = tmp.filter { x =>
+    val Monday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Montag"
     }
-    val Tuesday = tmp.filter { x =>
+    val Tuesday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Dienstag"
     }
-    val Wednesday = tmp.filter { x =>
+    val Wednesday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Mittwoch"
     }
-    val Thursday = tmp.filter { x =>
+    val Thursday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Donnerstag"
     }
-    val Friday = tmp.filter { x =>
+    val Friday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Freitag"
     }
   }
 
   val className = S.param("classname").openOr("").toLowerCase
 
-  allClassNamesAsLowercase match {
+  className match {
     case s if (allClassNamesAsLowercase contains s) =>
     case _ => S.redirectTo("/404")
   }
@@ -48,11 +48,28 @@ class Schedule extends Config {
   }
 
   val classSchedule = ScheduleRecord.findAll.filter { x =>
-    x.className.value.toLowerCase == className }
+    x.className.value.toLowerCase == className }.filterNot { x =>
+      x.appointment.get.week.toLowerCase == week
+    }
 
-  val in = classSchedule.filterNot { x =>
-    x.appointment.get.week.toLowerCase == week }
+  /**
+   * Each object represents a given period from Monday - Friday.
+   * Example: object one represents the first period from Monday - Friday.
+   * Since there won't be any classes given after 2100 Hours it is
+   * necessary to only have seven objects here.
+   */
+  object one extends period("08.15-09.45", classSchedule)
+  object two extends period("10.00-11.30", classSchedule)
+  object three extends period("11.45-13.15", classSchedule)
+  object four extends period("14.15-15.45", classSchedule)
+  object five extends period("16.00-17.30", classSchedule)
+  object six extends period("17.45-19.15", classSchedule)
+  object seven extends period("19.30-21.00", classSchedule)
 
+  /**
+   * @param List[ScheduleRecord] Should be one or more Events as a List.
+   * @return NodeSeq The Events surrounded with Tags for prettiness.
+   */
   def mkPrettyEvent(schedule: List[ScheduleRecord]): NodeSeq = {
 
     schedule map { x =>
@@ -63,7 +80,7 @@ class Schedule extends Config {
         case _ => "weekly"
       }
 
-      val icon = x.eventType.get.toLowerCase() match {
+      val icon = x.eventType.get.toLowerCase match {
         case "uebung" => "tutorial"
         case _ => "lecture"
       }
@@ -79,14 +96,6 @@ class Schedule extends Config {
       </div>
     }
   }
-
-  object one extends period("08.15-09.45", in)
-  object two extends period("10.00-11.30", in)
-  object three extends period("11.45-13.15", in)
-  object four extends period("14.15-15.45", in)
-  object five extends period("16.00-17.30", in)
-  object six extends period("17.45-19.15", in)
-  object seven extends period("19.30-21.00", in)
 
   def render = {
 
