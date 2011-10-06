@@ -14,27 +14,32 @@ import net.liftweb.common.Full
 class Schedule extends Config {
 
   sealed abstract class period(time: String, schedule: List[ScheduleRecord]) {
-  val tmp = schedule.filter {
-    x => x.appointment.get.time.trim().replaceAll(" ", "") == time
+    val tmp = schedule.filter {
+      x => x.appointment.get.time.trim().replaceAll(" ", "") == time
+    }
+    val Monday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Montag"
+    }
+    val Tuesday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Dienstag"
+    }
+    val Wednesday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Mittwoch"
+    }
+    val Thursday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Donnerstag"
+    }
+    val Friday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Freitag"
+    }
   }
-  val Monday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Montag"
-  }
-  val Tuesday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Dienstag"
-  }
-  val Wednesday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Mittwoch"
-  }
-  val Thursday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Donnerstag"
-  }
-  val Friday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Freitag"
-  }
-}
 
   val className = S.param("classname").openOr("").toLowerCase
+
+  allClassNamesAsLowercase match {
+    case s if (allClassNamesAsLowercase contains s) =>
+    case _ => S.redirectTo("/404")
+  }
 
   val week = S.param("week").openOr("").toLowerCase match {
     case "u" => "g"
@@ -42,11 +47,11 @@ class Schedule extends Config {
     case _ => ""
   }
 
-  val classSchedule = ScheduleRecord.findAll.filter {
-    x => x.className.value.toLowerCase == className }
+  val classSchedule = ScheduleRecord.findAll.filter { x =>
+    x.className.value.toLowerCase == className }
 
-  val in = classSchedule.filterNot( x =>
-    x.appointment.get.week.toLowerCase == week )
+  val in = classSchedule.filterNot { x =>
+    x.appointment.get.week.toLowerCase == week }
 
   def mkPrettyEvent(schedule: List[ScheduleRecord]): NodeSeq = {
 
@@ -58,8 +63,8 @@ class Schedule extends Config {
         case _ => "weekly"
       }
 
-      val icon = x.eventType.get match {
-        case "Uebung" => "tutorial"
+      val icon = x.eventType.get.toLowerCase() match {
+        case "uebung" => "tutorial"
         case _ => "lecture"
       }
       

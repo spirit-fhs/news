@@ -14,24 +14,24 @@ import net.liftweb.json.JsonDSL._
 class ScheduleQueue extends Config {
 
   sealed abstract class period(time: String, schedule: List[ScheduleRecordQueue]) {
-  val tmp = schedule.filter {
-    x => x.appointment.get.time.trim().replaceAll(" ", "") == time
-  }
-  val Monday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Montag"
-  }
-  val Tuesday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Dienstag"
-  }
-  val Wednesday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Mittwoch"
-  }
-  val Thursday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Donnerstag"
-  }
-  val Friday = tmp.filter { x =>
-    x.appointment.get.day.trim == "Freitag"
-  }
+    val tmp = schedule.filter {
+      x => x.appointment.get.time.trim().replaceAll(" ", "") == time
+    }
+    val Monday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Montag"
+    }
+    val Tuesday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Dienstag"
+    }
+    val Wednesday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Mittwoch"
+    }
+    val Thursday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Donnerstag"
+    }
+    val Friday = tmp.filter { x =>
+      x.appointment.get.day.trim == "Freitag"
+    }
 }
 
   val schedule_i = loadSchedule("I").map(_.toLowerCase)

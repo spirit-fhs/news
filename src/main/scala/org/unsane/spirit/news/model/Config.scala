@@ -89,6 +89,17 @@ trait Config {
     md5.digest().map(0xFF & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
   }
 
+  /**
+   * @return List[String] All valid classnames for the given semester.
+   */
+  lazy val allClassNamesAsLowercase: List[String] = {
+    loadSchedule("I").map(_.toLowerCase).toList :::
+    loadSchedule("WI").map(_.toLowerCase).toList :::
+    loadSchedule("ITS").map(_.toLowerCase).toList :::
+    loadSchedule("MUMA").map(_.toLowerCase).toList :::
+    loadSchedule("MA").map(_.toLowerCase).toList ::: Nil
+  }
+
   private val props = new Properties
   private val configFile = System.getProperty("user.dir") + "/settings.properties"
 }
