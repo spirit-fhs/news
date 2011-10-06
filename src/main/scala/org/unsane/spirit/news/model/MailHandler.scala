@@ -62,7 +62,7 @@ object MailHandler extends Loggable {
    * @param subject the subject of that post
    */
   def send(context: String, subject: String, adresses: Array[String]) = {
-    logger info User.currentUserId.open_! + " is using the email function!"
+    logger info User.currentUserId.openOr("") + " is using the email function!"
 
     val props = new Properties
     props.setProperty("mail.transport.protocol", "smtp")
@@ -82,10 +82,10 @@ object MailHandler extends Loggable {
        })
 
     msg.addRecipient(Message.RecipientType.CC,
-      new InternetAddress(S.getSessionAttribute("email").open_!))
+      new InternetAddress(S.getSessionAttribute("email").openOr("")))
 
-    msg.setFrom(new InternetAddress(S.getSessionAttribute("email").open_!.toString,
-                 S.getSessionAttribute("fullname").open_!.toString))
+    msg.setFrom(new InternetAddress(S.getSessionAttribute("email").openOr("").toString,
+                 S.getSessionAttribute("fullname").openOr("").toString))
 
     try {
       transport.connect

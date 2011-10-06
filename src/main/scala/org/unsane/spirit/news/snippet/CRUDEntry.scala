@@ -83,7 +83,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
        <th>Vom:</th>
        <th>Optionen:</th>
      </tr>
-    { Entry.findAll("name" -> User.currentUserId.open_!.toString).sortWith(
+    { Entry.findAll("name" -> User.currentUserId.openOr("").toString).sortWith(
       (entry1, entry2) => (entry1 > entry2)
     ).flatMap(v =>
       <tr>
@@ -235,7 +235,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * If Crudentry contains any semester, the checkbox is set to true.
    */
   def makecheckboxlist(in: NodeSeq): NodeSeq = {
-      (".checkbox_row" #> loadSemesters(S.attr("semester").open_!).toList.map ( sem =>
+      (".checkbox_row" #> loadSemesters(S.attr("semester").openOr("")).toList.map ( sem =>
           ".title" #> sem &
           (if (CrudEntry contains sem) ".checkbox" #> checkbox(true, if (_) changedSemester += sem + " ")
           else ".checkbox" #> checkbox(false, if (_) changedSemester += sem + " "))

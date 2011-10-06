@@ -84,7 +84,7 @@ class NewsSnippets {
   /**
    * hello creates the current fullname (title + lastname). Can only be used with logged in Users!
    */
-  def hello = <span>{ S.getSessionAttribute("fullname").open_!.toString }</span>
+  def hello = <span>{ S.getSessionAttribute("fullname").openOr("").toString }</span>
 
   /**
    * code creates the tooltip that pops up next to the editing window

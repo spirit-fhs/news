@@ -109,17 +109,17 @@ object NewsSpec extends Specification with Config with Contexts {
 
     "read all entries for the SpecsUser." in {
       Entry.findAll.filter(e =>
-        e hasSameAuthor User.currentUserId.open_!
-      ).forall(_.name.value mustEqual User.currentUserId.open_!) mustBe true
+        e hasSameAuthor User.currentUserId.openOr("")
+      ).forall(_.name.value mustEqual User.currentUserId.openOr("")) mustBe true
     }
 
     "delete all entries from the SpecUser." in {
       Entry.findAll.filter(e =>
-        e hasSameAuthor User.currentUserId.open_!
+        e hasSameAuthor User.currentUserId.openOr("")
       ).foreach(e => e.delete_!)
 
       Entry.findAll.filter(e =>
-        e hasSameAuthor User.currentUserId.open_!
+        e hasSameAuthor User.currentUserId.openOr("")
       ).size mustEqual 0
     }
 

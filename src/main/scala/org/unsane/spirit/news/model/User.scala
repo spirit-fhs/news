@@ -51,11 +51,11 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
 
   import SiteMap._
 
- /**
-  * Setting enforceUniqueLinks to false will let use set multiple links.
-  * We need this to force Users from http -> https login Page.
-  *
-  */
+  /**
+   * Setting enforceUniqueLinks to false will let use set multiple links.
+   * We need this to force Users from http -> https login Page.
+   *
+   */
   enforceUniqueLinks = false
 
   override def loginMenuLoc: Box[Menu] =
@@ -81,20 +81,21 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
       </script>
      </lift:surround>)
   }
+
   /**
    * Overriding login here is necessary because we need to Auth against fHS LDAP.
    * @todo Is this a proper solution?
    */
   override def login = {
     if (S.post_?) {
-      if (S.param("username").open_!.equals("") || S.param("password").open_!.equals("")) {
+      if (S.param("username").openOr("").equals("") || S.param("password").openOr("").equals("")) {
         S.error("Errorcode: Bitte User und Pass angeben")
         S.redirectTo("/user_mgt/login")
       }
-      if (tryLogin(S.param("username").open_!,S.param("password").open_!)) {
-        User.logUserIdIn(S.param("username").open_!)
-        S notice "Login Successful as " + User.currentUserId.open_!
-        S redirectTo "/index"
+      if (tryLogin(S.param("username").openOr(""),S.param("password").openOr(""))) {
+        User.logUserIdIn(S.param("username").openOr(""))
+        S.notice("Login Successful as " + User.currentUserId.openOr("John Doe <-- he should never be logged in!"))
+        S.redirectTo("/index")
       } else { }
     }
 
