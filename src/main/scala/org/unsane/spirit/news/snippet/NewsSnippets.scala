@@ -37,7 +37,7 @@ import java.text.SimpleDateFormat
 import net.liftweb.http.{S}
 import java.util.{GregorianCalendar, Date, Calendar}
 
-class NewsSnippets {
+object NewsSnippets {
 
   lazy val now = new GregorianCalendar
 

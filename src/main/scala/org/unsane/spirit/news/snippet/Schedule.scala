@@ -1,12 +1,16 @@
-package org.unsane.spirit.news.snippet
+package org.unsane.spirit.news
+package snippet
 
 import net.liftweb.util.Helpers._
 import net.liftweb.json.JsonDSL._
 import org.unsane.spirit.news.model.Config
 import org.unsane.spirit.news.model.{ScheduleRecordQueue, ScheduleRecord}
 import xml.NodeSeq
-import net.liftweb.http.S
-import net.liftweb.common.Full
+import net.liftweb.http.{SHtml, S}
+import net.liftweb.http.js.JsCmds._
+import net.liftweb.http.js.JE.{JsRaw, Call}
+import net.liftweb.common.{Full, Box}
+import net.liftweb.http.js.{JE, JsonCall, JsCmd}
 
 /**
  * Rendering the Schedule for a given classname and week.
@@ -46,7 +50,12 @@ class Schedule extends Config {
   val week = S.param("week").openOr("").toLowerCase match {
     case "u" => "g"
     case "g" => "u"
-    case _ => ""
+    case "w" => "m"
+    case _ => NewsSnippets.weekNr match {
+      case even if (even % 2 == 0) => "u"
+      case odd if (odd % 2 != 0) => "g"
+      case _ => "m"
+    }
   }
 
   val classSchedule = ScheduleRecord.findAll.filter { x =>
@@ -97,6 +106,30 @@ class Schedule extends Config {
        <div style="clear:both"></div>
       </div>
     }
+  }
+
+  def selectClassnameBox = {
+
+    val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
+                                     s => (S.redirectTo("/schedule?classname=" + s)))
+
+    SHtml.select(allClassNamesAsLowercase.map(x => (x,x)), Full(className),
+                 x => x, "onchange" -> js.toJsCmd)
+  }
+
+  def selectWeekBox = {
+
+    val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
+                                     s => (S.redirectTo("/schedule?classname=" + className + "&week=" + s)))
+
+    val weekSeq = Seq(("g", "Gerade"),("u", "Ungerade"),("w", "Alles"))
+
+    SHtml.select(weekSeq,
+      (week match {
+        case "u" => Full("g")
+        case "g" => Full("u")
+        case _ => Full("w")
+      }), x => x, "onchange" -> js.toJsCmd)
   }
 
   def render = {
