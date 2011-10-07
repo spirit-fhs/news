@@ -50,11 +50,10 @@ class NewsSnippets {
   lazy val weekString = simpleFormatWeek.format(now.getTime)
   lazy val dayString = simpleFormatDay.format(now.getTime)
 
-  var weekNr = try {
+  val weekNr = try {
       weekString.toInt
     } catch {
-      case _ =>
-        0
+      case _ => 0
     }
 
   /**
@@ -64,13 +63,13 @@ class NewsSnippets {
   def week = weekNr match {
     case 0 =>
       <span></span>
-    case a if(weekNr % 2 == 0) =>
+    case a if (weekNr % 2 == 0) =>
        <h3>
-         <span style="color:#a52a2a">Es ist {dayString} und eine gerade Woche.</span>
+         <span style="color:#a52a2a">Es ist {dayString} und eine gerade Woche ({weekNr} KW.).</span>
        </h3>
-    case b if(weekNr % 2 != 0) =>
+    case b if (weekNr % 2 != 0) =>
        <h3>
-         <span style="color:#2d71ff">Es ist {dayString} und eine ungerade Woche.</span>
+         <span style="color:#2d71ff">Es ist {dayString} und eine ungerade Woche ({weekNr} KW.).</span>
        </h3>
     case _ =>
       <span></span>
