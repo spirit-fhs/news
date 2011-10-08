@@ -5,6 +5,7 @@ import net.liftweb.http.js.JsCmd
 import java.io.{InputStreamReader, File, BufferedReader}
 import net.liftweb.http.S
 import net.liftweb.common.Loggable
+import org.unsane.spirit.news.model.Config
 
 
 object ScheduleParsingHelper {
@@ -18,7 +19,7 @@ object ScheduleParsingHelper {
  * Runs timetable2db, catches all output and errors from the ProcessBuilder
  * logs it and hopefully works.
  */
-class ScheduleParsingHelper extends Loggable {
+class ScheduleParsingHelper extends Loggable with Config {
 
   class ParsingLogger(in: BufferedReader) extends Actor {
 
@@ -33,10 +34,25 @@ class ScheduleParsingHelper extends Loggable {
 
   def runParser(in: String): JsCmd = {
 
+    allClassNamesAsLowercase map parseSchedules _
+
+    S.redirectTo("/scheduleAdmin/schedulepreview")
+    S.notice("Schedules hopefully parsed!")
+  }
+
+  private def parseSchedules(course: String) = {
+
+    val parser = loadProps("timetable2db.parser")
+    val schedulePath = loadProps("timetable2db.schedulePath")
+    val parsedPath = loadProps("timetable2db.parsedPath")
+    val execPath = loadProps("timetable2db.execPath")
+
     // Full Path to the command we will be executing.
-    val p = new ProcessBuilder("")
+    val p = new ProcessBuilder(parser, schedulePath + "s_" + course + ".html",
+                               course, parsedPath)
+
     // Full Path where the command shall be executed.
-    p.directory(new File(""))
+    p.directory(new File(execPath))
 
     val pr = p.start()
 
@@ -51,8 +67,6 @@ class ScheduleParsingHelper extends Loggable {
 
     pr.waitFor()
 
-    S.redirectTo("/scheduleAdmin/schedulepreview")
-    S.notice("Schedules hopefully parsed!")
   }
 
 }

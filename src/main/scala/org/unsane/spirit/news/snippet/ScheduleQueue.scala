@@ -74,13 +74,18 @@ class ScheduleQueue extends Config {
         case _ => "weekly"
       }
 
+      val icon = x.eventType.get.toLowerCase match {
+        case "uebung" => "tutorial"
+        case _ => "lecture"
+      }
+
       <div class={"event " + cycle}>
-       <span class={"eventTitle"}>{x.titleShort.get + " " + x.eventType.get}</span>
+       <span class={"eventTitle "}>{x.titleShort.get}</span><div class={icon}></div>
        <div style="clear:both"></div>
        {(if (x.group.value.replaceAll("""\u00A0""", "") == "") ""
            else <div>{"Gruppe: " + x.group.value.replaceAll("""\u00A0""", "")}</div>)}
        <div style="float:left">{x.appointment.get.location.place.building + ":" + x.appointment.get.location.place.room}</div>
-       <div style="float:right">{x.member.get.map(_.name).mkString(" ")}</div>
+       <div style="float:right">{x.member.get.map(_.name.replaceAll("_","")).mkString(" ")}</div>
        <div style="clear:both"></div>
       </div>
     }
@@ -175,6 +180,9 @@ class ScheduleQueue extends Config {
   </table>
   }
 
+  /**
+   * @todo Fix redundancy stuff.
+   */
   def process() = {
 
     ScheduleRecordQueue.findAll.map( x => x.className.value ).distinct.map { x =>
