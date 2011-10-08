@@ -100,6 +100,28 @@ trait Config {
     loadSchedule("MA").map(_.toLowerCase).toList ::: Nil
   }
 
+  /**
+   * Saving to changeable.properties!
+   * Only for schedule panic button!
+   */
+  def saveProps(prop: String, value: String) {
+    val wProps = new Properties
+    wProps.load(new FileInputStream(changeableFile))
+    wProps.setProperty(prop, value)
+    wProps.store(new FileOutputStream(changeableFile), "Changed by: " + User.currentUserId.openOr("John Doe") + " at " + new java.util.Date)
+  }
+
+  /**
+   * Reading from changeable.properties.
+   * Only for schedule panic button!
+   */
+  def loadChangeableProps(props: String): String = {
+    val wProps = new Properties
+    wProps.load(new FileInputStream(changeableFile))
+    wProps.getProperty("schedule")
+  }
+
   private val props = new Properties
+  private val changeableFile = System.getProperty("user.dir") + "/changeable.properties"
   private val configFile = System.getProperty("user.dir") + "/settings.properties"
 }
