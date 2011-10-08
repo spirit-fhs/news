@@ -55,6 +55,7 @@ endif
 ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Copying settings to jetty folder"
 	cp settings.properties $(JETTY_DIR)
+	cp changeable.properties $(JETTY_DIR)
 endif
 ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Deleting and creating news dir in webapps"
