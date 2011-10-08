@@ -19,6 +19,12 @@ import net.liftweb.http.js.{JE, JsonCall, JsCmd}
  */
 class Schedule extends Config {
 
+  loadChangeableProps("schedule") match {
+    case "new" =>
+    case "old" => S.redirectTo("/stundenplan/index")
+    case _ => S.redirectTo("/")
+  }
+
   sealed abstract class period(time: String, schedule: List[ScheduleRecord]) {
     val periodSchedule = schedule.filter {
       x => x.appointment.get.time.trim().replaceAll(" ", "") == time
@@ -44,6 +50,7 @@ class Schedule extends Config {
 
   className match {
     case s if (allClassNamesAsLowercase contains s) =>
+    case "" => S.redirectTo("/schedule?classname=" + allClassNamesAsLowercase.headOr("bai1"))
     case _ => S.redirectTo("/404")
   }
 

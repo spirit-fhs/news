@@ -1,9 +1,19 @@
-<lift:surround with="default_schedule" at="content">
-  <h2>Aktueller Stundenplan!</h2>
-<lift:Menu.item name="Informatik" a:class="homeLink"> <b>Bachelor Informatik</b></lift:Menu.item><br />
-<lift:Menu.item name="WInformatik" a:class="homeLink"> <b>Bachelor Wirtschaftsinformatik</b></lift:Menu.item><br />
-<lift:Menu.item name="Muma" a:class="homeLink"> <b>Bachelor Multimedia-Marketing</b></lift:Menu.item><br />
-<lift:Menu.item name="ITS" a:class="homeLink"> <b>Bachelor IT-Servicemanagement</b></lift:Menu.item><br />
-<lift:Menu.item name="Master" a:class="homeLink"> <b>Master</b></lift:Menu.item><br />
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Aktueller Stundenplan!</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default_schedule;at=content">
+      <div class="lift:Menu.item?name=Informatik;a:class=homelink"> <b>Bachelor Informatik</b></div>
+      <div class="lift:Menu.item?name=WInformatik;a:class=homelink"> <b>Bachelor Wirtschaftsinformatik</b></div>
+      <div class="lift:Menu.item?name=Muma;a:class=homelink"> <b>Bachelor Multimedia-Marketing</b></div>
+      <div class="lift:Menu.item?name=ITS;a:class=homelink"> <b>Bachelor IT-Servicemanagement</b></div>
+      <div class="lift:Menu.item?name=Master;a:class=homelink"> <b>Master</b></div>
 
-</lift:surround>
+
+    </div>
+  </body>
+</html>
+

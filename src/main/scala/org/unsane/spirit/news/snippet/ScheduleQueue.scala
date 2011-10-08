@@ -198,7 +198,6 @@ class ScheduleQueue extends Config {
     old.map(_.delete_!)
 
     S.notice("Neuen Stundenpläne erfolgreich portiert!")
-    S.redirectTo("/schedulepreview")
   }
 
 

@@ -130,7 +130,7 @@ class Boot extends Loggable with Config {
 
     lazy val schedule: Menu = {
           if(showschedule) {
-            Menu(Loc("Stundenplan", List("stundenplan", "index"), "Stundenplan" ),
+            Menu(Loc("StundenplanOld", List("stundenplan", "index"), "Stundenplan", Hidden),
               Menu(Loc("Informatik", List("stundenplan", "BaI" + loadProps("Semester")), "BaI"),
                 Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0), LocGroup("Informatik"))),
                 Menu(Loc("Informatik_2", List("stundenplan", schedule_i(1)), schedule_i(1), LocGroup("Informatik"))),
@@ -165,6 +165,7 @@ class Boot extends Loggable with Config {
             Menu(Loc("ExtHome", ExtLink("/index") , "Home")) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
+            Menu(Loc("StundenplanDispatch", List("scheduleDispatch"), "Stundenplan")) ::
             // Menu(Loc("Static", Link(List("static"), true, "/static/Stundenplan"), "Static Schedule")) ::
             schedule ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
@@ -185,7 +186,6 @@ class Boot extends Loggable with Config {
     //LiftRules.liftRequest.append {
     //  case Req("static" :: _, _, _) => false
     //}
-
 
     // This takes care of the RSS Feed.
     LiftRules.statelessDispatchTable.append(Feed)

@@ -20,11 +20,14 @@ class ScheduleParser {
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => (sph.saveProps("schedule", s)))
 
+    val classNames = "alle" :: sph.allClassNamesAsLowercase
+
     def render = {
 
+      "name=classNameChooser" #> SHtml.select(classNames.map(s => (s, s)), Full("alle"), sph.runParser(_)) &
       "type=submit" #>
-        SHtml.submit("Parser Starten!", () => sph.runParser(""),
-                     "onClick" -> (JsShowId("ajax-loader") & JsHideId("hint") & JsHideId("hint2") &
+        SHtml.submit("Parser Starten!", () => (),
+                     "onClick" -> (JsShowId("ajax-loader") & JsHideId("hint") & JsHideId("hint2") & JsHideId("classNameChooser") &
                                    JsRaw("$('#do_submit').attr('hidden', 'true')") &
                                    JsRaw("$('#scheduleSwitch').attr('hidden', 'true')")).toJsCmd) &
       "name=scheduleSwitch" #> SHtml.select(schedules, Full(scheduleType), x => x, "onchange" -> js.toJsCmd)
