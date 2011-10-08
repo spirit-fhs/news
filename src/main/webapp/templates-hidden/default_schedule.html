@@ -28,27 +28,17 @@
       <hr/>
         <div class="menu">
         Stundenpl&auml;ne :
-        <lift:Menu.group group="Informatik">
-            <menu:bind />
-        </lift:Menu.group> |
-        <lift:Menu.group group="WInformatik">
-            <menu:bind />
-        </lift:Menu.group> |
-        <lift:Menu.group group="Muma">
-            <menu:bind />
-        </lift:Menu.group> |
-        <lift:Menu.group group="ITS">
-            <menu:bind />
-        </lift:Menu.group> |
-        <lift:Menu.group group="Master">
-            <menu:bind />
-        </lift:Menu.group>
+        <span class="lift:Menu.group?group=Informatik"></span> |
+        <span class="lift:Menu.group?group=WInformatik"></span> |
+        <span class="lift:Menu.group?group=Muma"></span> |
+        <span class="lift:Menu.group?group=ITS"></span> |
+        <span class="lift:Menu.group?group=Master"></span>
         </div>
-        <lift:Menu.item name="Home">zur&uuml;ck zum Aktuellen</lift:Menu.item> |
-        <lift:Menu.item name="Groups"></lift:Menu.item> |
-        <lift:Menu.item name="ExtBlocks"></lift:Menu.item> |
-        <lift:Menu.item name="Abkuerzungen"></lift:Menu.item> |
-        <lift:Menu.item name="Hilfe"></lift:Menu.item>
+        <span class="lift:Menu.item?name=Home;donthide=true">zur&uuml;ck zum Aktuellen</span> |
+        <span class="lift:Menu.item?name=Groups;donthide=true">Gruppen</span> |
+        <span class="lift:Menu.item?name=ExtBlocks;donthide=true">Bl&ouml;cke</span> |
+        <span class="lift:Menu.item?name=Abkuerzungen;donthide=true">Abk&uuml;rzungen</span> |
+        <span class="lift:Menu.item?name=Hilfe;donthide=true">Hilfe</span>
       <hr/>
 
       <div class="column span-30 last" style="width:950px;float:right;">
