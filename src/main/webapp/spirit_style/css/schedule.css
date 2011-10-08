@@ -57,7 +57,8 @@ table caption {
 
 .eventTitle{
 	font-size:10pt;
-	font-weight:bold
+	font-weight:bold;
+	float:left;
 }
 
 tr:nth-child(2n+1) {
