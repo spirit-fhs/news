@@ -34,8 +34,6 @@ package org.unsane.spirit.news
 package rest
 
 import org.unsane.spirit
-import model.Entry
-
 import net.liftweb.util.Helpers._
 import net.liftweb.json.JsonDSL._
 import net.liftweb.http.rest.RestHelper
@@ -43,6 +41,7 @@ import net.liftweb.http._
 import net.liftweb.json
 import net.liftweb.common.{Full, Loggable}
 import lib.Schedule
+import model.{ScheduleRecord, Entry}
 
 object RestApi extends RestHelper with Loggable {
 
@@ -62,6 +61,10 @@ object RestApi extends RestHelper with Loggable {
 
     }
 
+    case "scheduleapi" :: "fileupload" :: Nil Get req => {
+      JsonResponse(("test" -> "test!"), Nil, Nil, 200)
+    }
+
     /**
      * this is a test, looking that REST-Api is doing his job
      */
@@ -78,8 +81,8 @@ object RestApi extends RestHelper with Loggable {
 
     /**
      * get one News
-      */
-    case "news" :: AsLong(id) :: Nil Get req => {
+     */
+    case "rest" :: "news" :: AsLong(id) :: Nil Get req => {
       val response = Response.getOneNews(id.toString())
 
       response match {
@@ -87,6 +90,22 @@ object RestApi extends RestHelper with Loggable {
         case _ => JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
       }
 
+    }
+
+    /**
+     * get Schedule
+     */
+
+    case "rest" :: "schedule" :: Nil Get req => {
+      val className = S.param("classname").openOr("").toLowerCase
+
+      val week = S.param("week").openOr("").toLowerCase match {
+        case "u" => "g"
+        case "g" => "u"
+        case _ => ""
+      }
+
+      JsonResponse(Response.getSchedule(className,week), Nil, Nil, 200)
     }
 
   }

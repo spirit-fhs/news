@@ -94,4 +94,14 @@ object Response extends Loggable {
     Entry.find("nr" -> id).map{x => x.asJValue}
   }
 
+  def getSchedule(className: String, week: String) : JArray = {
+    val classSchedule = ScheduleRecord.findAll.filter {
+        x => x.className.value.toLowerCase == className }
+
+    val in = classSchedule.filterNot( x =>
+        x.appointment.get.week.toLowerCase == week )
+
+    in.map(_.asJValue)
+  }
+
 }
