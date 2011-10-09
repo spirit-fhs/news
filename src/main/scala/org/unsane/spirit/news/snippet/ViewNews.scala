@@ -36,10 +36,11 @@ package snippet
 import scala.xml._
 import net.liftweb.util.Helpers._
 import net.liftweb.textile._
-import net.liftweb.http.S
 import net.liftweb.json.JsonDSL._
 import model.{Config, Entry}
 import net.liftweb.common.{Empty, Box, Full, Loggable}
+import net.liftweb.http.{SHtml, S}
+import net.liftweb.http.js.JE
 
 /**
  * @author Marcus Denison
@@ -78,6 +79,23 @@ class ViewNews extends SpiritHelpers with Loggable with Config {
       Entry.findAll.sortWith(
         (entry1, entry2) => (entry1 > entry2)
       )
+  }
+
+  /**
+   * Adding a dropdown menu to the ViewNews in order
+   * to achieve a better user experience when searching
+   * for news.
+   */
+  def classNameChooser() = {
+
+    val classNames =
+      "alle" :: allSemestersAsList zip  "Alle" :: allClassNamesAsLowercase
+
+    val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
+                                     s => (S.redirectTo("/semsearch/" + s)))
+
+    SHtml.select(classNames.toSeq, Full(S.param("search").openOr("Alle")), x => x, "onchange" -> js.toJsCmd)
+
   }
 
   def render = {

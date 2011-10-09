@@ -52,13 +52,21 @@ trait Config {
     props.getProperty(props.getProperty("Semester") + "_" + major).split(";").toList
   }
 
+  lazy val allSemestersAsList = {
+    loadSemesters("BaI") :::
+    loadSemesters("BaWI") :::
+    loadSemesters("BaITS") :::
+    loadSemesters("BaMuMa") :::
+    loadSemesters("Ma")
+  }
+
   /**
    * loadEmails loads the mailings lists
    * takes an Array full with semesters and gehts the mailing lists for them
    * @param Array[String]
    * @return Array[String]
    */
-  def loadEmails(sem : Array[String]): Array[String] = {
+  def loadEmails(sem: Array[String]): Array[String] = {
     props load new FileInputStream(configFile)
     var studentEmails = ArrayBuffer[String]()
     for(s <- sem) studentEmails += props getProperty s
