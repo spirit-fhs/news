@@ -75,7 +75,7 @@ object RestApi extends RestHelper with Loggable {
     /**
      * get all News
      */
-    case "news" :: Nil Get req => {
+    case "rest" :: "news" :: Nil Get req => {
       JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
     }
 
