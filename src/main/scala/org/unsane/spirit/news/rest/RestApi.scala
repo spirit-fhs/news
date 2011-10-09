@@ -61,10 +61,6 @@ object RestApi extends RestHelper with Loggable {
 
     }
 
-    case "scheduleapi" :: "fileupload" :: Nil Get req => {
-      JsonResponse(("test" -> "test!"), Nil, Nil, 200)
-    }
-
     /**
      * this is a test, looking that REST-Api is doing his job
      */
