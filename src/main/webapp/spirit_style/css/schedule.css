@@ -85,3 +85,9 @@ tr:nth-child(2n) {
 caption {
     text-align: center;
 }
+
+.legend{
+    font-size: 1.2em;
+    line-height: 1.25;
+    margin-bottom: 1.25em;
+}
