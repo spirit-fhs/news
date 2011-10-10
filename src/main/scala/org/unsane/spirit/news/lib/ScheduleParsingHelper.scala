@@ -4,8 +4,8 @@ import actors.Actor
 import net.liftweb.http.js.JsCmd
 import java.io.{InputStreamReader, File, BufferedReader}
 import net.liftweb.http.S
-import net.liftweb.common.Loggable
 import org.unsane.spirit.news.model.Config
+import net.liftweb.common.{Full, Loggable}
 
 
 object ScheduleParsingHelper {
@@ -25,8 +25,14 @@ class ScheduleParsingHelper extends Loggable with Config {
 
     def act {
       loop {
-        if (in.ready())
-          logger info "Parsing Output: " + in.readLine()
+
+        in.readLine() match {
+          case s: String => logger info "Parsing: " + s
+          case _ => {
+            logger info "Shutting down: " + this.toString()
+            exit()
+          }
+        }
 
       }
     }

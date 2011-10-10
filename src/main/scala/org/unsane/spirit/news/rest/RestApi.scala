@@ -62,23 +62,27 @@ object RestApi extends RestHelper with Loggable {
     }
 
     /**
-     * this is a test, looking that REST-Api is doing his job
+     * This is a test, looking that REST-Api is doing his job.
      */
     case "test" :: Nil Get req => {
       JsonResponse(("test" -> "test!"), Nil, Nil, 200)
     }
 
     /**
-     * get all News
+     * Get all News.
+     * /news
+     * @todo Change to a consistent path for all REST requests.
      */
-    case "rest" :: "news" :: Nil Get req => {
+    case "news" :: Nil Get req => {
       JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
     }
 
     /**
-     * get one News
+     * Get one News.
+     * /news/<nr>
+     * @todo Change to a consistent path for all REST requests.
      */
-    case "rest" :: "news" :: AsLong(id) :: Nil Get req => {
+    case "news" :: AsLong(id) :: Nil Get req => {
       val response = Response.getOneNews(id.toString())
 
       response match {
@@ -89,9 +93,9 @@ object RestApi extends RestHelper with Loggable {
     }
 
     /**
-     * get Schedule
+     * Get schedule for a given className and week.
+     * /rest/schedule?classname=<classname>&week=<week>
      */
-
     case "rest" :: "schedule" :: Nil Get req => {
       val className = S.param("classname").openOr("").toLowerCase
 
