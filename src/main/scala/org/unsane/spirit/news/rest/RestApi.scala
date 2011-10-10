@@ -71,7 +71,7 @@ object RestApi extends RestHelper with Loggable {
     /**
      * Get all News.
      * /news
-     * @todo Change to a consistent path for all REST requests.
+     * @deprecated
      */
     case "news" :: Nil Get req => {
       JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
@@ -80,9 +80,31 @@ object RestApi extends RestHelper with Loggable {
     /**
      * Get one News.
      * /news/<nr>
-     * @todo Change to a consistent path for all REST requests.
+     * @deprecated
      */
     case "news" :: AsLong(id) :: Nil Get req => {
+      val response = Response.getOneNews(id.toString())
+
+      response match {
+        case Full(x) => JsonResponse(x, Nil, Nil, 200)
+        case _ => JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
+      }
+
+    }
+
+    /**
+     * Get all News as JSON.
+     * /rest/news
+     */
+    case "rest" :: "news" :: Nil Get req => {
+      JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
+    }
+
+    /**
+     * Get one News as JSON.
+     * /rest/news/<nr>
+     */
+    case "rest" :: "news" :: AsLong(id) :: Nil Get req => {
       val response = Response.getOneNews(id.toString())
 
       response match {

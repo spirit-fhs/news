@@ -7,14 +7,17 @@
   <body class="lift:content_id=main">
     <div id="main" class="lift:surround?with=default;at=content">
         <form class="lift:ScheduleParser">
-
+           <h2>Stundenplan Parser</h2>
            <div id="ajax-loader" style="display:none">
            <img alt="" style="margin-bottom: 0px; margin-left: 5px" src="/images/ajax-loader.gif"><br/>
            <p >Daten werden verarbeitet........</p>
            </div>
 
            <div id="hint">
-               Derzeit k&ouml;nnen entweder alle Stundenpl&auml;ne geparst werden oder einzelne!
+               1. Wählen sie bitte entweder alle oder einen Stundenplan zum Parsen aus. <br />
+               2. Der Vorgang wird mittels "Parser Starten!" ausgef&uuml;hrt. <br />
+               3. Wenn der Parser fertig ist, werden sie auf die Vorschau geleitet und k&ouml;nnen <br />
+                  den Stundenplan freischalten. <br />
            </div>
            <hr />
            <input value="Senden" type="submit" name="do_submit" id="do_submit">
@@ -23,9 +26,20 @@
            <br />
            <br />
            <br />
-           <div id="hint2">!! HINWEIS: Beim &auml;ndern der Dropdown box wird der Wert sofort gespeichert !!</div>
            <hr />
+           <h2>Stundenplan Ansicht w&auml;hlen:</h2>
+           <div id="hint2">
+               <br />
+               Neuer Stundenplan: Aktiviert die Ansicht ohne iFrames!<br />
+               Alter Stundenplan: Aktiviert die Ansicht mit iFrames!
+               <br />
+               <br />
+               <h4>!! HINWEIS: Beim &auml;ndern des Dropdowns wird der Wert sofort
+                   <br />gespeichert und somit die Ansicht ge&auml;ndert !!</h4>
+           </div>
+
            <div name="scheduleSwitch" id="scheduleSwitch"></div>
+
        </form>
 
     </div>
