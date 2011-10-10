@@ -39,22 +39,24 @@ import java.util.{GregorianCalendar, Date, Calendar}
 
 object NewsSnippets {
 
-  lazy val now = new GregorianCalendar
+  private val now = new GregorianCalendar
 
-  lazy val simpleFormatWeek = new SimpleDateFormat
-  lazy val simpleFormatDay = new SimpleDateFormat
+  private val simpleFormatWeek = new SimpleDateFormat
+  private val simpleFormatDay = new SimpleDateFormat
 
   simpleFormatWeek.applyPattern("ww")
   simpleFormatDay.applyPattern("EEEE")
 
-  lazy val weekString = simpleFormatWeek.format(now.getTime)
-  lazy val dayString = simpleFormatDay.format(now.getTime)
+  def weekString() = simpleFormatWeek.format(now.getTime)
+  def dayString() = simpleFormatDay.format(now.getTime)
 
-  val weekNr = try {
+  def weekNr() = {
+    try {
       weekString.toInt
     } catch {
       case _ => 0
     }
+  }
 
   /**
    * Creating a nice String for Students to see what day it is
