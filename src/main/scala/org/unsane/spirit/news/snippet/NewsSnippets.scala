@@ -39,7 +39,7 @@ import java.util.{GregorianCalendar, Date, Calendar}
 
 object NewsSnippets {
 
-  private val now = new GregorianCalendar
+  private def getGregorianTime() = (new GregorianCalendar).getTime
 
   private val simpleFormatWeek = new SimpleDateFormat
   private val simpleFormatDay = new SimpleDateFormat
@@ -47,8 +47,8 @@ object NewsSnippets {
   simpleFormatWeek.applyPattern("ww")
   simpleFormatDay.applyPattern("EEEE")
 
-  def weekString() = simpleFormatWeek.format(now.getTime)
-  def dayString() = simpleFormatDay.format(now.getTime)
+  def weekString() = simpleFormatWeek.format(getGregorianTime)
+  def dayString() = simpleFormatDay.format(getGregorianTime)
 
   def weekNr() = {
     try {

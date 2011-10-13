@@ -14,22 +14,22 @@ import net.liftweb.json.JsonDSL._
 class ScheduleQueue extends Config {
 
   sealed abstract class period(time: String, schedule: List[ScheduleRecordQueue]) {
-    val tmp = schedule.filter {
+    val periodSchedule = schedule.filter {
       x => x.appointment.get.time.trim().replaceAll(" ", "") == time
     }
-    val Monday = tmp.filter { x =>
+    val Monday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Montag"
     }
-    val Tuesday = tmp.filter { x =>
+    val Tuesday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Dienstag"
     }
-    val Wednesday = tmp.filter { x =>
+    val Wednesday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Mittwoch"
     }
-    val Thursday = tmp.filter { x =>
+    val Thursday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Donnerstag"
     }
-    val Friday = tmp.filter { x =>
+    val Friday = periodSchedule.filter { x =>
       x.appointment.get.day.trim == "Freitag"
     }
 }
@@ -206,7 +206,7 @@ class ScheduleQueue extends Config {
       case 0 => ".preview" #> "Keine Datensätze in der Queue!" &
                 "type=submit" #> SHtml.submit("Veröffentlichen", () => (),"disabled" -> "disabled")
       case _ => ".preview" #> schedules_as_HTML.toList &
-                "type=submit" #> SHtml.submit("Veröffentlichen", () => process)
+                "type=submit" #> SHtml.submit("Stundenpläne Veröffentlichen", () => process)
     }
   }
 }

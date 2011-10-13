@@ -162,11 +162,11 @@ class Boot extends Loggable with Config {
     }
 
     val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home", Hidden)) ::
+            Menu(Loc("404", List("404") , "404", Hidden)) ::
             Menu(Loc("ExtHome", ExtLink("/index") , "Home")) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
             Menu(Loc("StundenplanDispatch", List("scheduleDispatch"), "Stundenplan")) ::
-            // Menu(Loc("Static", Link(List("static"), true, "/static/Stundenplan"), "Static Schedule")) ::
             schedule ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
