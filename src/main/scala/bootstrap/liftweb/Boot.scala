@@ -187,9 +187,9 @@ class Boot extends Loggable with Config {
               User.sitemap)
 
     //LiftRules.passNotFoundToChain = true
-    //LiftRules.liftRequest.append {
-    //  case Req("static" :: _, _, _) => false
-    //}
+    LiftRules.liftRequest.append {
+      case Req("staticschedule" :: _, _, _) => false
+    }
 
     // This takes care of the RSS Feed.
     LiftRules.statelessDispatchTable.append(Feed)
