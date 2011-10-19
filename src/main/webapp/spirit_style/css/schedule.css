@@ -92,3 +92,7 @@ caption {
     line-height: 1.25;
     margin-bottom: 1.25em;
 }
+
+.legend span{
+	margin-right: 1.05em;
+}
