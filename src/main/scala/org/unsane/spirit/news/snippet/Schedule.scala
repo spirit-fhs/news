@@ -2,15 +2,12 @@ package org.unsane.spirit.news
 package snippet
 
 import net.liftweb.util.Helpers._
-import net.liftweb.json.JsonDSL._
-import org.unsane.spirit.news.model.Config
-import org.unsane.spirit.news.model.{ScheduleRecordQueue, ScheduleRecord}
+import org.unsane.spirit.news.model.{ Config, ScheduleRecord}
 import xml.NodeSeq
-import net.liftweb.http.{SHtml, S}
 import net.liftweb.http.js.JsCmds._
-import net.liftweb.http.js.JE.{JsRaw, Call}
-import net.liftweb.common.{Full, Box}
 import net.liftweb.http.js.{JE, JsonCall, JsCmd}
+import net.liftweb.http.{SessionVar, SHtml, S}
+import net.liftweb.common.Full
 
 /**
  * Rendering the Schedule for a given classname and week.
@@ -24,6 +21,9 @@ class Schedule extends Config {
     case "old" => S.redirectTo("/stundenplan/index")
     case _ => S.redirectTo("/")
   }
+
+  private object weekTypeVar extends SessionVar[String]("")
+  private object classNameVar extends SessionVar[String]("")
 
   sealed abstract class period(time: String, schedule: List[ScheduleRecord]) {
     val periodSchedule = schedule.filter {
@@ -46,29 +46,29 @@ class Schedule extends Config {
     }
   }
 
-  val className = S.param("classname").openOr("").toLowerCase
-
-  className match {
+  classNameVar.get match {
     case s if (allClassNamesAsLowercase contains s) =>
-    case "" => S.redirectTo("/schedule?classname=" + allClassNamesAsLowercase.headOr("bai1"))
+    case "" => classNameVar(allClassNamesAsLowercase.headOr("bai1").toLowerCase)
     case _ => S.redirectTo("/404")
   }
 
-  val week = S.param("week").openOr("").toLowerCase match {
-    case "u" => "g"
-    case "g" => "u"
-    case "w" => "m"
-    case _ => NewsSnippets.weekNr match {
-      case even if (even % 2 == 0) => "u"
-      case odd if (odd % 2 != 0) => "g"
-      case _ => "m"
-    }
-  }
+  weekTypeVar.get match {
+    case "u" =>
+    case "g" =>
+    case "w" =>
+    case _ => weekTypeVar(NewsSnippets.weekNr match {
+      case even if (even % 2 == 0) => "g"
+      case odd if (odd % 2 != 0) => "u"
+      case _ => "w"
+    })}
 
   val classSchedule = ScheduleRecord.findAll.filter { x =>
-    x.className.value.toLowerCase == className }.filterNot { x =>
-      x.appointment.get.week.toLowerCase == week
-    }
+    x.className.value.toLowerCase == classNameVar.get}.filterNot { x =>
+      x.appointment.get.week.toLowerCase == (weekTypeVar.get match {
+        case "g" => "u"
+        case "u" => "g"
+        case _ => "m"
+  })}
 
   /**
    * Each object represents a given period from Monday - Friday.
@@ -118,30 +118,30 @@ class Schedule extends Config {
   def selectClassnameBox = {
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
-                                     s => (S.redirectTo("/schedule?classname=" + s)))
+                                     s => { classNameVar(s)
+                                            S.redirectTo("/schedule")})
 
-    SHtml.select(allClassNamesAsLowercase.map(x => (x,x)), Full(className),
+    SHtml.select(allClassNamesAsLowercase.map(x => (x,x)), Full(classNameVar.get),
                  x => x, "onchange" -> js.toJsCmd)
   }
 
   def selectWeekBox = {
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
-                                     s => (S.redirectTo("/schedule?classname=" + className + "&week=" + s)))
+                                     s => { weekTypeVar(s)
+                                            S.redirectTo("/schedule")})
 
-    val weekSeq = Seq(("g", "Gerade"),("u", "Ungerade"),("w", "Alles"))
-
-    SHtml.select(weekSeq,
-      (week match {
-        case "u" => Full("g")
-        case "g" => Full("u")
+    SHtml.select(Seq(("g", "Gerade"),("u", "Ungerade"),("w", "Alles")),
+      (weekTypeVar.get match {
+        case "u" => Full("u")
+        case "g" => Full("g")
         case _ => Full("w")
       }), x => x, "onchange" -> js.toJsCmd)
   }
 
   def render = {
 
-    ".caption" #> className &
+    ".caption" #> classNameVar.get &
     ".oneMonday" #> {mkPrettyEvent(one.Monday)} &
     ".oneTuesday" #> {mkPrettyEvent(one.Tuesday)} &
     ".oneWednesday" #> {mkPrettyEvent(one.Wednesday)} &
