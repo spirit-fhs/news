@@ -178,7 +178,7 @@ class Boot extends Loggable with Config {
               Menu(Loc("BlocksNew", List("schedule", "blocks"), "Blöcke", Hidden)),
               Menu(Loc("ExtBlocksNew", ExtLink("/schedule/blocks") , "Blöcke")),
               Menu(Loc("AbkuerzungenNew", List("schedule", "abkuerzungen"), "Abkuerzungen"))) ::
-            Menu(Loc("Bugs und Anregungen", ExtLink("https://pads.fh-schmalkalden.de/trac/newticket") , "Bugs und Anregungen")) ::
+            Menu(Loc("Bugs und Anregungen", List("issues") , "Bugs und Anregungen")) ::
             Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
             (if (productive)
               Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login") , "Anmelden", loggedOut)) ::
