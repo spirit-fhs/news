@@ -28,6 +28,7 @@ table td {
     border-color: #d6d6d6;
 	padding-right: 10px;
 	width: 50px;
+	font-weight: bold;
 }
 
 table caption {
@@ -66,7 +67,7 @@ tr:nth-child(2n+1) {
 }
 
 tr:nth-child(2n) {
-    background-color: #F2F2F2;
+    background-color: #efefef;
 }
 
 .lecture, .tutorial{
