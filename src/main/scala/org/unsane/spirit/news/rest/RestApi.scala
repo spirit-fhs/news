@@ -63,9 +63,51 @@ object RestApi extends RestHelper with Loggable {
 
     /**
      * This is a test, looking that REST-Api is doing his job.
+     * @todo Remove this?
      */
     case "test" :: Nil Get req => {
       JsonResponse(("test" -> "test!"), Nil, Nil, 200)
+    }
+
+     /**
+     * Get all News as JSON.
+     * /rest/1.0/news
+     * @version 1.0
+     */
+    case "rest" :: "1.0" :: "news" :: Nil Get req => {
+      JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
+    }
+
+    /**
+     * Get one News as JSON.
+     * /rest/1.0/news/<nr>
+     * @version 1.0
+     */
+    case "rest" :: "1.0" :: "news" :: AsLong(id) :: Nil Get req => {
+      val response = Response.getOneNews(id.toString())
+
+      response match {
+        case Full(x) => JsonResponse(x, Nil, Nil, 200)
+        case _ => JsonResponse("exception" -> "this id is not valid", Nil, Nil, 404)
+      }
+
+    }
+
+    /**
+     * Get schedule for a given className and week.
+     * /rest/1.0/schedule?classname=<classname>&week=<week>
+     * @version 1.0
+     */
+    case "rest" :: "1.0" :: "schedule" :: Nil Get req => {
+      val className = S.param("classname").openOr("").toLowerCase
+
+      val week = S.param("week").openOr("").toLowerCase match {
+        case "u" => "g"
+        case "g" => "u"
+        case _ => ""
+      }
+
+      JsonResponse(Response.getSchedule(className,week), Nil, Nil, 200)
     }
 
     /**
@@ -95,6 +137,7 @@ object RestApi extends RestHelper with Loggable {
     /**
      * Get all News as JSON.
      * /rest/news
+     * @deprecated
      */
     case "rest" :: "news" :: Nil Get req => {
       JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
@@ -103,6 +146,7 @@ object RestApi extends RestHelper with Loggable {
     /**
      * Get one News as JSON.
      * /rest/news/<nr>
+     * @deprecated
      */
     case "rest" :: "news" :: AsLong(id) :: Nil Get req => {
       val response = Response.getOneNews(id.toString())
@@ -117,6 +161,7 @@ object RestApi extends RestHelper with Loggable {
     /**
      * Get schedule for a given className and week.
      * /rest/schedule?classname=<classname>&week=<week>
+     * @deprecated
      */
     case "rest" :: "schedule" :: Nil Get req => {
       val className = S.param("classname").openOr("").toLowerCase
