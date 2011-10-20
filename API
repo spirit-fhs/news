@@ -1,0 +1,44 @@
+Spirit-News provides a small REST-API which is introduced here:
+
+REST-Service for news:
+
+  /rest/news (Returns all news as JSON.)
+
+Possible filters:
+
+  Parameters:
+    nr = The news number
+    semester = A degreecourse such as i2, mai3, etc.
+    date = A date in the format YYYYMMDD
+
+  /rest/news/{nr} (i.e. /155 returns the news with the nr. 155.)
+  /rest/news?semester={sem} (i.e. semester=I1   for all News for I1.)
+  /rest/news?date=YYYYMMDD  (i.e. date=20110811 for all News after the 11th Aug 2011.)
+
+Example API calls:
+
+  /rest/news?semester=I2&date=20110811 (Combining the semester and date filter.)
+  /rest/news?semester=I2 (Only the semester filter.)
+  /rest/news?date=20110811 (Only the date filter.)
+
+--------------------------------------------------------------------------------------------
+
+REST-Service for the schedule:
+
+  /rest/schedule (Returns nothing ;).)
+  
+Possible filters:
+
+  Parameters:
+    sem = A degreecourse such as bai2, mai3, etc.
+    weekType = (u = odd,g = straight,w = weekly)
+
+  /rest/schedule?classname={sem} 
+    (i.e. classname=bamm3 returns the complete schedule for bamm3 as JSON.)
+  /rest/schedule?classname={sem}&week{weekType} 
+    (i.e. classname=bamm3&week=u returns the schedule for bamm3 in an odd week.)
+
+Example API calls:
+
+  /rest/schedule?classname=bamm1 (Return complete schedule.)
+  /rest/schedule?classname=bamm1&week=u (Combining both filters and returning the schedule for odd weeks.)

@@ -7,7 +7,7 @@ to improve code and functionality in this open source project!
 
 Features:
 * Auth against internal university LDAP Server
-* Using Lift 2.2 with Scala 2.8.1 and MongoDB
+* Using Lift 2.4-M2 with Scala 2.8.1 and MongoDB
 * News will be directly posted on Twitter and Facebook
 * Students can be notified via mailinglists
 * lots more.....
@@ -50,21 +50,3 @@ $ sbt
 
 This will run the Specs from NewsSpec.scala, you will need a running MongoDB for them. 
 Please be aware that this test will drop the Databases for Spirit-News when it is done.
-
-
-REST-Service:
-
-There are two URL you can get News:
-
-/news      <- to get All News
-
-/news/{nr} <- get One News with the number
-
-To filter all News, we can add two Get-Parameters:
-
-semester={sem} (i.e. semester=I2   for all News for I2)
-date=YYYYMMDD  (i.e. date=20110811 for all News after the 11th Aug 2011)
-
-/news?semester=I2&date=20110811 or
-/news?semester=I2 or
-/news?date=20110811
