@@ -96,3 +96,10 @@ caption {
 .legend span{
 	margin-right: 1.05em;
 }
+
+option[value="g"]{
+	background-color:#F4E4B8;
+}
+option[value="u"]{
+	background-color:#C1DA9D;
+}
