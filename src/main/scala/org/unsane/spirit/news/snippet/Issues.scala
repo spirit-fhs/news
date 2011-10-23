@@ -27,7 +27,22 @@ class Issues extends Loggable with RC with Config {
     /**
      * @return Returns false if any attribute is not filled.
      */
-    def validate = !(List(name, email, subject, mail) contains "")
+    def validateFields = !(List(name, email, subject, mail) contains "")
+
+    /**
+     * @return Returns false if a non e-mail is submitted.
+     */
+    def validateEmail = email match {
+      case EmailParser(_,_,_) => true
+      case _ => false
+    }
+
+    /**
+     * @return Returns complete validation for pattern matching.
+     */
+    def validate = (validateFields, validateEmail)
+
+    private val EmailParser = """([\w\d\-\_]+)(\+\d+)?@([\w\d\-\.]+)""".r
 
   }
 
@@ -53,22 +68,18 @@ class Issues extends Loggable with RC with Config {
     }
 
     sessionIssue.validate match {
-      case false =>
+      case (false, _) =>
         S.error("Bitte alle Felder ausfüllen!")
+        S.redirectTo("/issues")
+      case (_, false) =>
+        S.error("Bitte eine valide E-Mail Adresse angeben!")
         S.redirectTo("/issues")
       case _ =>
     }
 
     logger info "ISSUE: " + sessionIssue.get.toString
 
-    val EmailParser = """([\w\d\-\_]+)(\+\d+)?@([\w\d\-\.]+)""".r
-
-    val frommail = email match {
-      case EmailParser(_,_,_) => email
-      case _ => "no-reply@spirit.fh-schmalkalden.de"
-    }
-
-    sendMail(frommail,
+    sendMail(sessionIssue.get.mail,
       Props.get("bug.report.email").openOr(""),
       "Spirit-Kontakt: " + sessionIssue.get.subject, sessionIssue.get.toString)
 
