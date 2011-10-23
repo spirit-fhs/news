@@ -48,7 +48,14 @@ class Issues extends Loggable with RC with Config {
 
     logger info "ISSUE: " + sessionIssue.get.toString
 
-    sendMail("no-reply@spirit.fh-schmalkalden.de",
+    val EmailParser = """([\w\d\-\_]+)(\+\d+)?@([\w\d\-\.]+)""".r
+
+    val frommail = email match {
+      case EmailParser(_,_,_) => email
+      case _ => "no-reply@spirit.fh-schmalkalden.de"
+    }
+
+    sendMail(frommail,
       Props.get("bug.report.email").openOr(""),
       "Bug/Anregung/Kritik von Spirit", sessionIssue.get.toString)
 
