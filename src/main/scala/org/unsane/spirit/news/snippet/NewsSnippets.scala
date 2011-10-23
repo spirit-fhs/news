@@ -66,13 +66,9 @@ object NewsSnippets {
     case 0 =>
       <span></span>
     case a if (weekNr % 2 == 0) =>
-       <h3>
-         <span style="color:#a52a2a">Es ist {dayString} und eine gerade Woche ({weekNr} KW.).</span>
-       </h3>
+       <h3>Es ist {dayString} und eine gerade Woche ({weekNr} KW.).</h3>
     case b if (weekNr % 2 != 0) =>
-       <h3>
-         <span style="color:#2d71ff">Es ist {dayString} und eine ungerade Woche ({weekNr} KW.).</span>
-       </h3>
+       <h3>Es ist {dayString} und eine ungerade Woche ({weekNr} KW.).</h3>
     case _ =>
       <span></span>
   }
