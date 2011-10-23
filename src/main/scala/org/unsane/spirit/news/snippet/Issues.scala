@@ -77,7 +77,7 @@ class Issues extends Loggable with RC with Config {
 
     sendMail(frommail,
       Props.get("bug.report.email").openOr(""),
-      "Bug/Anregung/Kritik von Spirit", sessionIssue.get.toString)
+      "Spirit-Kontakt: " + sessionIssue.get.subject, sessionIssue.get.toString)
 
     sessionIssue.remove()
 
