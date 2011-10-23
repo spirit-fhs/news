@@ -6,11 +6,13 @@
   </head>
   <body class="lift:content_id=main">
     <div id="main" class="lift:surround?with=default;at=content">
+        <h4>Kontaktformular f&uuml;r den Erstkontakt zum PaDSLab. <br />
+            Alle Felder mit einem Stern sind Pflichtfelder.</h4>
         <form class="lift:Issues" method="Post">
-            Name: <br /><div name="name"></div><br />
-            E-Mail: <br /><div name="email"></div><br />
-            Betreff: <br /><div name="subject"></div><br />
-            Nachricht: <br />
+            Name, Vorname:* <br /><div name="name"></div><br />
+            E-Mail:* <br /><div name="email"></div><br />
+            Betreff:* <br /><div name="subject"></div><br />
+            Kommentar:* <br />
             <div name="issue"></div><br />
             <div name="captcha"></div>
             <input value="Senden" type="submit" name="do_submit" id="do_submit">

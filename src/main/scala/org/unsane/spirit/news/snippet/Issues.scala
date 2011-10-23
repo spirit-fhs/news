@@ -23,6 +23,19 @@ class Issues extends Loggable with RC with Config {
       "Betreff: " + subject + "\n" +
       "Nachricht: " + mail
     }
+
+    /**
+     * @return Returns false if any attribute is not filled.
+     */
+    def validate(): Boolean = {
+      (name, email, subject, mail) match {
+        case ("",_,_,_) => false
+        case (_,"",_,_) => false
+        case (_,_,"",_) => false
+        case (_,_,_,"") => false
+        case (_,_,_,_) => true
+      }
+    }
   }
 
   object sessionIssue extends SessionVar[issue](issue("", "", "", ""))
@@ -44,6 +57,13 @@ class Issues extends Loggable with RC with Config {
       case s =>
         S.error("Bitte validierung erneut eingeben!")
         S.redirectTo("/issues")
+    }
+
+    sessionIssue.validate() match {
+      case false =>
+        S.error("Bitte alle Felder ausfüllen!")
+        S.redirectTo("/issues")
+      case _ =>
     }
 
     logger info "ISSUE: " + sessionIssue.get.toString
@@ -73,7 +93,7 @@ class Issues extends Loggable with RC with Config {
     "name=email" #> SHtml.text(sessionIssue.get.email, email = _ ) &
     "name=subject" #> SHtml.text(sessionIssue.get.subject, subject = _) &
     "name=issue" #> SHtml.textarea(sessionIssue.get.mail, mailNews = _) &
-    "type=submit" #> SHtml.submit("Senden", () => process)
+    "type=submit" #> SHtml.submit("Abschicken", () => process)
   }
 
   private def sendMail(from: String, to: String, subject: String, issue: String) {

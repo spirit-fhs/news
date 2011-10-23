@@ -1,5 +1,8 @@
 Changelog:
 
+23.11.2011
+  - Removed "Anregungen und Bugs", introduced "Kontakt" in oder to get in contact with the PaDSLab. Also added reCaptcha to the contact form.
+
 20.11.2011
   - Added a feature/bug/contact feature which allows users to report bugs etc. to the developer team.
   - Moved the REST-API to /rest/1.0/... in order to have versioning. The other REST-API URLs still work but are deprecated.
