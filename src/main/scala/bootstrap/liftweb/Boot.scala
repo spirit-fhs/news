@@ -186,6 +186,9 @@ class Boot extends Loggable with Config {
             else
               User.sitemap)
 
+    LiftRules.useXhtmlMimeType = false //required by ReCaptcha js lib
+    LiftRules.resourceNames = "recaptcha" :: LiftRules.resourceNames
+
     //LiftRules.passNotFoundToChain = true
     LiftRules.liftRequest.append {
       case Req("staticschedule" :: _, _, _) => false

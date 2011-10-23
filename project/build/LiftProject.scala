@@ -9,6 +9,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val liftVersion = "2.4-M4"
 
   override def libraryDependencies = Set(
+    "net.tanesha.recaptcha4j" % "recaptcha4j" % "0.0.7",
     "net.databinder" %% "dispatch" % "0.7.7",
     "net.liftweb" %% "lift-textile" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default" withSources,
