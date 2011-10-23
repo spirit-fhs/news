@@ -27,15 +27,8 @@ class Issues extends Loggable with RC with Config {
     /**
      * @return Returns false if any attribute is not filled.
      */
-    def validate(): Boolean = {
-      (name, email, subject, mail) match {
-        case ("",_,_,_) => false
-        case (_,"",_,_) => false
-        case (_,_,"",_) => false
-        case (_,_,_,"") => false
-        case (_,_,_,_) => true
-      }
-    }
+    def validate = !(List(name, email, subject, mail) contains "")
+
   }
 
   object sessionIssue extends SessionVar[issue](issue("", "", "", ""))
@@ -59,7 +52,7 @@ class Issues extends Loggable with RC with Config {
         S.redirectTo("/issues")
     }
 
-    sessionIssue.validate() match {
+    sessionIssue.validate match {
       case false =>
         S.error("Bitte alle Felder ausfüllen!")
         S.redirectTo("/issues")
