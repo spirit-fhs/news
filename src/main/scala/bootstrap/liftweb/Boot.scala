@@ -163,6 +163,7 @@ class Boot extends Loggable with Config {
 
     val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home", Hidden)) ::
             Menu(Loc("404", List("404") , "404", Hidden)) ::
+            Menu(Loc("StdPlanHilfe", List("help") , "Hilfe", Hidden)) ::
             Menu(Loc("ExtHome", ExtLink("/index") , "Home")) ::
             Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
             Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
