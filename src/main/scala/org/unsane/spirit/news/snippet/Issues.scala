@@ -15,19 +15,19 @@ import net.liftweb.http.{SessionVar, SHtml, S}
 
 class Issues extends Loggable with RC with Config {
 
-  case class issue(name: String, email: String, subject: String, mail: String) {
+  case class issue(name: String, email: String, subject: String, issueText: String) {
 
     override def toString = {
       "Von: " + name + "\n" +
       "E-Mail: " + email + "\n" +
       "Betreff: " + subject + "\n" +
-      "Nachricht: " + mail
+      "Nachricht: " + issueText
     }
 
     /**
      * @return Returns false if any attribute is not filled.
      */
-    def validateFields = !(List(name, email, subject, mail) contains "")
+    def validateFields = !(List(name, email, subject, issueText) contains "")
 
     /**
      * @return Returns false if a non e-mail is submitted.
@@ -54,11 +54,11 @@ class Issues extends Loggable with RC with Config {
   var name = ""
   var email = ""
   var subject = ""
-  var mailNews = ""
+  var issueText = ""
 
   private def process = {
 
-    sessionIssue.set(issue(name, email, subject, mailNews))
+    sessionIssue.set(issue(name, email, subject, issueText))
 
     validateCaptcha() match {
       case List() =>
@@ -79,7 +79,7 @@ class Issues extends Loggable with RC with Config {
 
     logger info "ISSUE: " + sessionIssue.get.toString
 
-    sendMail(sessionIssue.get.mail,
+    sendMail(sessionIssue.get.email,
       Props.get("bug.report.email").openOr(""),
       "Spirit-Kontakt: " + sessionIssue.get.subject, sessionIssue.get.toString)
 
@@ -96,7 +96,7 @@ class Issues extends Loggable with RC with Config {
     "name=name" #> SHtml.text(sessionIssue.get.name, name = _) &
     "name=email" #> SHtml.text(sessionIssue.get.email, email = _ ) &
     "name=subject" #> SHtml.text(sessionIssue.get.subject, subject = _) &
-    "name=issue" #> SHtml.textarea(sessionIssue.get.mail, mailNews = _) &
+    "name=issue" #> SHtml.textarea(sessionIssue.get.issueText, issueText = _) &
     "type=submit" #> SHtml.submit("Abschicken", () => process)
   }
 
