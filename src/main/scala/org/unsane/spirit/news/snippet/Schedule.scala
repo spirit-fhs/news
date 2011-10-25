@@ -23,7 +23,7 @@ class Schedule extends Config {
   }
 
   private object weekTypeVar extends SessionVar[String]("")
-  private object classNameVar extends SessionVar[String]("")
+  private object classNameVar extends SessionVar[String](S.param("classname").openOr(""))
 
   sealed abstract class period(time: String, schedule: List[ScheduleRecord]) {
     val periodSchedule = schedule.filter {
@@ -46,9 +46,16 @@ class Schedule extends Config {
     }
   }
 
+  S.param("classname").openOr("") match {
+    case "" =>
+    case s if (!(allClassNamesAsLowercase contains s)) => S.redirectTo("/404")
+    case s => classNameVar.set(s)
+  }
+
   classNameVar.get match {
     case s if (allClassNamesAsLowercase contains s) =>
-    case "" => classNameVar(allClassNamesAsLowercase.headOr("bai1").toLowerCase)
+    case "" =>
+      classNameVar(allClassNamesAsLowercase.head.toLowerCase)
     case _ => S.redirectTo("/404")
   }
 
@@ -119,7 +126,7 @@ class Schedule extends Config {
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => { classNameVar(s)
-                                            S.redirectTo("/schedule")})
+                                            S.redirectTo("/schedule?classname=" + s)})
 
     SHtml.select(allClassNamesAsLowercase.map(x => (x,x)), Full(classNameVar.get),
                  x => x, "onchange" -> js.toJsCmd)
