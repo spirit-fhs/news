@@ -58,30 +58,30 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	cp changeable.properties $(JETTY_DIR)
 endif
 ifeq ($(HOSTNAME),$(DEV_HOST))
-    @echo "==> Backing up schedule"
-    tar -cf $(JETTY_DIR)/tmp/schedule.tar $(JETTY_DIR)/webapps/news/staticschedule
-    @echo "==> Deleting and creating news dir in webapps"
-    rm -r $(JETTY_DIR)/webapps/news
-    mkdir $(JETTY_DIR)/webapps/news
-    @echo "==> Copying news.war into webapps/news folder and extracting it"
-    cp $(JETTY_DIR)/webapps/news.war /usr/share/jetty/webapps/news
-    cd $(JETTY_DIR)/webapps/news/ && jar xf news.war
-    @echo "==> Setting up folder and permissions at staticschedule/plan for scheduler"
-    cd / && tar -xvf $(JETTY_DIR)/tmp/schedule.tar
-    @echo "==> type 'make jetty-restart'"
+	@echo "==> Backing up schedule"
+	tar -cf $(JETTY_DIR)/tmp/schedule.tar $(JETTY_DIR)/webapps/news/staticschedule
+	@echo "==> Deleting and creating news dir in webapps"
+	rm -r $(JETTY_DIR)/webapps/news
+	mkdir $(JETTY_DIR)/webapps/news
+	@echo "==> Copying news.war into webapps/news folder and extracting it"
+	cp $(JETTY_DIR)/webapps/news.war /usr/share/jetty/webapps/news
+	cd $(JETTY_DIR)/webapps/news/ && jar xf news.war
+	@echo "==> Setting up folder and permissions at staticschedule/plan for scheduler"
+	cd / && tar -xvf $(JETTY_DIR)/tmp/schedule.tar
+	@echo "==> type 'make jetty-restart'"
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
-    @echo "==> Backing up schedule"
-    tar -cf $(JETTY_DIR)/tmp/schedule.tar $(JETTY_DIR)/webapps/root/staticschedule
-    @echo "==> Deleting and creating root dir in webapps"
-    rm -r $(JETTY_DIR)/webapps/root
-    mkdir $(JETTY_DIR)/webapps/root
-    @echo "==> Copying root.war into webapps/root folder and extracting it"
-    cp $(JETTY_DIR)/webapps/root.war /usr/share/jetty/webapps/root
-    cd $(JETTY_DIR)/webapps/root/ && jar xf root.war
-    @echo "==> Setting up folder and permissions at staticschedule/plan for scheduler"
-    cd / && tar -xvf $(JETTY_DIR)/tmp/schedule.tar
-    @echo "==> type 'make jetty-restart'"
+	@echo "==> Backing up schedule"
+	tar -cf $(JETTY_DIR)/tmp/schedule.tar $(JETTY_DIR)/webapps/root/staticschedule
+	@echo "==> Deleting and creating root dir in webapps"
+	rm -r $(JETTY_DIR)/webapps/root
+	mkdir $(JETTY_DIR)/webapps/root
+	@echo "==> Copying root.war into webapps/root folder and extracting it"
+	cp $(JETTY_DIR)/webapps/root.war /usr/share/jetty/webapps/root
+	cd $(JETTY_DIR)/webapps/root/ && jar xf root.war
+	@echo "==> Setting up folder and permissions at staticschedule/plan for scheduler"
+	cd / && tar -xvf $(JETTY_DIR)/tmp/schedule.tar
+	@echo "==> type 'make jetty-restart'"
 endif
 
 jetty-restart:
