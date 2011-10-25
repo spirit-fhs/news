@@ -42,7 +42,7 @@ class Issues extends Loggable with RC with Config {
      */
     def validate = (validateFields, validateEmail)
 
-    private val EmailParser = """([\w\d\-\_]+)(\+\d+)?@([\w\d\-\.]+)""".r
+    private val EmailParser = """([\w\d\-\_\.]+)(\+\d+)?@([\w\d\-\.]+)""".r
 
   }
 
@@ -72,7 +72,7 @@ class Issues extends Loggable with RC with Config {
         S.error("Bitte alle Felder ausfüllen!")
         S.redirectTo("/issues")
       case (_, false) =>
-        S.error("Bitte eine valide E-Mail Adresse angeben!")
+        S.error("Bitte eine valide E-Mail-Adresse angeben!")
         S.redirectTo("/issues")
       case _ =>
     }
