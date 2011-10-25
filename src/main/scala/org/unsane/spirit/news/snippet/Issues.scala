@@ -79,7 +79,7 @@ class Issues extends Loggable with RC with Config {
 
     logger info "ISSUE: " + sessionIssue.get.toString
 
-    sendMail(sessionIssue.get.issueText,
+    sendMail(sessionIssue.get.email,
       Props.get("bug.report.email").openOr(""),
       "Spirit-Kontakt: " + sessionIssue.get.subject, sessionIssue.get.toString)
 
