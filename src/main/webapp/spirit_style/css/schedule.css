@@ -42,14 +42,15 @@ table caption {
 	border:1px solid #D6D6D6;
 	padding: 3px;
 	margin: 3px 0;
+	font-weight:bold;
 }
 
 .odd{
-	background-color:#C1DA9D;
+	background-color:#8398CD;
 }
 
 .even{
-	background-color:#F4E4B8;
+	background-color:#F3994C;
 }
 
 .weekly{
@@ -58,7 +59,6 @@ table caption {
 
 .eventTitle{
 	font-size:10pt;
-	font-weight:bold;
 	float:left;
 }
 
@@ -98,8 +98,8 @@ caption {
 }
 
 option[value="g"]{
-	background-color:#F4E4B8;
+	background-color:#F3994C;
 }
 option[value="u"]{
-	background-color:#C1DA9D;
+	background-color:#8398CD;
 }
