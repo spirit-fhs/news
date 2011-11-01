@@ -10,7 +10,6 @@ trait ReCaptcha {
   import net.liftweb.util.{FieldError, FieldIdentifier}
   import net.liftweb.http.S
   import net.tanesha.recaptcha.ReCaptchaFactory
-  import net.liftweb.json._
   import net.liftweb.json.JsonAST._
   import net.liftweb.json.JsonDSL._
 
@@ -40,7 +39,8 @@ trait ReCaptcha {
     import scala.xml.Unparsed
     import net.liftweb.http.js.JE
     import net.liftweb.json.JsonAST._
-
+    import net.liftweb.json.compact
+  
    val RecaptchaOptions = compact(render(reCaptchaOptions))
     <xml:group>
     <script>
