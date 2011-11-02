@@ -31,7 +31,7 @@ Possible filters:
 
   Parameters:
     sem = A degreecourse such as bai2, mai3, etc.
-    weekType = (u = odd,g = straight,w = weekly)
+    weekType = (u = odd,g = even,w = weekly)
 
   /rest/1.0/schedule?classname={sem} 
     (i.e. classname=bamm3 returns the complete schedule for bamm3 as JSON.)
