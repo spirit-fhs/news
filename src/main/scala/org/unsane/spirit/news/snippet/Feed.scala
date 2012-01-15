@@ -74,6 +74,7 @@ object Feed extends RestHelper with SpiritHelpers {
 			 { news.map { entry =>
 			   (<item>
 				  <title>{ entry.subject.value } ({ semesterChanger(entry.semester.value) })</title>
+				  <author>{ entry.writer.value }</author>
 					<description>{ TextileParser.toHtml(entry.news.value).toString }</description>
 					<link>{ url}/entry/{entry.nr.value }</link>
 					<guid isPermaLink="false">{ entry.nr.value }</guid>
