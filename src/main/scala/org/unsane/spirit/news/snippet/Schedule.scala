@@ -90,6 +90,7 @@ class Schedule extends Config {
   object five extends period("16.00-17.30", classSchedule)
   object six extends period("17.45-19.15", classSchedule)
   object seven extends period("19.30-21.00", classSchedule)
+  object eight extends period("21.15-22.45", classSchedule)
 
   /**
    * @param List[ScheduleRecord] Should be one or more Events as a List.
@@ -183,7 +184,12 @@ class Schedule extends Config {
     ".sevenTuesday" #> {mkPrettyEvent(seven.Tuesday)} &
     ".sevenWednesday" #>{mkPrettyEvent(seven.Wednesday)} &
     ".sevenThursday" #> {mkPrettyEvent(seven.Thursday)} &
-    ".sevenFriday" #> {mkPrettyEvent(seven.Friday)}
+    ".sevenFriday" #> {mkPrettyEvent(seven.Friday)} &
+    ".eightMonday" #> {mkPrettyEvent(eight.Monday)} &
+    ".eightTuesday" #> {mkPrettyEvent(eight.Tuesday)} &
+    ".eightWednesday" #>{mkPrettyEvent(eight.Wednesday)} &
+    ".eightThursday" #> {mkPrettyEvent(eight.Thursday)} &
+    ".eightFriday" #> {mkPrettyEvent(eight.Friday)}
 
   }
 }

@@ -100,16 +100,17 @@ class ScheduleQueue extends Config {
     object five extends period("16.00-17.30", in)
     object six extends period("17.45-19.15", in)
     object seven extends period("19.30-21.00", in)
+    object eight extends period("21.15-22.45", in)
 
     in match {
       case Nil => <div></div>
-      case _ => renderSchedule(classname, one, two, three, four, five, six, seven)
+      case _ => renderSchedule(classname, one, two, three, four, five, six, seven, eight)
     }
   }
 
   def renderSchedule(classname: String, one: period, two: period, three: period,
                      four: period, five: period, six: period,
-                     seven: period) = {
+                     seven: period, eight: period) = {
 
   <table>
     <caption>{ "Stundenplan für: " + classname }</caption>
@@ -176,6 +177,14 @@ class ScheduleQueue extends Config {
     <td>{mkPrettyEvent(seven.Wednesday)}</td>
     <td>{mkPrettyEvent(seven.Thursday)}</td>
     <td>{mkPrettyEvent(seven.Friday)}</td>
+  </tr>
+  <tr>
+    <td class="first">21.15 - 22.45</td>
+    <td>{mkPrettyEvent(eight.Monday)}</td>
+    <td>{mkPrettyEvent(eight.Tuesday)}</td>
+    <td>{mkPrettyEvent(eight.Wednesday)}</td>
+    <td>{mkPrettyEvent(eight.Thursday)}</td>
+    <td>{mkPrettyEvent(eight.Friday)}</td>
   </tr>
   </table>
   }
