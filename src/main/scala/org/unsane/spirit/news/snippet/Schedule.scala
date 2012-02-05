@@ -25,25 +25,23 @@ class Schedule extends Config {
   private object weekTypeVar extends SessionVar[String]("")
   private object classNameVar extends SessionVar[String](S.param("classname").openOr(""))
 
-  sealed abstract class period(time: String, schedule: List[ScheduleRecord]) {
-    val periodSchedule = schedule.filter {
+  sealed abstract case class period(time: String, schedule: List[ScheduleRecord]) {
+    private val periodSchedule = schedule.filter {
       x => x.appointment.get.time.trim().replaceAll(" ", "") == time
     }
-    val Monday = periodSchedule.filter { x =>
-      x.appointment.get.day.trim == "Montag"
+
+    val Monday = periodFilter("Montag")
+    val Tuesday = periodFilter("Dienstag")
+    val Wednesday = periodFilter("Mittwoch")
+    val Thursday = periodFilter("Donnerstag")
+    val Friday = periodFilter("Freitag")
+
+    def periodFilter = (weekDay: String) => periodSchedule.filter { x =>
+      x.appointment.get.day.trim == weekDay
     }
-    val Tuesday = periodSchedule.filter { x =>
-      x.appointment.get.day.trim == "Dienstag"
-    }
-    val Wednesday = periodSchedule.filter { x =>
-      x.appointment.get.day.trim == "Mittwoch"
-    }
-    val Thursday = periodSchedule.filter { x =>
-      x.appointment.get.day.trim == "Donnerstag"
-    }
-    val Friday = periodSchedule.filter { x =>
-      x.appointment.get.day.trim == "Freitag"
-    }
+
+    def hasCourses = !((Monday ::: Tuesday ::: Wednesday ::: Thursday ::: Friday).isEmpty)
+
   }
 
   S.param("classname").openOr("") match {
@@ -92,11 +90,13 @@ class Schedule extends Config {
   object seven extends period("19.30-21.00", classSchedule)
   object eight extends period("21.15-22.45", classSchedule)
 
+  private val periodList = List(one, two, three, four, five, six, seven, eight)
+
   /**
    * @param List[ScheduleRecord] Should be one or more Events as a List.
    * @return NodeSeq The Events surrounded with Tags for prettiness.
    */
-  def mkPrettyEvent(schedule: List[ScheduleRecord]): NodeSeq = {
+  private def mkPrettyEvent(schedule: List[ScheduleRecord]): NodeSeq = {
 
     schedule map { x =>
 
@@ -147,49 +147,49 @@ class Schedule extends Config {
       }), x => x, "onchange" -> js.toJsCmd)
   }
 
+  /**
+   * This method is needed in order to view or not view empty lines
+   * a schedule.
+   *
+   * @param period Which period line shall be rendered.
+   * @param renderMe If the given period shall be rendered.
+   * If any higher period is rendered. This period will be rendered, too.
+   * @return NodeSeq The rendered period as HTML or an empty DIV.
+   *
+   */
+  def renderPeriod(in: period, renderMe: (Boolean, Boolean)): NodeSeq = renderMe match {
+
+    case (false, false) => <div></div>
+
+    case (_, _) =>
+      <tr>
+        <td class="first">{ in.time }</td>
+        <td>{ mkPrettyEvent(in.Monday) }</td>
+        <td>{ mkPrettyEvent(in.Tuesday) }</td>
+        <td>{ mkPrettyEvent(in.Wednesday) }</td>
+        <td>{ mkPrettyEvent(in.Thursday) }</td>
+        <td>{ mkPrettyEvent(in.Friday) }</td>
+      </tr>
+  }
+
   def render = {
-
-    ".caption" #> classNameVar.get &
-    ".oneMonday" #> {mkPrettyEvent(one.Monday)} &
-    ".oneTuesday" #> {mkPrettyEvent(one.Tuesday)} &
-    ".oneWednesday" #> {mkPrettyEvent(one.Wednesday)} &
-    ".oneThursday" #> {mkPrettyEvent(one.Thursday)} &
-    ".oneFriday" #> {mkPrettyEvent(one.Friday)} &
-    ".twoMonday" #> {mkPrettyEvent(two.Monday)} &
-    ".twoTuesday" #> {mkPrettyEvent(two.Tuesday)} &
-    ".twoWednesday" #> {mkPrettyEvent(two.Wednesday)} &
-    ".twoThursday" #> {mkPrettyEvent(two.Thursday)} &
-    ".twoFriday" #> {mkPrettyEvent(two.Friday)} &
-    ".threeMonday" #> {mkPrettyEvent(three.Monday)} &
-    ".threeTuesday" #> {mkPrettyEvent(three.Tuesday)} &
-    ".threeWednesday" #> {mkPrettyEvent(three.Wednesday)} &
-    ".threeThursday" #> {mkPrettyEvent(three.Thursday)} &
-    ".threeFriday" #> {mkPrettyEvent(three.Friday)} &
-    ".fourMonday" #> {mkPrettyEvent(four.Monday)} &
-    ".fourTuesday" #> {mkPrettyEvent(four.Tuesday)} &
-    ".fourWednesday" #> {mkPrettyEvent(four.Wednesday)} &
-    ".fourThursday" #> {mkPrettyEvent(four.Thursday)} &
-    ".fourFriday" #> {mkPrettyEvent(four.Friday)} &
-    ".fiveMonday" #> {mkPrettyEvent(five.Monday)} &
-    ".fiveTuesday" #> {mkPrettyEvent(five.Tuesday)} &
-    ".fiveWednesday" #> {mkPrettyEvent(five.Wednesday)} &
-    ".fiveThursday" #> {mkPrettyEvent(five.Thursday)} &
-    ".fiveFriday" #> {mkPrettyEvent(five.Friday)} &
-    ".sixMonday" #> {mkPrettyEvent(six.Monday)} &
-    ".sixTuesday" #> {mkPrettyEvent(six.Tuesday)} &
-    ".sixWednesday" #> {mkPrettyEvent(six.Wednesday)} &
-    ".sixThursday" #> {mkPrettyEvent(six.Thursday)} &
-    ".sixFriday" #> {mkPrettyEvent(six.Friday)} &
-    ".sevenMonday" #> {mkPrettyEvent(seven.Monday)} &
-    ".sevenTuesday" #> {mkPrettyEvent(seven.Tuesday)} &
-    ".sevenWednesday" #>{mkPrettyEvent(seven.Wednesday)} &
-    ".sevenThursday" #> {mkPrettyEvent(seven.Thursday)} &
-    ".sevenFriday" #> {mkPrettyEvent(seven.Friday)} &
-    ".eightMonday" #> {mkPrettyEvent(eight.Monday)} &
-    ".eightTuesday" #> {mkPrettyEvent(eight.Tuesday)} &
-    ".eightWednesday" #>{mkPrettyEvent(eight.Wednesday)} &
-    ".eightThursday" #> {mkPrettyEvent(eight.Thursday)} &
-    ".eightFriday" #> {mkPrettyEvent(eight.Friday)}
-
+    <table>
+      <caption>Stundenplan f&uuml;r das Semester: { classNameVar.get } </caption>
+	  <thead>
+    <tr>
+      <th>Uhrzeit</th>
+      <th>Montag</th>
+      <th>Dienstag</th>
+      <th>Mittwoch</th>
+      <th>Donnerstag</th>
+      <th>Freitag</th>
+    </tr>
+	  </thead>
+	  <tbody> {
+      periodList map { current =>
+        renderPeriod(current, (current.hasCourses, periodList.dropWhile(_ != current).tail.map(_.hasCourses) contains true))
+      }}
+    </tbody>
+    </table>
   }
 }
