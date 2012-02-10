@@ -36,16 +36,12 @@ package snippet
 import java.text.SimpleDateFormat
 import net.liftweb.http.{S}
 import java.util.{GregorianCalendar, Date, Calendar}
-import net.liftweb.common.{Logger, Loggable}
-import org.joda.time.convert.CalendarConverter
 
-object NewsSnippets extends Loggable {
+object NewsSnippets {
 
   private def gc = new GregorianCalendar()
 
   private def getGregorianTime() = gc.getTime
-
-  logger info  ("Date: " + getGregorianTime)
 
   private val simpleFormatWeek = new SimpleDateFormat
   private val simpleFormatDay = new SimpleDateFormat
