@@ -36,19 +36,39 @@ package snippet
 import java.text.SimpleDateFormat
 import net.liftweb.http.{S}
 import java.util.{GregorianCalendar, Date, Calendar}
+import net.liftweb.common.{Logger, Loggable}
+import org.joda.time.convert.CalendarConverter
 
-object NewsSnippets {
+object NewsSnippets extends Loggable {
 
-  private def getGregorianTime() = (new GregorianCalendar).getTime
+  private def gc = new GregorianCalendar()
+
+  private def getGregorianTime() = gc.getTime
+
+  logger info  ("Date: " + getGregorianTime)
 
   private val simpleFormatWeek = new SimpleDateFormat
   private val simpleFormatDay = new SimpleDateFormat
+  private val simpleFormatDate = new SimpleDateFormat
 
   simpleFormatWeek.applyPattern("ww")
   simpleFormatDay.applyPattern("EEEE")
+  simpleFormatDate.applyPattern("dd.MM.yyyy")
 
   def weekString() = simpleFormatWeek.format(getGregorianTime)
   def dayString() = simpleFormatDay.format(getGregorianTime)
+
+  def weekStart() = {
+    val gcStart = gc
+    gcStart.set( Calendar.DAY_OF_WEEK, Calendar.MONDAY )
+    simpleFormatDate.format(gcStart.getTime)
+  }
+
+  def weekEnd() = {
+    val gcEnd = gc
+    gcEnd.set( Calendar.DAY_OF_WEEK, Calendar.FRIDAY )
+    simpleFormatDate.format(gcEnd.getTime)
+  }
 
   def weekNr() = {
     try {
@@ -66,9 +86,9 @@ object NewsSnippets {
     case 0 =>
       <span></span>
     case a if (weekNr % 2 == 0) =>
-       <h3>Es ist {dayString} und eine gerade Woche ({weekNr} KW.).</h3>
+       <h3>Es ist {dayString} und eine gerade Woche (KW {weekNr} - Vom {weekStart} bis {weekEnd}).</h3>
     case b if (weekNr % 2 != 0) =>
-       <h3>Es ist {dayString} und eine ungerade Woche ({weekNr} KW.).</h3>
+       <h3>Es ist {dayString} und eine ungerade Woche (KW {weekNr} - Vom {weekStart} bis {weekEnd}).</h3>
     case _ =>
       <span></span>
   }
