@@ -199,7 +199,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     emailing match {
       case true =>
       case false =>
-        S.warning("Bitte beachten sie, dass die E-Mail-Funktion erst ab dem 30.9 wieder zur Verfügung steht.")
+        S.warning("E-Mailing ist deaktiviert.")
     }
 
     "name=date"  #> text(if(CrudEntry.lifecycle.value == "") lifecycleFormat.format(new Date)

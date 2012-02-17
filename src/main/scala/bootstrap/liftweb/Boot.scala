@@ -34,6 +34,7 @@ package bootstrap.liftweb
 
 import org.unsane.spirit.news._
 import model._
+import lib._
 import fun._
 import rest.RestApi
 import snippet.Feed
@@ -171,9 +172,7 @@ class Boot extends Loggable with Config {
             schedule ::
             Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
             Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
-            Menu(Loc("ScheduleMgt", List("scheduleAdmin", "index"), "Std. Plan Verwaltung", adminLoggedIn),
-              Menu(Loc("ScheduleParser", List("scheduleAdmin", "index"), "Std. Plan Parser", adminLoggedIn)),
-              Menu(Loc("SchedulePreview", List("scheduleAdmin", "schedulepreview"), "Std. Plan Vorschau", adminLoggedIn))) ::
+            Menu(Loc("ScheduleMgt", List("scheduleAdmin", "index"), "Std. Plan Verwaltung", adminLoggedIn)) ::
             Menu(Loc("schedule", List("schedule"), "schedule", Hidden),
               Menu(Loc("GroupsNew", List("schedule", "groups"), "Gruppen")),
               Menu(Loc("BlocksNew", List("schedule", "blocks"), "Blöcke", Hidden)),
@@ -211,6 +210,7 @@ class Boot extends Loggable with Config {
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))
 
+    UploadWatcher.run()
     DayChecker.start()
     if (tweet) Spreader.start()
     if (loadProps("ircConnect").equals("true")){

@@ -5,7 +5,7 @@ import net.liftweb.common.{Failure, Full}
 import net.liftweb.json
 import json.DefaultFormats
 import json.JsonAST.{JValue, JArray}
-import model.{ScheduleRecordQueue, ScheduleRecord}
+import model.ScheduleRecord
 import net.liftweb.json.JsonDSL._
 
 /**
@@ -25,13 +25,13 @@ object Schedule {
       i <- (json.parse(jsonStringAsSchedule) \ "schedule" ).children
     } yield i
 
-    val check = ScheduleRecordQueue.createRecord
+    val check = ScheduleRecord.createRecord
     check.setFieldsFromJValue(scheduleList.head)
-    ScheduleRecordQueue.findAll("className" ->
+    ScheduleRecord.findAll("className" ->
       check.className.value).map(_.delete_!)
 
     scheduleList map { x =>
-      val newScheduleRecord = ScheduleRecordQueue.createRecord
+      val newScheduleRecord = ScheduleRecord.createRecord
       newScheduleRecord.setFieldsFromJValue(x)
       newScheduleRecord.save
     }

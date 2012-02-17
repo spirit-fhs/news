@@ -38,7 +38,7 @@ class ScheduleParsingHelper extends Loggable with Config {
     }
   }
 
-  def runParser(in: String): JsCmd = {
+  def runParser(in: String) = {
 
     in match {
       case "alle" => allClassNamesAsLowercase map parseSchedules _
@@ -46,8 +46,6 @@ class ScheduleParsingHelper extends Loggable with Config {
       case _ =>
     }
 
-    S.redirectTo("/scheduleAdmin/schedulepreview")
-    S.notice("Schedules hopefully parsed!")
   }
 
   private def parseSchedules(course: String) = {
