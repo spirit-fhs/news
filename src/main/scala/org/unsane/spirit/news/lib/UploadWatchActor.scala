@@ -10,16 +10,20 @@ class UploadWatchActor(watcher: WatchService) extends Actor with Loggable {
 
   def act {
 
-    val key = watcher.take
     val sph = ScheduleParsingHelper()
 
     while(true) {
-
-      if (!key.pollEvents().toList.isEmpty) {
-        logger info "Parsing new Schedules."
-        sph.runParser("alle")
+      try {
+        val key = watcher.take()
+        for (x <- key.pollEvents().toList) {
+          logger info x.context() + " has changed. Sending to parser."
+          sph.runParser(x.context().toString.stripPrefix("s_").stripSuffix(".html"))
+        }
+        key.reset()
+      } catch {
+        case s => logger warn s
       }
-      Thread.sleep(60000)
+      Thread.sleep(1000)
     }
   }
 }

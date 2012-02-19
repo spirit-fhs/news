@@ -42,7 +42,8 @@ class ScheduleParsingHelper extends Loggable with Config {
 
     in match {
       case "alle" => allClassNamesAsLowercase map parseSchedules _
-      case s: String => parseSchedules(s)
+      case s: String => 
+        if (allClassNamesAsLowercase contains s) parseSchedules(s)
       case _ =>
     }
 

@@ -15,7 +15,7 @@ object UploadWatcher extends Loggable with Config {
     val dir = FileSystems.getDefault().getPath(schedulePath)
 
     try {
-      val key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+      val key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
     } catch {
       case s => logger warn s
     }
