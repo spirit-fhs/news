@@ -95,20 +95,13 @@ object Response extends Loggable {
     entries.filter{entry => afterDate(entry.date.value,key)}
   }
 
-  def getPreviewNews(params: Map[String, List[String]]) : JArray = {
+  def getPreviewNews(params: Map[String, List[String]]): JArray = {
 
     val news = Entry.findAll
 
-    var newsPreview: List[EntryPreview] = null
-
-    newsPreview = params.get("preview") match {
-      case Some(_) => filterNews(news)
-      case _ => null
-    }
-    
-    newsPreview = params.get("date") match {
-      case Some(x) => filterDateEntryPreview(newsPreview, x.head)
-      case _ => newsPreview
+    val newsPreview = params.get("date") match {
+      case Some(x) => filterDateEntryPreview(filterNews(news), x.head)
+      case _ => filterNews(news)
     }
 
     JArray(newsPreview.map(makeJValue _))

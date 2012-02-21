@@ -14,6 +14,9 @@ Possible filters:
   /rest/1.0/news/{nr} (i.e. /155 returns the news with the nr. 155.)
   /rest/1.0/news?semester={sem} (i.e. semester=I1   for all News for I1.)
   /rest/1.0/news?date=YYYYMMDD  (i.e. date=20110811 for all News after the 11th Aug 2011.)
+  /rest/1.0/news?preview=true (returns a preview with subject, writer, nr and date. NOTE: 
+                               The date filter may be applied.)
+
 
 Example API calls:
 
