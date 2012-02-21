@@ -7,7 +7,7 @@ to improve code and functionality in this open source project!
 
 Features:
 * Auth against internal university LDAP Server
-* Using Lift 2.4-M4 with Scala 2.8.1 and MongoDB
+* Using Lift 2.4, Scala 2.8.1 and Java 7 and MongoDB
 * News will be directly posted on Twitter and Facebook
 * Students can be notified via mailinglists
 * lots more.....

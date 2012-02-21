@@ -63,7 +63,7 @@ trait Config {
   /**
    * loadEmails loads the mailings lists
    * takes an Array full with semesters and gehts the mailing lists for them
-   * @param Array[String]
+   * @param sem Array[String]
    * @return Array[String]
    */
   def loadEmails(sem: Array[String]): Array[String] = {
@@ -80,7 +80,7 @@ trait Config {
 
   /**
    * loadProps
-   * @param Name Property that shall be loaded as a String
+   * @param prop Name Property that shall be loaded as a String
    * @return String Property that was loaded
    */
   def loadProps(prop: String): String = {
