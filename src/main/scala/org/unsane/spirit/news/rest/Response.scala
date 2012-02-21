@@ -36,16 +36,22 @@ package rest
 import org.unsane.spirit.news
 import model._
 
+import net.liftweb.json.Serialization.write
+
 import net.liftweb.json.JsonDSL._
-import net.liftweb.json.JsonAST.JValue
 import net.liftweb.common.Box
-import net.liftweb.json.JArray
+import net.liftweb.json.{JArray}
 import net.liftweb.common.Loggable
 
+
 import java.util.{GregorianCalendar,Date, Locale}
+
 import java.text.SimpleDateFormat
+import net.liftweb.json.JsonAST.{JField, JValue, JObject, JString}
 
 object Response extends Loggable {
+
+  implicit val formats = net.liftweb.json.DefaultFormats
 
   private[this] def afterDate(date1Param: String, date2Param: String): Boolean = {
 
@@ -57,23 +63,68 @@ object Response extends Loggable {
 
     date1.after(date2)
   }
+  
+  private[this] def makeJValue(entry: EntryPreview)  : JValue = {
+
+    ("nr", entry.nr) ~ ("date", entry.date) ~ ("writer", entry.writer) ~ ("subject", entry.subject) ~ ("semester", entry.semester)
+  }
+
+  private[this] def makePreview(entry: Entry) : EntryPreview = {
+    new EntryPreview(
+      entry.nr.value,
+      entry.date.value,
+      entry.writer.value,
+      entry.subject.value,
+      entry.semester.value)
+  }
+
+  private[this] def filterNews(entries: List[Entry]) : List[EntryPreview] = {
+    entries.map(makePreview _)
+  }
 
   private[this] def filterSemester(entries: List[Entry], key: String): List[Entry] = {
     entries.filter{entry => entry.semester.value.split(" ") contains key
     }
   }
 
+  private[this] def filterDateEntryPreview(entries: List[EntryPreview], key: String): List[EntryPreview] = {
+    entries.filter{entry => afterDate(entry.date,key)}
+  }
+
   private[this] def filterDate(entries: List[Entry], key: String): List[Entry] = {
     entries.filter{entry => afterDate(entry.date.value,key)}
   }
 
+  def getPreviewNews(params: Map[String, List[String]]) : JArray = {
+
+    val news = Entry.findAll
+
+    var newsPreview: List[EntryPreview] = null
+
+    newsPreview = params.get("preview") match {
+      case Some(_) => filterNews(news)
+      case _ => null
+    }
+    
+    newsPreview = params.get("date") match {
+      case Some(x) => filterDateEntryPreview(newsPreview, x.head)
+      case _ => newsPreview
+    }
+
+    JArray(newsPreview.map(makeJValue _))
+  }
+  
   def getAllNews(params: Map[String, List[String]]) : JArray = {
 
-    if(params.isEmpty)
+    if(params.isEmpty) {
+      logger info  "entry"
       JArray(Entry.findAll.map(_.asJValue))
+    }
     else {
-      var news = Entry.findAll
+      logger info "Hello World!"
 
+      var news = Entry.findAll
+      
       news = params.get("semester") match {
         case Some(x) => filterSemester(news, x.head)
         case _ => news
@@ -86,8 +137,6 @@ object Response extends Loggable {
 
       JArray(news.map(_.asJValue))
     }
-
-
   }
 
   def getOneNews(id: String): Box[JValue] = {

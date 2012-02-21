@@ -61,21 +61,19 @@ object RestApi extends RestHelper with Loggable {
 
     }
 
-    /**
-     * This is a test, looking that REST-Api is doing his job.
-     * @todo Remove this?
-     */
-    case "test" :: Nil Get req => {
-      JsonResponse(("test" -> "test!"), Nil, Nil, 200)
-    }
-
      /**
-     * Get all News as JSON.
-     * /rest/1.0/news
-     * @version 1.0
-     */
+      * Get all News as JSON.
+      * Maybe preview ? => ?preview=true
+      * date filter, only if preview=true
+      * /rest/1.0/news
+      * @version 1.0
+      */
     case "rest" :: "1.0" :: "news" :: Nil Get req => {
-      JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
+      if(req.param("preview").equals("true")) {
+        JsonResponse(Response.getPreviewNews(req.params), Nil, Nil, 200)
+      } else {
+        JsonResponse(Response.getAllNews(req.params), Nil, Nil, 200)
+      }
     }
 
     /**
