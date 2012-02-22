@@ -56,12 +56,19 @@ object Response extends Loggable {
   private[this] def afterDate(date1Param: String, date2Param: String): Boolean = {
 
     val sdf1 = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
-    val date1 = sdf1.parse(date1Param)
-
     val sdf2 = new SimpleDateFormat("yyyyMMdd", Locale.US)
-    val date2 = sdf2.parse(date2Param)
 
-    date1.after(date2)
+    try {
+      val date1 = sdf1.parse(date1Param)
+      val date2 = sdf2.parse(date2Param)
+
+      date1.after(date2)
+    } catch {
+      case e: Exception => {
+        val date1 = sdf1.parse(date1Param)
+        date1.after(new Date)
+      }
+    }
   }
   
   private[this] def makeJValue(entry: EntryPreview)  : JValue = {
@@ -114,8 +121,6 @@ object Response extends Loggable {
       JArray(Entry.findAll.map(_.asJValue))
     }
     else {
-      logger info "Hello World!"
-
       var news = Entry.findAll
       
       news = params.get("semester") match {
