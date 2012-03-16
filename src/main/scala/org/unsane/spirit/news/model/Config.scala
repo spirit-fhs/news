@@ -52,9 +52,9 @@ trait Config {
     props.getProperty(props.getProperty("Semester") + "_" + major).split(";").toList
   }
 
-  lazy val allSemestersAsList = {
-    loadSemesters("BaI") :::
-    loadSemesters("BaWI") :::
+  lazy val allSemesterAsList4News = {
+    loadSemesters("BaI").take(3) :::
+    loadSemesters("BaWI").take(3) :::
     loadSemesters("BaITS") :::
     loadSemesters("BaMuMa") :::
     loadSemesters("Ma")

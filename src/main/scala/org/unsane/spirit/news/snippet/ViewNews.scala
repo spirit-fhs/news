@@ -57,7 +57,7 @@ class ViewNews extends SpiritHelpers with Loggable with Config {
       logger info ("Searching for " + s + "!")
       val validSearch =
         loadSemesters("BaI") :: loadSemesters("BaWI") ::
-        loadSemesters("BaMuMa") :: loadSemesters("BaITS") ::
+        loadSemesters("BaITS") :: loadSemesters("BaMuMa") ::
         loadSemesters("Ma") :: loadSemesters("Other") :: Nil
 
       if (validSearch.flatten.contains(s)) {
@@ -89,7 +89,7 @@ class ViewNews extends SpiritHelpers with Loggable with Config {
   def classNameChooser() = {
 
     val classNames =
-      "alle" :: allSemestersAsList zip  "Alle" :: allClassNamesAsLowercase
+      "alle" :: allSemesterAsList4News zip  "Alle" :: allClassNamesAsLowercase
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => (S.redirectTo("/semsearch/" + s)))
