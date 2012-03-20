@@ -439,7 +439,7 @@ var Schedule = function() {
             
             // dayEvents contains all events of a day, which are at a specific time
             var daytimeEvents = SearchFunctions.getEventsByDayFromSchedule();            
-            var fuck = "abc";
+            
             
             return daytimeEvents;
             
@@ -594,7 +594,7 @@ var Schedule = function() {
                         
                 }   
                 
-                var fuck = "abc";
+                
             }
             
             this.fillSchedulePages(schedule);
