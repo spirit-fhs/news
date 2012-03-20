@@ -126,7 +126,7 @@ var News = function () {
                 });
 
             });
-            var fuck='sdfasdf';
+            
 
         },
 
