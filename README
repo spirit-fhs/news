@@ -1,8 +1,8 @@
 *****************************************************************
-*  		      					                                          *
-* 		SpiritMobile @GitHUb  README-FILE 			                  *
-* 			version 0.01 				                                    *
-*			      					                                          *
+*  		      					                                                *
+* 		SpiritMobile @GitHUb  README-FILE 			                       *
+* 			version 0.01 				                                          *
+*			      					                                                 *
 *****************************************************************
 
 
@@ -24,6 +24,14 @@ systems website itself:
 B. How to install SpiritMobile
 *******************************
 
+1. Install & Setup Webserver
+2. Load SpiritMobile onto Webspace 
+
+
+************************
+C. How to use iSpirit? *
+************************
+
 1. Get your Smartphone/Table.
 2. Start up yor Browser.
 3. Type in http://spirit.fh-schmalkalden.de/ @ adress bar.
@@ -34,11 +42,6 @@ B. How to install SpiritMobile
 Now it's done. The SpiritMobile web application is placed on your home 
 screen and can be used.
 
-
-************************
-C. How to use iSpirit? *
-************************
-
-1. Start SpiritMobile Webapp
-2. Navigate through the menus
-3. Have fun :)
+7. Start SpiritMobile Webapp via shortcut
+8. Navigate through the menus
+9. Have fun :)
