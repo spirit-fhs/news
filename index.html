@@ -45,15 +45,38 @@
                     ns.showNewsOnElement('#jsonloader');
                     $('#menuitem_news').unbind('click');
                 });
-                
-                
+	
                 // Schedule-Section
                 // Load Schedule
                 var sd = new Schedule();
+
+		var courses = ['bai','bawi','bamm','bais','mai'];		
+		$.ajaxSetup({ timeout: 7000  });
+
+		document.domain="spirit.fh-schmalkalden.de";
+			for(var ci=0;ci<courses.length;ci++){
+				for(var semester = 1;semester<7;semester++){
+					$.getJSON("http://spirit.fh-schmalkalden.de/rest/1.0/schedule"  ,
+						{
+						classname:"" + courses[ci] + semester
+						},
+						function(data){
+						sd.loadScheduleData(data);
+
+						}).success(function() { alert("second success"); });
+						
+						
+
+				}
+			}
+		
+
+                /*
                 sd.loadScheduleData('schedulebai3.json');
                 sd.loadScheduleData('schedulemai3.json');
                 sd.loadScheduleData('schedulebawi1.json');
-                
+                */
+
                 var lS = new LocalSchedule();
                 lS.init();
                 
