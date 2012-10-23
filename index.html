@@ -3,7 +3,7 @@
     <head>
         <title>Spirit Mobile</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta http-equiv="Cache-Control" content="no-cache"/>
+        <!--  <meta http-equiv="Cache-Control" content="no-cache"/> -->
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
 
@@ -50,32 +50,62 @@
                 // Load Schedule
                 var sd = new Schedule();
 
-		var courses = ['bai','bawi','bamm','bais','mai'];		
-		$.ajaxSetup({ timeout: 7000  });
+                var courses = ['bai','bawi','bamm','bais','mai'];		
+                $.ajaxSetup({ timeout: 7000 ,
+                    beforeSend: function ( x ) {
+                        if(x && x.overrideMimeType) {
+                            x.overrideMimeType("application/j-son;charset=UTF-8");
+                        }
 
-		document.domain="spirit.fh-schmalkalden.de";
-			for(var ci=0;ci<courses.length;ci++){
-				for(var semester = 1;semester<7;semester++){
-					$.getJSON("http://spirit.fh-schmalkalden.de/rest/1.0/schedule"  ,
-						{
-						classname:"" + courses[ci] + semester
-						},
-						function(data){
-						sd.loadScheduleData(data);
+                    },
+                    /*success:function(datas, textStatus, jqXHR){
+alert(datas);
+                         var returnedData = jQuery.parseJSON(datas.substr(datas.indexOf('{')));
+                        }),*/
+                    
+                    error: function(x,e) { if(x.status==0){
+                            console.log('You are offline!!n Please Check Your Network.');
+                        }else if(x.status==404){
+                            console.log('Requested URL not found.');
+                        }else if(x.status==500){
+                            console.log('Internel Server Error.');
+                        }else if(e=='parsererror'){
+                            console.log('Error.nParsing JSON Request failed.');
+                            console.log(x);
+                        }else if(e=='timeout'){
+                            console.log('Request Time out.');
+                        }else {
+                            console.log('Unknow Error.n'+x.responseText);
+                        } } 
+                });
+                //document.domain="spirit.fh-schmalkalden.de";
+                for(var ci=0;ci<courses.length;ci++){
+                    for(var semester = 1;semester<7;semester++){
+                        var request = $.get("http://spirit.fh-schmalkalden.de/rest/1.0/schedule?callback=?"  ,
+                                        
+                        {
+                            classname:"" + courses[ci] + semester                        
+                        },
+                        function(data){ alert(data);
 
-						}).success(function() { alert("second success"); });
-						
-						
+                            sd.loadScheduleData(data);
 
-				}
-			}
+                        },"jsonp"
+                    );/*
+                        request.always(function(){console.log(this);
+                            //  sd.loadScheduleData();				
+                        });
+                     */						
+
+                    }
+                }
 		
 
                 /*
                 sd.loadScheduleData('schedulebai3.json');
                 sd.loadScheduleData('schedulemai3.json');
                 sd.loadScheduleData('schedulebawi1.json');
-                */
+                 */
 
                 var lS = new LocalSchedule();
                 lS.init();
