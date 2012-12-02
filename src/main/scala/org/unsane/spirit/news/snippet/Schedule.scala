@@ -12,7 +12,7 @@ import net.liftweb.common.Full
 /**
  * Rendering the Schedule for a given classname and week.
  *
- * @TODO This is a WIP, still work to be done!
+ * TODO This is a WIP, still work to be done!
  */
 class Schedule extends Config {
 
@@ -125,7 +125,7 @@ class Schedule extends Config {
 
   def selectClassnameBox = {
 
-    val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
+    val js = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => { classNameVar(s)
                                             S.redirectTo("/schedule?classname=" + s)})
 
@@ -135,7 +135,7 @@ class Schedule extends Config {
 
   def selectWeekBox = {
 
-    val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
+    val js = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => { weekTypeVar(s)
                                             S.redirectTo("/schedule")})
 

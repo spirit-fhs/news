@@ -40,7 +40,7 @@ import net.liftweb.http.SHtml._
 import net.liftweb.http._
 import js.JsCmds._
 import net.liftweb.common._
-import net.liftweb.textile._
+import net.liftmodules.textile._
 import java.text._
 import java.util.Date
 import java.util.Locale
@@ -127,10 +127,6 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
       logger info "News should be sent via eMail!"
       MailHandler.send(TextileParser.toHtml(CrudEntry.news.value.toString).toString, CrudEntry.subject.value, loadEmails(changedSemester.split(" ")))
     }
-    if (tweet) {
-      logger info "News should be spread via Twitter!"
-      Spreader ! Tweet(CrudEntry.subject.value, changedSemester.split(" ").map(" #"+_).mkString , nr)
-    }
   }
 
   /**
@@ -162,7 +158,6 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     logger info "Entry was updated by " + User.currentUserId.openOr("")
     if (sendEmail) MailHandler.send(TextileParser.toHtml(CrudEntry.news.value).toString,
       "[Update] " + CrudEntry.subject.value, loadEmails(changedSemester split (" ")))
-    if (tweet && tweetUpdate) Spreader ! Tweet("[Update] " + CrudEntry.subject.value, changedSemester.split(" ").map(" #"+_).mkString , newNr)
     S notice "Ihr update wurde gespeichert"
   }
 

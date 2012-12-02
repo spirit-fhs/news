@@ -36,7 +36,7 @@ package snippet
 import net.liftweb.http._
 import net.liftweb.http.rest._
 import org.unsane.spirit.news.model.Entry
-import net.liftweb.textile.TextileParser
+import net.liftmodules.textile.TextileParser
 
 object Feed extends RestHelper with SpiritHelpers {
 
