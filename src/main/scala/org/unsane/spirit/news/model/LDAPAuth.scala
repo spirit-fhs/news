@@ -78,27 +78,15 @@ trait LDAPAuth extends Loggable with Config {
    * Trying to get auth from the LDAP
    * @param userName the login
    * @param passWord the password
-   * @param ldapServer the ldapServer, should be ldap1 (default param) or zefi
    * @return Boolean
    */
   def tryLoginLDAP(
     userName: String,
-     passWord: String,
-     ldapServer: String = "ldap1"
+     passWord: String
   ): Boolean = {
-    logger warn userName + " is trying to log into "+ldapServer+"!"
-    val (ldapURL, dn) =
-      if (ldapServer == "ldap1") {
-        ("ldaps://ldap1.fh-schmalkalden.de:636"
-        ,"uid=" + userName + "," +
-         (if (userName.equals("denison")) "ou=students,dc=fh-sm,dc=de"
-          else "ou=people,dc=fh-sm,dc=de"))
-      } else if (ldapServer == "zefi") {
-        ("ldaps://zefi.fh-schmalkalden.de:636"
-         ,"uid="+userName+",ou=people,ou=in,dc=fh-schmalkalden,dc=de")
-      } else {
-        return false
-      }
+    logger warn userName + " is trying to log into zefi!"
+    val ldapURL = "ldaps://zefi.fh-schmalkalden.de:636"
+    val dn =  "uid="+userName+",ou=people,ou=in,dc=fh-schmalkalden,dc=de"
 
     env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory")
     env.put(Context.PROVIDER_URL, ldapURL)
@@ -110,28 +98,20 @@ trait LDAPAuth extends Loggable with Config {
     try {
       System.setProperty("javax.net.ssl.trustStore", userhome + "/sslstore")
       val ctx: DirContext = new InitialDirContext(env)
-      if (ldapServer == "zefi") {
-        val attrs: Attributes = ctx.getAttributes(dn)
-        val gidNumber = attrs.get("gidNumber").get(0)
-        // only staff can log in
-        if (gidNumber != "1001") return false
-      }
       val attrs: Attributes = ctx.getAttributes(dn)
-      S.setSessionAttribute("fullname", getFullname(attrs, ldapServer))
+      val gidNumber = attrs.get("gidNumber").get(0)
+        // only staff can log in
+      if (gidNumber != "1001") return false
+      S.setSessionAttribute("fullname", getFullname(attrs))
       S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName))
       logger info userName + " logged in successfully!"
       true
     } catch {
       case e: AuthenticationException =>
-        if (ldapServer == "ldap1") {
-          tryLoginLDAP(userName, passWord, "zefi")
-        }
-        else {
           logger error e.printStackTrace.toString
           S error "Error: Bitte richtige FHS-ID und Passwort angeben"
           S redirectTo "/user_mgt/login"
           false
-        }
       case b: NamingException =>
         logger error b.printStackTrace.toString
         logger error b.getExplanation
@@ -184,15 +164,10 @@ trait LDAPAuth extends Loggable with Config {
   /**
    * @param attrs the attributes
    * @return String built with title and last name
-   * @TODO Employees don't have a personalTitle in the LDAP Directory
    */
-  private def getFullname(attrs: Attributes, ldapServer: String): String = {
+  private def getFullname(attrs: Attributes): String = {
     val ids = attrs.getIDs.toList
-    def getAttrVal(id: String) =
-      if (ids contains id) attrs.get(id).get(0).toString else ""
-    if (ldapServer == "ldap1")
-      (getAttrVal("personalTitle") + " " + getAttrVal("sn")).trim
-    else // zefi
-      getAttrVal("displayName")
+    def getAttrVal(id: String) = if (ids contains id) attrs.get(id).get(0).toString else ""
+    getAttrVal("displayName")
   }
 }
