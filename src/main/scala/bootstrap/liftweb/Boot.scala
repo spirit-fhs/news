@@ -58,6 +58,7 @@ class Boot extends Loggable with Config {
 
 
     // Protecting file upload for schedule
+    val userhome = System.getProperty("user.dir")
     System.setProperty("javax.net.ssl.trustStore", userhome + "/sslstore")
     val roles = AuthRole("Upload")
 

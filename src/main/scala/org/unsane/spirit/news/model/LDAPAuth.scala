@@ -45,7 +45,7 @@ trait LDAPAuth extends Loggable with Config {
     loadProps("Productive") == "yes" ||
       loadProps("UseLDAPAuth") == "yes"
   private val env = new Hashtable[String,String]
-  private val userhome = System.getProperty("user.dir")
+
 
 
   def tryLogin(userName: String, passWord: String): Boolean = {
