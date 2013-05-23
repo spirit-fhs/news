@@ -96,7 +96,7 @@ trait LDAPAuth extends Loggable with Config {
     env.put(Context.SECURITY_PROTOCOL, "SSL")
 
     try {
-      System.setProperty("javax.net.ssl.trustStore", userhome + "/sslstore")
+
       val ctx: DirContext = new InitialDirContext(env)
       val attrs: Attributes = ctx.getAttributes(dn)
       val gidNumber = attrs.get("gidNumber").get(0)
