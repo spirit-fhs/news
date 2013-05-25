@@ -36,6 +36,7 @@ package model
 import java.util.Properties
 import java.io._
 import collection.mutable.ArrayBuffer
+import net.liftweb.json.ext._Interval
 
 /**
  * Could have used Lift's Props, but using java.util.Properties fitted the solution in a better way.
@@ -107,6 +108,13 @@ trait Config {
     loadSchedule("MUMA").map(_.toLowerCase).toList :::
     loadSchedule("MA").map(_.toLowerCase).toList ::: Nil
   }
+
+  /**
+   * @return The students which are allowed to log in.
+   */
+   lazy val allowedStudents: List[String] = {
+    loadProps("allowedStudents").split(";").map(_.toLowerCase).toList
+   }
 
   /**
    * Saving to changeable.properties!

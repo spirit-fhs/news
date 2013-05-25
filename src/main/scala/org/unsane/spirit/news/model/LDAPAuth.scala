@@ -41,12 +41,8 @@ import net.liftweb.common.Loggable
 import scala.collection.JavaConversions._
 
 trait LDAPAuth extends Loggable with Config {
-  private val useLDAPAuth =
-    loadProps("Productive") == "yes" ||
-      loadProps("UseLDAPAuth") == "yes"
+  private val useLDAPAuth = (loadProps("Productive") == "yes" || loadProps("UseLDAPAuth") == "yes")
   private val env = new Hashtable[String,String]
-
-
 
   def tryLogin(userName: String, passWord: String): Boolean = {
     // allow additional users in setting.properties
@@ -101,7 +97,7 @@ trait LDAPAuth extends Loggable with Config {
       val attrs: Attributes = ctx.getAttributes(dn)
       val gidNumber = attrs.get("gidNumber").get(0)
         // only staff can log in
-      if (gidNumber != "1001") return false
+      if (gidNumber != "1001" || !allowedStudents.contains(userName)) return false
       S.setSessionAttribute("fullname", getFullname(attrs))
       S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName))
       logger info userName + " logged in successfully!"
