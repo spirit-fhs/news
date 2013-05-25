@@ -40,6 +40,9 @@ import scala.actors._
 import Http._
 import net.liftweb.common.Loggable
 
+import twitter4j._
+import auth.AccessToken
+
 /* This is one cool feature!
  * Spreader takes the Entry number, gets a TinyURL for this.
  * And it will be TWittered instantly.
@@ -49,8 +52,10 @@ import net.liftweb.common.Loggable
 case class Tweet(subject: String, semester: String, number: String)
 
 object Spreader extends Actor with Config with Loggable {
-  private val consumer = new Consumer(loadProps("Consumer"), loadProps("ConsumerSecret"))
-  private val token = new Token(loadProps("Token"), loadProps("TokenSecret"))
+
+  private val twitter = new TwitterFactory().getInstance()
+  twitter.setOAuthConsumer(loadProps("Consumer"), loadProps("ConsumerSecret"))
+  twitter.setOAuthAccessToken(new AccessToken(loadProps("Token"), loadProps("TokenSecret")))
 
   private def mkTweet(subject: String, tinyurl: String, semester: String) = {
     val tailWithoutSemester = " " + tinyurl
@@ -73,7 +78,7 @@ object Spreader extends Actor with Config with Loggable {
             val http = new Http
             val longUrl = "http://is.gd/api.php?longurl=http://spirit.fh-schmalkalden.de/entry/" + nr
             val tinyurl = http(longUrl.as_str)
-            http(Status.update(mkTweet(subject, tinyurl, semester), consumer, token).>|)
+            twitter.updateStatus(mkTweet(subject, tinyurl, semester))
           } catch {
             case e =>
               logger error e.toString

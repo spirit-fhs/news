@@ -10,6 +10,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   override def libraryDependencies = Set(
     "net.tanesha.recaptcha4j" % "recaptcha4j" % "0.0.7",
+    "org.twitter4j" % "twitter4j-stream" % "3.0.3", 
     "net.databinder" %% "dispatch" % "0.7.7",
     "net.liftweb" %% "lift-textile" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default" withSources,
