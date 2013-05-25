@@ -97,7 +97,7 @@ trait LDAPAuth extends Loggable with Config {
       val attrs: Attributes = ctx.getAttributes(dn)
       val gidNumber = attrs.get("gidNumber").get(0)
         // only staff can log in
-      if (gidNumber != "1001" || !allowedStudents.contains(userName)) return false
+      if (gidNumber != "1001" && !allowedStudents.contains(userName)) return false
       S.setSessionAttribute("fullname", getFullname(attrs))
       S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName))
       logger info userName + " logged in successfully!"
