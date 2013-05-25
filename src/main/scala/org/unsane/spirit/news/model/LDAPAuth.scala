@@ -99,7 +99,7 @@ trait LDAPAuth extends Loggable with Config {
         // only staff can log in
       if (gidNumber != "1001" && !allowedStudents.contains(userName)) return false
       S.setSessionAttribute("fullname", getFullname(attrs))
-      S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName))
+      S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName, gidNumber.toString))
       logger info userName + " logged in successfully!"
       true
     } catch {
@@ -131,10 +131,11 @@ trait LDAPAuth extends Loggable with Config {
    * the email function. How should this be solved?
    * This is only a quickfix, should be fixed a more proper way in the future!!!!!
    */
-  private def emailValidator(email: String, userName:String): String = email match {
-    // case "" => userName+"@fh-sm.de" // does not work for students
-    case "" => "not-valid"
-    case _ => email
+  private def emailValidator(email: String, userName:String, gidNumber: String): String = (email, gidNumber) match {
+    case ("", "1002") => userName + "@stud.fh-sm.de"
+    case ("", "1001") => userName + "@fh-sm.de"
+    case ("", _)      => "not-valid"
+    case _            => email
   }
 
   /**
