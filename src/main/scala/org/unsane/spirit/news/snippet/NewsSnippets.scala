@@ -35,7 +35,8 @@ package snippet
 
 import java.text.SimpleDateFormat
 import net.liftweb.http.{S}
-import java.util.{GregorianCalendar, Date, Calendar}
+import java.util.{GregorianCalendar, Date, Calendar, Locale}
+import net.liftweb.record.field.LocaleField
 
 object NewsSnippets {
 
@@ -44,11 +45,10 @@ object NewsSnippets {
   private def getGregorianTime() = gc.getTime
 
   private val simpleFormatWeek = new SimpleDateFormat
-  private val simpleFormatDay = new SimpleDateFormat
+  private val simpleFormatDay = new SimpleDateFormat("EEEE", Locale.GERMAN)
   private val simpleFormatDate = new SimpleDateFormat
 
   simpleFormatWeek.applyPattern("ww")
-  simpleFormatDay.applyPattern("EEEE")
   simpleFormatDate.applyPattern("dd.MM.yyyy")
 
   def weekString() = simpleFormatWeek.format(getGregorianTime)
