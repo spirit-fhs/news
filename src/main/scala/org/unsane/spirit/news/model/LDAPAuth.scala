@@ -97,7 +97,11 @@ trait LDAPAuth extends Loggable with Config {
       val attrs: Attributes = ctx.getAttributes(dn)
       val gidNumber = attrs.get("gidNumber").get(0)
         // only staff can log in
-      if (gidNumber != "1001" && !allowedStudents.contains(userName)) return false
+      if (gidNumber != "1001" && !allowedStudents.contains(userName)) {
+        S error "Students may not log in. Sorry!"
+        S redirectTo "/user_mgt/login"
+        return false
+      }
       S.setSessionAttribute("fullname", getFullname(attrs))
       S.setSessionAttribute("email", emailValidator(getEmail(attrs), userName, gidNumber.toString))
       logger info userName + " logged in successfully!"
@@ -112,12 +116,12 @@ trait LDAPAuth extends Loggable with Config {
         logger error b.printStackTrace.toString
         logger error b.getExplanation
         logger error b.getRootCause.getMessage
-        S error "Error: I can't see LDAP, please contact a SPIRIT-Admin"
+        S error "Oops, no LDAP? Something went wrong. Please tell someone in charge."
         S redirectTo "/user_mgt/login"
         false
       case c: TimeLimitExceededException =>
         logger error c.printStackTrace.toString
-        S error "Error: LDAP is taking long, please contact a SPIRIT-Admin"
+        S error "Waiting for LDAP to long! Please tell someone in charge."
         S redirectTo "/user_mgt/login"
         false
       case _ =>
