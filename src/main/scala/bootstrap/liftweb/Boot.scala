@@ -125,6 +125,7 @@ class Boot extends Loggable with Config {
 
     val schedule_i = loadSchedule("I")
     val schedule_wi = loadSchedule("WI")
+    val schedule_mc = loadSchedule("MC")
     val schedule_its = loadSchedule("ITS")
     val schedule_muma = loadSchedule("MUMA")
     val schedule_ma = loadSchedule("MA")
@@ -137,7 +138,11 @@ class Boot extends Loggable with Config {
               Menu(Loc("Informatik", List("stundenplan", "BaI" + loadProps("Semester")), "BaI"),
                 Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0), LocGroup("Informatik"))),
                 Menu(Loc("Informatik_2", List("stundenplan", schedule_i(1)), schedule_i(1), LocGroup("Informatik"))),
-                Menu(Loc("Informatik_3", List("stundenplan", schedule_i(2)), schedule_i(2), LocGroup("Informatik")))),
+                Menu(Loc("Informatik_3", List("stundenplan", schedule_i(2)), schedule_i(2), LocGroup("Informatik")))),                
+                Menu(Loc("MobileComp", List("stundenplan", "BaMC" + loadProps("Semester")), "BaMC"),
+                Menu(Loc("MobileComp_1", List("stundenplan", schedule_mc(0)), schedule_mc(0), LocGroup("MobileComp"))),
+                Menu(Loc("MobileComp_2", List("stundenplan", schedule_mc(1)), schedule_mc(1), LocGroup("MobileComp"))),
+                Menu(Loc("MobileComp_3", List("stundenplan", schedule_mc(2)), schedule_mc(2), LocGroup("MobileComp")))),                
               Menu(Loc("WInformatik", List("stundenplan", "BaWI" + loadProps("Semester")), "BaWI"),
                 Menu(Loc("WInformatik_1", List("stundenplan", schedule_wi(0)), schedule_wi(0), LocGroup("WInformatik"))),
                 Menu(Loc("WInformatik_2", List("stundenplan", schedule_wi(1)), schedule_wi(1), LocGroup("WInformatik"))),
