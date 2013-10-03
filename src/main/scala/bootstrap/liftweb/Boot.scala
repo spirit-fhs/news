@@ -139,7 +139,7 @@ class Boot extends Loggable with Config {
                 Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0), LocGroup("Informatik"))),
                 Menu(Loc("Informatik_2", List("stundenplan", schedule_i(1)), schedule_i(1), LocGroup("Informatik"))),
                 Menu(Loc("Informatik_3", List("stundenplan", schedule_i(2)), schedule_i(2), LocGroup("Informatik")))),                
-                Menu(Loc("MobileComp", List("stundenplan", "BaMC" + loadProps("Semester")), "BaMC"),
+              Menu(Loc("MobileComp", List("stundenplan", "BaMC" + loadProps("Semester")), "BaMC"),
                 Menu(Loc("MobileComp_1", List("stundenplan", schedule_mc(0)), schedule_mc(0), LocGroup("MobileComp"))),
                 Menu(Loc("MobileComp_2", List("stundenplan", schedule_mc(1)), schedule_mc(1), LocGroup("MobileComp"))),
                 Menu(Loc("MobileComp_3", List("stundenplan", schedule_mc(2)), schedule_mc(2), LocGroup("MobileComp")))),                
