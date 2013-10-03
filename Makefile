@@ -11,7 +11,7 @@ else
 endif
 
 JETTY_DIR=	/usr/share/jetty/
-SBT_CMD=	java -jar sbt-launch-0.7.4.jar
+SBT_CMD=	java -jar sbt-launch-0.7.7.jar
 
 all: build install jetty-restart
 
