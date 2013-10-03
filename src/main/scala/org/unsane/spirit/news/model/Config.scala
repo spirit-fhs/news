@@ -58,6 +58,7 @@ trait Config {
     loadSemesters("BaWI").take(3) :::
     loadSemesters("BaITS") :::
     loadSemesters("BaMuMa") :::
+    loadSemesters("BaMC") :::
     loadSemesters("Ma")
   }
 
@@ -106,6 +107,7 @@ trait Config {
     loadSchedule("WI").map(_.toLowerCase).toList :::
     loadSchedule("ITS").map(_.toLowerCase).toList :::
     loadSchedule("MUMA").map(_.toLowerCase).toList :::
+    loadSchedule("MC").map(_.toLowerCase).toList :::
     loadSchedule("MA").map(_.toLowerCase).toList ::: Nil
   }
 

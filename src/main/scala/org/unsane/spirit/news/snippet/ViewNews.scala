@@ -57,7 +57,7 @@ class ViewNews extends SpiritHelpers with Loggable with Config {
       logger info ("Searching for " + s + "!")
       val validSearch =
         loadSemesters("BaI") :: loadSemesters("BaWI") ::
-        loadSemesters("BaITS") :: loadSemesters("BaMuMa") ::
+        loadSemesters("BaITS") :: loadSemesters("BaMuMa") :: loadSemesters("BaMC") ::
         loadSemesters("Ma") :: loadSemesters("Other") :: Nil
 
       if (validSearch.flatten.contains(s)) {
