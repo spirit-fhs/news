@@ -1,15 +1,16 @@
-# NOTICE 
+NOTICE 
+=========
 
-** This project was done with little knowledge **
-** on Scala and Lift! Some parts of the code   **
-** should not be taken as best practice  **      
-** examples or examples at all. Refactoring    **
-** is planned.                                 **
-** Thank you for reading!                      **
+ This project was done with little knowledge
+ on Scala and Lift! Some parts of the code
+ should not be taken as best practice 
+ examples or examples at all. Refactoring    
+ is planned.                                 
+ Thank you for reading!                      
 
 
-# Spirit-News is a simple blogging system for the Faculty of Computer Science
-# of the University of Applied Sciences Schmalkalden!
+## Spirit-News is a simple blogging system for the Faculty of Computer Science
+## of the University of Applied Sciences Schmalkalden!
 
 First lines of code were produced by students during a course on functional
 programming by Professor Braun.  Professor Braun is always seeking for students
