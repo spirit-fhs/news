@@ -35,6 +35,7 @@ package model
 
 import net.liftweb.mongodb._
 import record.{MongoRecord, MongoId, MongoMetaRecord}
+import record.field.ObjectIdPk
 import net.liftweb.record.field.StringField
 
 /**
@@ -44,7 +45,7 @@ object Entry extends Entry with MongoMetaRecord[Entry] {
 
 }
 
-class Entry extends MongoRecord[Entry] with MongoId[Entry] {
+class Entry extends MongoRecord[Entry] with ObjectIdPk[Entry] {
   def meta = Entry
   object name extends StringField(this, 100)
   object subject extends StringField(this, 100)

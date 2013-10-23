@@ -60,7 +60,7 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
 
   override def loginMenuLoc: Box[Menu] =
     if (productive)
-      Full(Menu(Loc("Login", loginPath, S.??("login"), Hidden :: loginMenuLocParams)))
+      Full(Menu(Loc("Login", loginPath, S.?("login"), Hidden :: loginMenuLocParams)))
     else super.loginMenuLoc 
 
   override def menus: List[Menu] = sitemap
@@ -70,9 +70,9 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
       <h3>{"Derzeit ist der Login nur für Mitarbeiter!"}</h3>
       <form method="post" action={S.uri} name="login">
       <table>
-        <tr><td style="border:0;colspan:2">{S.??("log.in")}</td></tr>
-        <tr><td style="border:0">{S.??("FHS-ID")}</td><td style="border:0"><user:user /></td></tr>
-        <tr><td style="border:0">{S.??("password")}</td><td style="border:0"><user:password /></td></tr>
+        <tr><td style="border:0;colspan:2">{S.?("log.in")}</td></tr>
+        <tr><td style="border:0">{S.?("FHS-ID")}</td><td style="border:0"><user:user /></td></tr>
+        <tr><td style="border:0">{S.?("password")}</td><td style="border:0"><user:password /></td></tr>
         <tr><td style="border:0"><user:submit /></td></tr>
       </table>
       </form>
@@ -102,6 +102,6 @@ object User extends User with MetaMegaProtoUser[User] with LDAPAuth with Config 
     bind("user", loginXhtml,
       "user" -> ((<input type="text" name="username"/>)),
       "password" -> (<input type="password" name="password"/>),
-      "submit" -> (<input type="submit" value={S.??("log.in")}/>))
+      "submit" -> (<input type="submit" value={S.?("log.in")}/>))
   }
 }

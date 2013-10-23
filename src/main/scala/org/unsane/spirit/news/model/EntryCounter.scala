@@ -34,10 +34,11 @@ package org.unsane.spirit.news
 package model
 
 import net.liftweb.mongodb._
-import record.{MongoRecord, MongoId, MongoMetaRecord}
+import record.{MongoRecord, MongoMetaRecord}
+import record.field.ObjectIdPk
 import net.liftweb.record.field.StringField
 
-class EntryCounter extends MongoRecord[EntryCounter] with MongoId[EntryCounter] {
+class EntryCounter extends MongoRecord[EntryCounter] with ObjectIdPk[EntryCounter] {
   def meta = EntryCounter
   object counter extends StringField(this, 4)
 

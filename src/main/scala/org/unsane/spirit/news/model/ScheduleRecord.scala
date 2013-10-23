@@ -2,7 +2,8 @@ package org.unsane.spirit.news
 package model
 
 import net.liftweb.mongodb._
-import record.{MongoRecord, MongoId, MongoMetaRecord}
+import record.{MongoRecord,  MongoMetaRecord}
+import record.field.ObjectIdPk
 import net.liftweb.mongodb.record.{ field => mongoField }
 import net.liftweb.record.field.{IntField, StringField}
 import net.liftweb.mongodb.record.field.MongoListField
@@ -11,7 +12,7 @@ object ScheduleRecord extends ScheduleRecord with MongoMetaRecord[ScheduleRecord
 
 }
 
-class ScheduleRecord extends MongoRecord[ScheduleRecord] with MongoId[ScheduleRecord] {
+class ScheduleRecord extends MongoRecord[ScheduleRecord] with ObjectIdPk[ScheduleRecord] {
   def meta = ScheduleRecord
 
   object appointment extends mongoField.MongoCaseClassField[ScheduleRecord, appointment](this)

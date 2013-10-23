@@ -80,7 +80,7 @@ object Spreader extends Actor with Config with Loggable {
             val tinyurl = http(longUrl as_str)
             twitter.updateStatus(mkTweet(subject, tinyurl, semester))
           } catch {
-            case e =>
+            case e:Throwable =>
               logger error e.toString
           }
       }

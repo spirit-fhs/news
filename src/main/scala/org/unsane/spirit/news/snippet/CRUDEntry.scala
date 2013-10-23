@@ -184,7 +184,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
       "type=cancel" #> submit("Abbrechen", () => S.redirectTo("/edit/editieren"))
 
     } catch {
-      case e =>
+      case e:Throwable =>
         logger warn e.printStackTrace.toString
         S notice "You shouldn't do this!"
         S redirectTo "/index"

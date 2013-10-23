@@ -1,5 +1,7 @@
 import com.typesafe.sbt.SbtStartScript 
 
+import com.earldouglas.xsbtwebplugin.PluginKeys
+
 name := "SPIRIT-News"
 
 version := "1.1"
@@ -48,3 +50,4 @@ libraryDependencies ++= {
     "javax.servlet" % "servlet-api" % "2.5" % "provided"
     )
 }
+

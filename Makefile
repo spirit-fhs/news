@@ -7,11 +7,11 @@ HOSTNAME=	$(shell hostname -s)
 ifeq ($(HOSTNAME),$(PROD_HOST))
 	WAR_FILE=root.war
 else
-	WAR_FILE=./target/scala_2.8.1/spirit-news_2.8.1-1.0.war
+	WAR_FILE=./target/scala-2.10/spirit-news_2.10-1.1.war
 endif
 
 JETTY_DIR=	/usr/share/jetty/
-SBT_CMD=	java -jar sbt-launch-0.7.7.jar
+SBT_CMD=	java -jar sbt-launch-0.12.4.jar
 
 all: build install jetty-restart
 
@@ -29,9 +29,9 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	git pull origin master
 	@echo "==> Running SBT to package the code for deployment"
 	$(SBT_CMD) clean update
-	rm lib_managed/scala_2.8.1/compile/activation-1.1.jar
-	rm lib_managed/scala_2.8.1/compile/lift-json_2.8.0-2.1-M1.jar
-	$(SBT_CMD) compile prepare-webapp package
+	rm lib_managed/scala_2.10/compile/activation-1.1.jar
+	rm lib_managed/scala_2.10/compile/lift-json_2.10.2-2.1-M1.jar
+	$(SBT_CMD) compile package
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
 	wget -N http://spiritdev.fh-schmalkalden.de/news/news.war
