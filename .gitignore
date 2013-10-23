@@ -16,6 +16,7 @@ derby.log
 .classpath
 .project
 .manager
+.cache
 
 # building
 target
