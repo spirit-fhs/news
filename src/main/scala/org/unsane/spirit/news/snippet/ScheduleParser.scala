@@ -6,7 +6,7 @@ import net.liftweb.http.js.JE.{JsRaw, Call}
 import net.liftweb.http.{SHtml, S}
 import org.unsane.spirit.news.lib.ScheduleParsingHelper
 import net.liftweb.common.Full
-import net.liftweb.http.js.{JE, JsonCall, JsCmd}
+import net.liftweb.http.js.{JE, JsonCall, JsCmd,JsExp}
 
 /**
  * Rendering view for importing Data via timetable2db.
@@ -18,7 +18,7 @@ class ScheduleParser {
     val scheduleType = sph.loadChangeableProps("schedule")
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
-                                     s => (sph.saveProps("schedule", s)))
+                                     s => (sph.saveProps("schedule", s))): (String, JsExp)
 
     val classNames = "alle" :: sph.allClassNamesAsLowercase
 

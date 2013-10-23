@@ -5,13 +5,13 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
   "file://"+Path.userHome+"/.m2/repository"
 
   val scalatools_release = "Scala Tools Releases" at
-  "http://scala-tools.org/repo-releases"
-  val liftVersion = "2.4"
+  "https://oss.sonatype.org/content/groups/scala-tools"
+  val liftVersion = "2.5.1"
 
   override def libraryDependencies = Set(
     "net.tanesha.recaptcha4j" % "recaptcha4j" % "0.0.7",
     "org.twitter4j" % "twitter4j-stream" % "3.0.3", 
-    "net.databinder" %% "dispatch" % "0.7.7",
+    "net.databinder" %% "dispatch" % "0.8.10",
     "net.liftweb" %% "lift-textile" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default" withSources,
     "net.liftweb" %% "lift-mapper" % liftVersion % "compile->default" withSources,

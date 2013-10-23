@@ -10,7 +10,7 @@ import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
 import scala.xml._
-import net.liftweb.textile._
+import net.liftmodules.textile._
 
 trait EntryPreview {
 

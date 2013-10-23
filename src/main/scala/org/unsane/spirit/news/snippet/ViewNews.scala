@@ -35,12 +35,12 @@ package snippet
 
 import scala.xml._
 import net.liftweb.util.Helpers._
-import net.liftweb.textile._
+import net.liftmodules.textile._
 import net.liftweb.json.JsonDSL._
 import model.{Config, Entry}
 import net.liftweb.common.{Empty, Box, Full, Loggable}
 import net.liftweb.http.{SHtml, S}
-import net.liftweb.http.js.JE
+import net.liftweb.http.js.{JE,JsExp}
 
 /**
  * @author Marcus Denison
@@ -92,7 +92,7 @@ class ViewNews extends SpiritHelpers with Loggable with Config {
       "alle" :: allSemesterAsList4News zip  "Alle" :: allClassNamesAsLowercase
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
-                                     s => (S.redirectTo("/semsearch/" + s)))
+                                     s => (S.redirectTo("/semsearch/" + s))): (String, JsExp)
 
     SHtml.select(classNames.toSeq, Full(S.param("search").openOr("Alle")), x => x, "onchange" -> js.toJsCmd)
 

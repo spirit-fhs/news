@@ -40,7 +40,7 @@ import net.liftweb.http.SHtml._
 import net.liftweb.http._
 import js.JsCmds._
 import net.liftweb.common._
-import net.liftweb.textile._
+import net.liftmodules.textile._
 import java.text._
 import java.util.Date
 import java.util.Locale

@@ -34,7 +34,7 @@ package org.unsane.spirit.news
 package model
 
 import dispatch._
-import twitter._
+import dispatch.classic._
 import oauth._
 import scala.actors._
 import Http._
@@ -76,8 +76,8 @@ object Spreader extends Actor with Config with Loggable {
         case Tweet(subject,semester,nr) =>
           try {
             val http = new Http
-            val longUrl = "http://is.gd/api.php?longurl=http://spirit.fh-schmalkalden.de/entry/" + nr
-            val tinyurl = http(longUrl.as_str)
+            val longUrl = url("http://is.gd/api.php?longurl=http://spirit.fh-schmalkalden.de/entry/" + nr)
+            val tinyurl = http(longUrl as_str)
             twitter.updateStatus(mkTweet(subject, tinyurl, semester))
           } catch {
             case e =>

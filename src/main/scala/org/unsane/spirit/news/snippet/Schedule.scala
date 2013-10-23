@@ -5,7 +5,7 @@ import net.liftweb.util.Helpers._
 import org.unsane.spirit.news.model.{ Config, ScheduleRecord}
 import xml.NodeSeq
 import net.liftweb.http.js.JsCmds._
-import net.liftweb.http.js.{JE, JsonCall, JsCmd}
+import net.liftweb.http.js.{JE, JsonCall, JsCmd,JsExp}
 import net.liftweb.http.{SessionVar, SHtml, S}
 import net.liftweb.common.Full
 
@@ -127,7 +127,9 @@ class Schedule extends Config {
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => { classNameVar(s)
-                                            S.redirectTo("/schedule?classname=" + s)})
+                                            S.redirectTo("/schedule?classname=" + s)}): (String, JsExp) 
+                                            
+                                            
 
     SHtml.select(allClassNamesAsLowercase.map(x => (x,x)), Full(classNameVar.get),
                  x => x, "onchange" -> js.toJsCmd)
@@ -137,7 +139,7 @@ class Schedule extends Config {
 
     val (name2, js) = SHtml.ajaxCall(JE.JsRaw("this.value"),
                                      s => { weekTypeVar(s)
-                                            S.redirectTo("/schedule")})
+                                            S.redirectTo("/schedule")}): (String, JsExp) 
 
     SHtml.select(Seq(("g", "Gerade"),("u", "Ungerade"),("w", "Alles")),
       (weekTypeVar.get match {
