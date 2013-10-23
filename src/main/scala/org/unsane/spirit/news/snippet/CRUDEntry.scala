@@ -35,7 +35,7 @@ package snippet
 
 import scala.xml._
 import net.liftweb.util.Helpers._
-import net.liftweb.http.{S}
+import net.liftweb.http.{ S }
 import net.liftweb.http.SHtml._
 import net.liftweb.http._
 import js.JsCmds._
@@ -47,8 +47,21 @@ import java.util.Locale
 import net.liftweb.json.JsonDSL._
 import model._
 import net.liftweb.util.Props
+import scala.concurrent.stm._
 
 class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPreview {
+
+  var tweetUpdate = false
+  private lazy val date = df.format(new Date)
+  private val lifecycleFormat = new SimpleDateFormat("dd.MM.yyyy")
+  private var sendEmail = false
+  private val tweet = loadProps("Tweet") == "yes"
+
+  private var newEntry = Ref(true)
+
+  private val df = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
+  private var changedSemester = ""
+  private val emailing = loadProps("Emailing") == "yes"
 
   object CurrentEntry extends RequestVar[Box[Entry]](Empty)
 
@@ -56,44 +69,47 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * CrudEntry is either a new Entry or a an existing Entry to be Updated!
    */
   lazy val CrudEntry =
-    CurrentEntry.get match {
-      case Full(entry) =>
-        logger info "Entry was found: " + entry.nr.value + "!"
-        newEntry = false
-        entry
-      case Empty =>
-        logger info "Creating new Entry to save later!"
-        newEntry = true
-        Entry.createRecord
-      case _ =>
-        logger info "This should not have happend, but why did it?!"
-        newEntry = true
-        Entry.createRecord
+    atomic {
+      implicit txn =>
+        CurrentEntry.get match {
+          case Full(entry) =>
+            logger info "Entry was found: " + entry.nr.value + "!"
+            newEntry() = false
+            entry
+          case Empty =>
+            logger info "Creating new Entry to save later!"
+            newEntry() = true
+            Entry.createRecord
+          case _ =>
+            logger info "This should not have happend, but why did it?!"
+            newEntry() = true
+            Entry.createRecord
+        }
     }
-
   /**
    * Lists all Entries for the logged in User!
    */
   def viewUserEntries(xhtml: NodeSeq): NodeSeq = {
     <table>
-     <tr>
-       <th>Nr:</th>
-       <th>Verfasser:</th>
-       <th>Betreff:</th>
-       <th>Vom:</th>
-       <th>Optionen:</th>
-     </tr>
-    { Entry.findAll("name" -> User.currentUserId.openOr("").toString).sortWith(      
-      (entry1, entry2) => (entry1 > entry2)
-    ).flatMap(v =>
       <tr>
-        <td style="border:0">{v.nr.value.toString}</td>
-        <td style="border:0">{v.writer.value.toString}</td>
-        <td style="border:0">{v.subject.value.toString}</td>
-        <td style="border:0">{v.date.value.toString.substring(4, 11) + ". " + v.date.value.toString.substring(17, 22)}</td>
-        <td style="border:0">{link("/edit/edit", () => CurrentEntry(Full(v)), Text("Edit"))}</td>
-        <td style="border:0">{link("/edit/delete", () => CurrentEntry(Full(v)), Text("Delete"))}</td>
-      </tr>) }
+        <th>Nr:</th>
+        <th>Verfasser:</th>
+        <th>Betreff:</th>
+        <th>Vom:</th>
+        <th>Optionen:</th>
+      </tr>
+      {
+        Entry.findAll("name" -> User.currentUserId.openOr("").toString).sortWith(
+          (entry1, entry2) => (entry1 > entry2)).flatMap(v =>
+            <tr>
+              <td style="border:0">{ v.nr.value.toString }</td>
+              <td style="border:0">{ v.writer.value.toString }</td>
+              <td style="border:0">{ v.subject.value.toString }</td>
+              <td style="border:0">{ v.date.value.toString.substring(4, 11) + ". " + v.date.value.toString.substring(17, 22) }</td>
+              <td style="border:0">{ link("/edit/edit", () => CurrentEntry(Full(v)), Text("Edit")) }</td>
+              <td style="border:0">{ link("/edit/delete", () => CurrentEntry(Full(v)), Text("Delete")) }</td>
+            </tr>)
+      }
     </table>
   }
 
@@ -102,34 +118,34 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * saving, spreading it via email and twitter.
    */
   def create() {
-    lazy val nr = if(EntryCounter.findAll.isEmpty) "1" else EntryCounter.findAll.head.counter.toString
+    lazy val nr = if (EntryCounter.findAll.isEmpty) "1" else EntryCounter.findAll.head.counter.toString
 
-    CrudEntry.date.set( date )
-    CrudEntry.name.set( User.currentUserId.openOr("Oops!") )
-    CrudEntry.semester.set ( changedSemester )
-    CrudEntry.nr.set ( nr )
+    CrudEntry.date.set(date)
+    CrudEntry.name.set(User.currentUserId.openOr("Oops!"))
+    CrudEntry.semester.set(changedSemester)
+    CrudEntry.nr.set(nr)
     if (CrudEntry.subject.value.trim.isEmpty) {
       CrudEntry.subject.set((
-        CrudEntry.news.value./:(("", 0)) {(o, i) =>
+        CrudEntry.news.value./:(("", 0)) { (o, i) =>
           if (o._2 > 20) o
           else (o._1 + i, o._2 + 1)
-        }._1 + "...").replace("\n"," "))
+        }._1 + "...").replace("\n", " "))
       logger warn "Setting subject cause it was empty!"
     }
     CrudEntry.save
 
-    val count = if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
-      count.counter.set( (nr.toInt + 1).toString )
-      count.save
+    val count = if (EntryCounter.findAll.isEmpty) EntryCounter.createRecord else EntryCounter.findAll.head
+    count.counter.set((nr.toInt + 1).toString)
+    count.save
 
     logger info "Entry was created by " + User.currentUserId.openOr("")
-    if (sendEmail && changedSemester.nonEmpty){
+    if (sendEmail && changedSemester.nonEmpty) {
       logger info "News should be sent via eMail!"
       MailHandler.send(TextileParser.toHtml(CrudEntry.news.value.toString).toString, CrudEntry.subject.value, loadEmails(changedSemester.split(" ")))
     }
     if (tweet) {
       logger info "News should be spread via Twitter!"
-      Spreader ! Tweet(CrudEntry.subject.value, changedSemester.split(" ").map(" #"+_).mkString , nr)
+      Spreader ! Tweet(CrudEntry.subject.value, changedSemester.split(" ").map(" #" + _).mkString, nr)
     }
   }
 
@@ -140,22 +156,22 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   def update() {
     val oldNr = CrudEntry.nr.value
     val newNr =
-      if(tweetUpdate)
-        if(EntryCounter.findAll.isEmpty) "1"
+      if (tweetUpdate)
+        if (EntryCounter.findAll.isEmpty) "1"
         else EntryCounter.findAll.head.counter.toString
       else oldNr
 
-    CrudEntry.date.set( date )
-    CrudEntry.semester.set ( changedSemester )
-    CrudEntry.name.set( User.currentUserId.openOr("Oops!") )
-    CrudEntry.nr.set ( newNr )
+    CrudEntry.date.set(date)
+    CrudEntry.semester.set(changedSemester)
+    CrudEntry.name.set(User.currentUserId.openOr("Oops!"))
+    CrudEntry.nr.set(newNr)
     CrudEntry.save
 
     if (newNr != oldNr) {
       val count =
-        if(EntryCounter.findAll.isEmpty) EntryCounter.createRecord
+        if (EntryCounter.findAll.isEmpty) EntryCounter.createRecord
         else EntryCounter.findAll.head
-      count.counter.set( (newNr.toInt + 1).toString )
+      count.counter.set((newNr.toInt + 1).toString)
       count.save
     }
 
@@ -163,7 +179,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     logger info "Entry was updated by " + User.currentUserId.openOr("")
     if (sendEmail) MailHandler.send(TextileParser.toHtml(CrudEntry.news.value).toString,
       "[Update] " + CrudEntry.subject.value, loadEmails(changedSemester split (" ")))
-    if (tweet && tweetUpdate) Spreader ! Tweet("[Update] " + CrudEntry.subject.value, changedSemester.split(" ").map(" #"+_).mkString , newNr)
+    if (tweet && tweetUpdate) Spreader ! Tweet("[Update] " + CrudEntry.subject.value, changedSemester.split(" ").map(" #" + _).mkString, newNr)
     S notice "Ihr update wurde gespeichert"
   }
 
@@ -173,19 +189,20 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   def delete = {
     try {
       "name=textarea" #> CrudEntry.news.value &
-      "name=subject" #> CrudEntry.subject.value &
-      "name=verfasser" #> CrudEntry.writer.value &
-      "name=nr" #> CrudEntry.nr.value &
-      "type=submit" #> submit("Löschen", () => {
-        logger info "Entry Nr: " + CrudEntry.nr.value +
-                    " was deleted by " + User.currentUserId.openOr("")
-        CrudEntry.delete_!
-        S notice "Ihr Eintrag wurde gelöscht"
-        S redirectTo "/index" }) &
-      "type=cancel" #> submit("Abbrechen", () => S.redirectTo("/edit/editieren"))
+        "name=subject" #> CrudEntry.subject.value &
+        "name=verfasser" #> CrudEntry.writer.value &
+        "name=nr" #> CrudEntry.nr.value &
+        "type=submit" #> submit("Löschen", () => {
+          logger info "Entry Nr: " + CrudEntry.nr.value +
+            " was deleted by " + User.currentUserId.openOr("")
+          CrudEntry.delete_!
+          S notice "Ihr Eintrag wurde gelöscht"
+          S redirectTo "/index"
+        }) &
+        "type=cancel" #> submit("Abbrechen", () => S.redirectTo("/edit/editieren"))
 
     } catch {
-      case e:Throwable =>
+      case e: Throwable =>
         logger warn e.printStackTrace.toString
         S notice "You shouldn't do this!"
         S redirectTo "/index"
@@ -196,39 +213,40 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * Building the input Forms, with either empty forms or getting the values from an existing Entry.
    */
   def view = {
+    atomic {
+      implicit txn =>
+        emailing match {
+          case true =>
+          case false =>
+            S.warning("E-Mailing ist deaktiviert.")
+        }
 
-    emailing match {
-      case true =>
-      case false =>
-        S.warning("E-Mailing ist deaktiviert.")
+        "name=date" #> text(if (CrudEntry.lifecycle.value == "") lifecycleFormat.format(new Date)
+        else CrudEntry.lifecycle.value,
+          date => CrudEntry.lifecycle.set(dateValidator(date)),
+          "cols" -> "80", "id" -> "datepicker") &
+          "name=textarea" #> textarea(CrudEntry.news.value.toString,
+            CrudEntry.news.set(_),
+            "rows" -> "12", "cols" -> "80",
+            "style" -> "width:100%", "id" -> "entry") &
+            "name=subject" #> text(CrudEntry.subject.value, CrudEntry.subject.set(_)) &
+            "name=verfasser" #> text(if (CrudEntry.writer.value == "") S.getSessionAttribute("fullname").openOr("")
+            else CrudEntry.writer.value, CrudEntry.writer.set(_)) &
+            "name=email" #> checkbox(false,
+              if (_) sendEmail = true,
+              if (S.getSessionAttribute("email").openOr("") == "not-valid") "disabled" -> "disabled"
+              else if (!emailing) "disabled" -> "disabled"
+              else "enabled" -> "enabled") &
+              "name=twitter" #> checkbox(true, if (_) tweetUpdate = true) &
+              (if (newEntry()) "type=submit" #> submit("Senden", () => {
+                create()
+                S.redirectTo("/index")
+              })
+              else "type=submit" #> submit("Update", () => {
+                update()
+                S.redirectTo("/index")
+              }))
     }
-
-    "name=date"  #> text(if(CrudEntry.lifecycle.value == "") lifecycleFormat.format(new Date)
-                    else CrudEntry.lifecycle.value,
-                    date => CrudEntry.lifecycle.set( dateValidator(date) ),
-                    "cols" -> "80", "id" -> "datepicker") &
-    "name=textarea" #> textarea(CrudEntry.news.value.toString,
-                           CrudEntry.news.set(_),
-                           "rows" -> "12", "cols" -> "80",
-                           "style" -> "width:100%", "id" -> "entry") &
-    "name=subject" #> text(CrudEntry.subject.value, CrudEntry.subject.set(_)) &
-    "name=verfasser" #> text(if(CrudEntry.writer.value == "") S.getSessionAttribute("fullname").openOr("")
-                    else CrudEntry.writer.value, CrudEntry.writer.set(_)) &
-    "name=email" #> checkbox(false,
-                        if(_) sendEmail = true,
-                        if (S.getSessionAttribute("email").openOr("") == "not-valid") "disabled" -> "disabled"
-                        else if (!emailing) "disabled" -> "disabled"
-                        else "enabled" -> "enabled") &
-    "name=twitter" #> checkbox(true, if(_) tweetUpdate = true) &
-    (if (newEntry) "type=submit" #> submit("Senden", () => {
-      create()
-      S.redirectTo("/index")
-    })
-    else "type=submit" #> submit("Update", () => {
-      update()
-      S.redirectTo("/index")
-    }))
-
   }
 
   /**
@@ -236,20 +254,10 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * If Crudentry contains any semester, the checkbox is set to true.
    */
   def makecheckboxlist(in: NodeSeq): NodeSeq = {
-      (".checkbox_row" #> loadSemesters(S.attr("semester").openOr("")).toList.map ( sem =>
-          ".title" #> sem &
-          (if (CrudEntry contains sem) ".checkbox" #> checkbox(true, if (_) changedSemester += sem + " ")
-          else ".checkbox" #> checkbox(false, if (_) changedSemester += sem + " "))
-      )).apply(in)
+    (".checkbox_row" #> loadSemesters(S.attr("semester").openOr("")).toList.map(sem =>
+      ".title" #> sem &
+        (if (CrudEntry contains sem) ".checkbox" #> checkbox(true, if (_) changedSemester += sem + " ")
+        else ".checkbox" #> checkbox(false, if (_) changedSemester += sem + " ")))).apply(in)
   }
 
-  var tweetUpdate = false
-  private lazy val date = df.format(new Date)
-  private val lifecycleFormat = new SimpleDateFormat ("dd.MM.yyyy")
-  private var sendEmail = false
-  private val tweet = loadProps("Tweet") == "yes"
-  private var newEntry = false
-  private val df = new SimpleDateFormat ("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
-  private var changedSemester = ""
-  private val emailing = loadProps("Emailing") == "yes"
 }
