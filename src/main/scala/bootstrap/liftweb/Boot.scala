@@ -120,8 +120,8 @@ class Boot extends Loggable with Config {
       case RewriteRequest(ParsePath("semsearch" :: semsearch :: Nil,_,_,_),_,_) =>
         RewriteResponse("index" :: Nil, Map("search" -> semsearch))
     }
-
-    LiftRules.statelessDispatchTable.append(RestApi)
+    
+    LiftRules.statelessDispatch.append(RestApi)
 
     val schedule_i = loadSchedule("I")
     val schedule_wi = loadSchedule("WI")
@@ -202,7 +202,7 @@ class Boot extends Loggable with Config {
     }
 
     // This takes care of the RSS Feed.
-    LiftRules.statelessDispatchTable.append(Feed)
+    LiftRules.statelessDispatch.append(Feed)
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
 

@@ -34,7 +34,7 @@ package org.unsane.spirit.news
 package model
 
 import net.liftweb.mongodb._
-import record.{MongoRecord, MongoId, MongoMetaRecord}
+import record.{MongoRecord, MongoMetaRecord}
 import record.field.ObjectIdPk
 import net.liftweb.record.field.StringField
 

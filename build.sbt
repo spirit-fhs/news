@@ -20,7 +20,7 @@ seq(SbtStartScript.startScriptForClassesSettings: _*)
 
 // net.virtualvoid.sbt.graph.Plugin.graphSettings // for sbt dependency-graph plugin
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature","-language:implicitConversions","-language:postfixOps")
 
 libraryDependencies ++= {
   val liftVersion = "2.5"

@@ -83,7 +83,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
        <th>Vom:</th>
        <th>Optionen:</th>
      </tr>
-    { Entry.findAll("name" -> User.currentUserId.openOr("").toString).sortWith(
+    { Entry.findAll("name" -> User.currentUserId.openOr("").toString).sortWith(      
       (entry1, entry2) => (entry1 > entry2)
     ).flatMap(v =>
       <tr>
@@ -147,6 +147,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
 
     CrudEntry.date.set( date )
     CrudEntry.semester.set ( changedSemester )
+    CrudEntry.name.set( User.currentUserId.openOr("Oops!") )
     CrudEntry.nr.set ( newNr )
     CrudEntry.save
 
