@@ -9,7 +9,7 @@ object LiftConsole {
     b.boot
     // Now run the MainGenericRunner to get your repl
     MainGenericRunner.main(args)
-    // After the repl exits, then exit the scala script
-    exit(0)
+    // After the repl exits, then exit the scala script    
+    sys.exit(0)
   }
 }
