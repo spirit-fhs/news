@@ -1,11 +1,12 @@
-################### NOTICE ####################
-# This project was done with little knowledge #
-# on Scala and Lift! Some parts of the code   #
-# should not be taken as best practice        #
-# examples or examples at all. Refactoring    #
-# is planned.                                 #
-# Thank you for reading!                      #
-###############################################
+# NOTICE 
+
+** This project was done with little knowledge **
+** on Scala and Lift! Some parts of the code   **
+** should not be taken as best practice  **      
+** examples or examples at all. Refactoring    **
+** is planned.                                 **
+** Thank you for reading!                      **
+
 
 # Spirit-News is a simple blogging system for the Faculty of Computer Science
 # of the University of Applied Sciences Schmalkalden!
@@ -42,7 +43,7 @@ Ideas, friendly critisism and bugs are always welcomed!
 Live version running at http://spirit.fh-schmalkalden.de
 
 Running it on your local machine requires you to have a working Simple Build
-Tool installation. http://code.google.com/p/simple-build-tool/
+Tool installation. http://www.scala-sbt.org/
 
 Quickstart:
 
