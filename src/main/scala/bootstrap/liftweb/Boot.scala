@@ -8,15 +8,15 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of the author nor the names of his contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -69,16 +69,16 @@ class Boot extends Loggable with Config {
 
     val jsonUser = loadProps("jsonUser")
     val jsonPassword = loadProps("jsonPassword")
-    logger info (jsonUser +":"+ jsonPassword)
+    logger info (jsonUser + ":" + jsonPassword)
 
     LiftRules.authentication = HttpBasicAuthentication("org.unsane.spirit") {
-     case (user, pw, req) =>
-      if (user == jsonUser && md5SumString(pw) == jsonPassword) {
-        userRoles(AuthRole("Upload"))
-        true
-      } else {
-        false
-      }
+      case (user, pw, req) =>
+        if (user == jsonUser && md5SumString(pw) == jsonPassword) {
+          userRoles(AuthRole("Upload"))
+          true
+        } else {
+          false
+        }
 
     }
 
@@ -96,9 +96,9 @@ class Boot extends Loggable with Config {
     LiftRules.addToPackages("org.unsane.spirit.news")
 
     LiftRules.dispatch.prepend(NamedPF("Login Validation") {
-      case Req("login_required" :: page , extension, _)
+      case Req("login_required" :: page, extension, _)
         if (!LoginUtil.isLogged) =>
-          () => Full(RedirectResponse("success"))
+        () => Full(RedirectResponse("success"))
     })
 
     val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
@@ -106,21 +106,21 @@ class Boot extends Loggable with Config {
     val onlyWS = If(() => loadProps("Semester") == "WS", () => RedirectResponse("/index"))
     val adminLoggedIn = If(() => scheduleAdmins contains User.currentUserId.openOr(""), () => RedirectResponse("/index"))
 
-    LiftRules.uriNotFound.prepend(NamedPF("404handler"){
-      case (req,failure) =>
-        NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
+    LiftRules.uriNotFound.prepend(NamedPF("404handler") {
+      case (req, failure) =>
+        NotFoundAsTemplate(ParsePath(List("404"), "html", false, false))
     })
 
     LiftRules.statefulRewrite.append {
-      case RewriteRequest(ParsePath("entry" :: entrynr :: Nil,_,_,_),_,_) =>
+      case RewriteRequest(ParsePath("entry" :: entrynr :: Nil, _, _, _), _, _) =>
         RewriteResponse("index" :: Nil, Map("search" -> entrynr))
     }
 
     LiftRules.statefulRewrite.append {
-      case RewriteRequest(ParsePath("semsearch" :: semsearch :: Nil,_,_,_),_,_) =>
+      case RewriteRequest(ParsePath("semsearch" :: semsearch :: Nil, _, _, _), _, _) =>
         RewriteResponse("index" :: Nil, Map("search" -> semsearch))
     }
-    
+
     LiftRules.statelessDispatch.append(RestApi)
 
     val schedule_i = loadSchedule("I")
@@ -133,65 +133,65 @@ class Boot extends Loggable with Config {
     // TODO Build Menu some different way, a cleaner way!?
 
     lazy val schedule: Menu = {
-          if(showschedule) {
-            Menu(Loc("StundenplanOld", List("stundenplan", "index"), "Stundenplan", Hidden),
-              Menu(Loc("Informatik", List("stundenplan", "BaI" + loadProps("Semester")), "BaI"),
-                Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0), LocGroup("Informatik"))),
-                Menu(Loc("Informatik_2", List("stundenplan", schedule_i(1)), schedule_i(1), LocGroup("Informatik"))),
-                Menu(Loc("Informatik_3", List("stundenplan", schedule_i(2)), schedule_i(2), LocGroup("Informatik")))),                
-              Menu(Loc("MobileComp", List("stundenplan", "BaMC" + loadProps("Semester")), "BaMC"),
-                Menu(Loc("MobileComp_1", List("stundenplan", schedule_mc(0)), schedule_mc(0), LocGroup("MobileComp"))),
-                Menu(Loc("MobileComp_2", List("stundenplan", schedule_mc(1)), schedule_mc(1), LocGroup("MobileComp"))),
-                Menu(Loc("MobileComp_3", List("stundenplan", schedule_mc(2)), schedule_mc(2), LocGroup("MobileComp")))),                
-              Menu(Loc("WInformatik", List("stundenplan", "BaWI" + loadProps("Semester")), "BaWI"),
-                Menu(Loc("WInformatik_1", List("stundenplan", schedule_wi(0)), schedule_wi(0), LocGroup("WInformatik"))),
-                Menu(Loc("WInformatik_2", List("stundenplan", schedule_wi(1)), schedule_wi(1), LocGroup("WInformatik"))),
-                Menu(Loc("WInformatik_3", List("stundenplan", schedule_wi(2)), schedule_wi(2), LocGroup("WInformatik")))),
-              Menu(Loc("Muma", List("stundenplan", "BaMM" + loadProps("Semester")), "BaMM"),
-                Menu(Loc("Muma_1", List("stundenplan", schedule_muma(0)), schedule_muma(0), LocGroup("Muma"))),
-                Menu(Loc("Muma_2", List("stundenplan", schedule_muma(1)), schedule_muma(1), LocGroup("Muma"))),
-                Menu(Loc("Muma_3", List("stundenplan", schedule_muma(2)), schedule_muma(2), LocGroup("Muma")))),
-              Menu(Loc("ITS", List("stundenplan", "BaIS" + loadProps("Semester")), "BaIS"),
-                Menu(Loc("ITS_1", List("stundenplan", schedule_its(0)), schedule_its(0), LocGroup("ITS"))),
-                Menu(Loc("ITS_2", List("stundenplan", schedule_its(1)), schedule_its(1), LocGroup("ITS"))),
-                Menu(Loc("ITS_3", List("stundenplan", schedule_its(2)), schedule_its(2), LocGroup("ITS")))),
-              Menu(Loc("Master", List("stundenplan", "MaI" + loadProps("Semester")), "MaI"),
-                Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0), LocGroup("Master"))),
-                Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1), LocGroup("Master"), onlyWS))),
-              Menu(Loc("Groups", List("groups"), "Gruppen")),
-              Menu(Loc("Blocks", List("blocks"), "Blöcke", Hidden)),
-              Menu(Loc("ExtBlocks", ExtLink("/blocks") , "Blöcke")),
-              Menu(Loc("Abkuerzungen", List("stundenplan", "abkuerzungen"), "Abkuerzungen")),
-              Menu(Loc("Hilfe", List("stundenplan", "hilfe"), "Hilfe"))
-            )
-            } else {
-              Menu(Loc("Stundenplan", List("stundenplan", "na"), "Stundenplan" ))
-            }
+      if (showschedule) {
+        Menu(Loc("StundenplanOld", List("stundenplan", "index"), "Stundenplan", Hidden),
+          Menu(Loc("Informatik", List("stundenplan", "BaI" + loadProps("Semester")), "BaI"),
+            Menu(Loc("Informatik_1", List("stundenplan", schedule_i(0)), schedule_i(0), LocGroup("Informatik"))),
+            Menu(Loc("Informatik_2", List("stundenplan", schedule_i(1)), schedule_i(1), LocGroup("Informatik"))),
+            Menu(Loc("Informatik_3", List("stundenplan", schedule_i(2)), schedule_i(2), LocGroup("Informatik")))),
+          Menu(Loc("MobileComp", List("stundenplan", "BaMC" + loadProps("Semester")), "BaMC"),
+            Menu(Loc("MobileComp_1", List("stundenplan", schedule_mc(0)), schedule_mc(0), LocGroup("MobileComp"))),
+            Menu(Loc("MobileComp_2", List("stundenplan", schedule_mc(1)), schedule_mc(1), LocGroup("MobileComp"))),
+            Menu(Loc("MobileComp_3", List("stundenplan", schedule_mc(2)), schedule_mc(2), LocGroup("MobileComp")))),
+          Menu(Loc("WInformatik", List("stundenplan", "BaWI" + loadProps("Semester")), "BaWI"),
+            Menu(Loc("WInformatik_1", List("stundenplan", schedule_wi(0)), schedule_wi(0), LocGroup("WInformatik"))),
+            Menu(Loc("WInformatik_2", List("stundenplan", schedule_wi(1)), schedule_wi(1), LocGroup("WInformatik"))),
+            Menu(Loc("WInformatik_3", List("stundenplan", schedule_wi(2)), schedule_wi(2), LocGroup("WInformatik")))),
+          Menu(Loc("Muma", List("stundenplan", "BaMM" + loadProps("Semester")), "BaMM"),
+            Menu(Loc("Muma_1", List("stundenplan", schedule_muma(0)), schedule_muma(0), LocGroup("Muma"))),
+            Menu(Loc("Muma_2", List("stundenplan", schedule_muma(1)), schedule_muma(1), LocGroup("Muma"))),
+            Menu(Loc("Muma_3", List("stundenplan", schedule_muma(2)), schedule_muma(2), LocGroup("Muma")))),
+          Menu(Loc("ITS", List("stundenplan", "BaIS" + loadProps("Semester")), "BaIS"),
+            Menu(Loc("ITS_1", List("stundenplan", schedule_its(0)), schedule_its(0), LocGroup("ITS"))),
+            Menu(Loc("ITS_2", List("stundenplan", schedule_its(1)), schedule_its(1), LocGroup("ITS"))),
+            Menu(Loc("ITS_3", List("stundenplan", schedule_its(2)), schedule_its(2), LocGroup("ITS")))),
+          Menu(Loc("Master", List("stundenplan", "MaI" + loadProps("Semester")), "MaI"),
+            Menu(Loc("MA_1", List("stundenplan", schedule_ma(0)), schedule_ma(0), LocGroup("Master"))),
+            Menu(Loc("MA_2", List("stundenplan", schedule_ma(1)), schedule_ma(1), LocGroup("Master"), onlyWS))),
+          Menu(Loc("Groups", List("groups"), "Gruppen")),
+          Menu(Loc("Blocks", List("blocks"), "Blöcke", Hidden)),
+          Menu(Loc("ExtBlocks", ExtLink("/blocks"), "Blöcke")),
+          Menu(Loc("Abkuerzungen", List("stundenplan", "abkuerzungen"), "Abkuerzungen")),
+          Menu(Loc("Hilfe", List("stundenplan", "hilfe"), "Hilfe"))
+        )
+      } else {
+        Menu(Loc("Stundenplan", List("stundenplan", "na"), "Stundenplan"))
+      }
     }
 
     val entries: List[Menu] = Menu(Loc("Home", List("index"), "Home", Hidden)) ::
-            Menu(Loc("404", List("404") , "404", Hidden)) ::
-            Menu(Loc("StdPlanHilfe", List("help") , "Hilfe", Hidden)) ::
-            Menu(Loc("ExtHome", ExtLink("/index") , "Home")) ::
-            Menu(Loc("Entry", List("entry"), "entry", Hidden )) ::
-            Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden )) ::
-            Menu(Loc("StundenplanDispatch", List("scheduleDispatch"), "Stundenplan")) ::
-            schedule ::
-            Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
-            Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
-            Menu(Loc("ScheduleMgt", List("scheduleAdmin", "index"), "Std. Plan Verwaltung", adminLoggedIn)) ::
-            Menu(Loc("schedule", List("schedule"), "schedule", Hidden),
-              Menu(Loc("GroupsNew", List("schedule", "groups"), "Gruppen")),
-              Menu(Loc("BlocksNew", List("schedule", "blocks"), "Blöcke", Hidden)),
-              Menu(Loc("ExtBlocksNew", ExtLink("/schedule/blocks") , "Blöcke")),
-              Menu(Loc("AbkuerzungenNew", List("schedule", "abkuerzungen"), "Abkuerzungen"))) ::
-              Menu(Loc("Kontakt", List("issues") , "Kontakt")) ::
-            Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
-            (if (productive)
-              Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login") , "Anmelden", loggedOut)) ::
-              User.sitemap
-            else
-              User.sitemap)
+      Menu(Loc("404", List("404"), "404", Hidden)) ::
+      Menu(Loc("StdPlanHilfe", List("help"), "Hilfe", Hidden)) ::
+      Menu(Loc("ExtHome", ExtLink("/index"), "Home")) ::
+      Menu(Loc("Entry", List("entry"), "entry", Hidden)) ::
+      Menu(Loc("SemSearch", List("semsearch"), "semsearch", Hidden)) ::
+      Menu(Loc("StundenplanDispatch", List("scheduleDispatch"), "Stundenplan")) ::
+      schedule ::
+      Menu(Loc("Verfassen", List("writenews"), "Verfassen", loggedIn)) ::
+      Menu(Loc("editieren", Link(List("edit"), true, "/edit/editieren"), "Editieren", loggedIn)) ::
+      Menu(Loc("ScheduleMgt", List("scheduleAdmin", "index"), "Std. Plan Verwaltung", adminLoggedIn)) ::
+      Menu(Loc("schedule", List("schedule"), "schedule", Hidden),
+        Menu(Loc("GroupsNew", List("schedule", "groups"), "Gruppen")),
+        Menu(Loc("BlocksNew", List("schedule", "blocks"), "Blöcke", Hidden)),
+        Menu(Loc("ExtBlocksNew", ExtLink("/schedule/blocks"), "Blöcke")),
+        Menu(Loc("AbkuerzungenNew", List("schedule", "abkuerzungen"), "Abkuerzungen"))) ::
+      Menu(Loc("Kontakt", List("issues"), "Kontakt")) ::
+      Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
+      (if (productive)
+        Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login"), "Anmelden", loggedOut)) ::
+          User.sitemap
+      else
+        User.sitemap)
 
     LiftRules.useXhtmlMimeType = false //required by ReCaptcha js lib
     LiftRules.resourceNames = "recaptcha" :: LiftRules.resourceNames
@@ -204,7 +204,7 @@ class Boot extends Loggable with Config {
     // This takes care of the RSS Feed.
     LiftRules.statelessDispatch.append(Feed)
 
-    LiftRules.setSiteMap(SiteMap(entries:_*))
+    LiftRules.setSiteMap(SiteMap(entries: _*))
 
     LiftRules.ajaxStart =
       Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
@@ -220,7 +220,7 @@ class Boot extends Loggable with Config {
     UploadWatcher.run()
     DayChecker.start()
     if (tweet) Spreader.start()
-    if (loadProps("ircConnect").equals("true")){
+    if (loadProps("ircConnect").equals("true")) {
       SpiritBot.connect
     }
 
