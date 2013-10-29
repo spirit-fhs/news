@@ -186,11 +186,11 @@ class Boot extends Loggable with Config {
         Menu(Loc("ExtBlocksNew", ExtLink("/schedule/blocks"), "Blöcke")),
         Menu(Loc("AbkuerzungenNew", List("schedule", "abkuerzungen"), "Abkuerzungen"))) ::
       Menu(Loc("Kontakt", List("issues"), "Kontakt")) ::
-      Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
+      //Menu(Loc("Entwickler-Blog", ExtLink("http://padsblog.posterous.com/"), "Entwickler-Blog")) ::
       (if (productive)
         Menu(Loc("SSLLogin", ExtLink("https://spirit.fh-schmalkalden.de/user_mgt/login"), "Anmelden", loggedOut)) ::
           User.sitemap
-      else
+      else 
         User.sitemap)
 
     LiftRules.useXhtmlMimeType = false //required by ReCaptcha js lib
