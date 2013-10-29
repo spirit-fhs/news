@@ -21,7 +21,7 @@ class UploadWatchActor(watcher: WatchService) extends Actor with Loggable {
         }
         key.reset()
       } catch {
-        case s => logger warn s
+        case s: Exception => logger warn s
       }
       Thread.sleep(1000)
     }

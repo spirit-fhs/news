@@ -192,6 +192,7 @@ class Boot extends Loggable with Config {
           User.sitemap
       else 
         User.sitemap)
+        
 
     LiftRules.useXhtmlMimeType = false //required by ReCaptcha js lib
     LiftRules.resourceNames = "recaptcha" :: LiftRules.resourceNames

@@ -17,7 +17,7 @@ object UploadWatcher extends Loggable with Config {
     try {
       val key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
     } catch {
-      case s => logger warn s
+      case s: Exception => logger warn s
     }
 
     (new UploadWatchActor(watcher)).start()
