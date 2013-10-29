@@ -28,9 +28,7 @@ ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Pulling code from Github"
 	git pull origin master
 	@echo "==> Running SBT to package the code for deployment"
-	$(SBT_CMD) clean update
-	rm lib_managed/scala_2.10/compile/activation-1.1.jar
-	rm lib_managed/scala_2.10/compile/lift-json_2.10.2-2.1-M1.jar
+	$(SBT_CMD) clean update	
 	$(SBT_CMD) compile package
 endif
 ifeq ($(HOSTNAME),$(PROD_HOST))
