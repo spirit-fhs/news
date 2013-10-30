@@ -1,0 +1,3 @@
+[submodule "src/main/webapp/mobilewebapp"]
+	path = src/main/webapp/mobilewebapp
+	url = https://github.com/P1tt187/mobilewebapp
