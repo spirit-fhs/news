@@ -1,59 +1,66 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <link rel="shortcut icon" href="http://spirit.fh-schmalkalden.de/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
+<head>
+    <link rel="shortcut icon" href="http://spirit.fh-schmalkalden.de/favicon.ico" type="image/x-icon"/>
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
 
     <title>Aktuelles</title>
 
-    <link href="/spirit_style/jquery/css/style.css" type="text/css" rel="stylesheet" media="screen, projection" />
+    <link href="/spirit_style/jquery/css/style.css" type="text/css" rel="stylesheet" media="screen, projection"/>
 
-    <link href="/spirit_style/blueprint/screen.css" type="text/css" rel="stylesheet" media="screen, projection" />
-    <link href="/spirit_style/blueprint/print.css" type="text/css" rel="stylesheet" media="print" />
-    <!--[if IE]><link rel="stylesheet" href="/spirit_style/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-    <link href="/spirit_style/blueprint/plugins/fancy-type/screen.css" type="text/css" rel="stylesheet" media="screen, projection" />
+    <link href="/spirit_style/blueprint/screen.css" type="text/css" rel="stylesheet" media="screen, projection"/>
+    <link href="/spirit_style/blueprint/print.css" type="text/css" rel="stylesheet" media="print"/>
+    <!--[if IE]>
+    <link rel="stylesheet" href="/spirit_style/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <link href="/spirit_style/blueprint/plugins/fancy-type/screen.css" type="text/css" rel="stylesheet"
+          media="screen, projection"/>
 
     <link type="text/css" href="/spirit_style/css/spirit.css" rel="stylesheet" media="screen"/>
     <link type="text/css" href="/spirit_style/css/schedule.css" rel="stylesheet" media="screen"/>
 
-  </head>
-  <div class="lift:OldScheduleDispatch"></div>
-  <body style="margin:40px auto;width:950px;">
-    <div class="container">
-      <a target="_blank" href="http://www.fh-schmalkalden.de">
-      <img style="float:left" src="/spirit_style/images/logo_fhs.jpg" alt="" border="0" width="220" height="45"/> </a>
-      <div style="margin:0px 0px 0px 250px;"><h1 class="alt"><a href="/">Aktuelles der Fakult&auml;t Informatik</a></h1></div>
-      <hr/>
-        <div class="menu">
+</head>
+<div class="lift:OldScheduleDispatch"></div>
+<body style="margin:40px auto;width:950px;">
+<div class="container">
+    <a target="_blank" href="http://www.fh-schmalkalden.de">
+        <img style="float:left" src="/spirit_style/images/logo_fhs.jpg" alt="" border="0" width="220" height="45"/> </a>
+
+    <div style="margin:0px 0px 0px 250px;"><h1 class="alt"><a href="/">Aktuelles der Fakult&auml;t Informatik</a></h1>
+    </div>
+    <hr/>
+    <div class="menu">
         Stundenpl&auml;ne :
         <span class="lift:Menu.group?group=Informatik"></span> |
+        <span class="lift:Menu.group?group=MobileComp"></span> |
         <span class="lift:Menu.group?group=WInformatik"></span> |
         <span class="lift:Menu.group?group=Muma"></span> |
         <span class="lift:Menu.group?group=ITS"></span> |
         <span class="lift:Menu.group?group=Master"></span>
-        </div>
-        <span class="lift:Menu.item?name=Home;donthide=true">zur&uuml;ck zum Aktuellen</span> |
-        <span class="lift:Menu.item?name=Groups;donthide=true">Gruppen</span> |
-        <span class="lift:Menu.item?name=ExtBlocks;donthide=true">Bl&ouml;cke</span> |
-        <span class="lift:Menu.item?name=Abkuerzungen;donthide=true">Abk&uuml;rzungen</span> |
-        <span class="lift:Menu.item?name=Hilfe;donthide=true">Hilfe</span>
-      <hr/>
-
-      <div class="column span-30 last" style="width:950px;float:right;">
-        <div id="content">The main content will get bound here</div>
-      </div>
-      <center><div class="lift:NewsSnippets.week"></div></center>
-      <hr />
-
-      <div class="column span-23 last" style="text-align: center;clear:both;">
-        <h4 class="alt">
-        <a href="https://github.com/spirit-fhs/news/contributors">Spirit-News Contributors</a><br />
-        <a href="http://pads.fh-schmalkalden.de">Supported by pads.fh-schmalkalden.de</a><br />
-        Powered by <a href="http://www.liftweb.net">Lift</a> and <a href="http://www.mongodb.org">mongoDB</a></h4>
-      </div>
-
     </div>
-  </body>
+    <span class="lift:Menu.item?name=Home;donthide=true">zur&uuml;ck zum Aktuellen</span> |
+    <span class="lift:Menu.item?name=Groups;donthide=true">Gruppen</span> |
+    <span class="lift:Menu.item?name=ExtBlocks;donthide=true">Bl&ouml;cke</span> |
+    <span class="lift:Menu.item?name=Abkuerzungen;donthide=true">Abk&uuml;rzungen</span> |
+    <span class="lift:Menu.item?name=Hilfe;donthide=true">Hilfe</span>
+    <hr/>
+
+    <div class="column span-30 last" style="width:950px;float:right;">
+        <div id="content">The main content will get bound here</div>
+    </div>
+    <center>
+        <div class="lift:NewsSnippets.week"></div>
+    </center>
+    <hr/>
+
+    <div class="column span-23 last" style="text-align: center;clear:both;">
+        <h4 class="alt">
+            <a href="https://github.com/spirit-fhs/news/contributors">Spirit-News Contributors</a><br/>
+            <a href="http://pads.fh-schmalkalden.de">Supported by pads.fh-schmalkalden.de</a><br/>
+            Powered by <a href="http://www.liftweb.net">Lift</a> and <a href="http://www.mongodb.org">mongoDB</a></h4>
+    </div>
+
+</div>
+</body>
 </html>

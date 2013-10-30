@@ -52,3 +52,10 @@ libraryDependencies ++= {
     )
 }
 
+    buildInfoSettings
+
+    sourceGenerators in Compile <+= buildInfo
+
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion)
+
+    buildInfoPackage := "org.unsane.spirit.news.model"
