@@ -57,7 +57,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   private var sendEmail = false
   private val tweet = loadProps("Tweet") == "yes"
 
-  private var newEntry = Ref(true)
+  private val newEntry = Ref(true)
 
   private val df = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US)
   private var changedSemester = ""
@@ -68,7 +68,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   /**
    * CrudEntry is either a new Entry or a an existing Entry to be Updated!
    */
-   val CrudEntry =
+  lazy val CrudEntry =
     atomic {
       implicit txn =>
         CurrentEntry.get match {
