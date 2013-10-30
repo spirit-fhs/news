@@ -50,7 +50,7 @@
                 // Load Schedule
                 var sd = new Schedule();
 
-                var courses = ['bai','bawi','bamm','bais','mai'];		
+                var courses = ['bai','bamc','bawi','bamm','bais','mai'];		
                 $.ajaxSetup({ timeout: 7000 ,
                     beforeSend: function ( x ) {
                         if(x && x.overrideMimeType) {
@@ -81,7 +81,7 @@ alert(datas);
                 //document.domain="spirit.fh-schmalkalden.de";
                 for(var ci=0;ci<courses.length;ci++){
                     for(var semester = 1;semester<7;semester++){
-                        var request = $.get("http://spirit.fh-schmalkalden.de/rest/1.0/schedule?callback=?"  ,
+                        var request = $.get(document.domain + "/rest/1.0/schedule?callback=?"  ,
                                         
                         {
                             classname:"" + courses[ci] + semester                        
