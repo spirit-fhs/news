@@ -1,0 +1,600 @@
+[
+    {
+        "eventType": "Uebung",
+        "titleShort": "SemWeb",
+        "_id": "4edc85b9e4b090a2379d2460",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Englmeier"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "B",
+                    "room": "PC1"
+                },
+                "alternative": []
+            },
+            "time": "08.15-09.45",
+            "week": "g"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "VS",
+        "_id": "4edc85b9e4b090a2379d2461",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Braun"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Mittwoch",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "08.15-09.45",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "DSS",
+        "_id": "4edc85b9e4b090a2379d2462",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Beyer"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Donnerstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC3"
+                },
+                "alternative": []
+            },
+            "time": "08.15-09.45",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "eGov",
+        "_id": "4edc85b9e4b090a2379d2463",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Polster"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Freitag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "004"
+                },
+                "alternative": []
+            },
+            "time": "08.15-09.45",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "ProGS",
+        "_id": "4edc85b9e4b090a2379d2464",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Böse"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "10.00-11.30",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "IndBV",
+        "_id": "4edc85b9e4b090a2379d2465",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Chantelau"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Mittwoch",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "10.00-11.30",
+            "week": "g"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "IndBV",
+        "_id": "4edc85b9e4b090a2379d2466",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Chantelau"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Mittwoch",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC3"
+                },
+                "alternative": []
+            },
+            "time": "10.00-11.30",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "MMUS",
+        "_id": "4edc85b9e4b090a2379d2467",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Höller"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Donnerstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "10.00-11.30",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "eGov",
+        "_id": "4edc85b9e4b090a2379d2468",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Polster"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Freitag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "004"
+                },
+                "alternative": []
+            },
+            "time": "10.00-11.30",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "SemWeb",
+        "_id": "4edc85b9e4b090a2379d2469",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Englmeier"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "B",
+                    "room": "104"
+                },
+                "alternative": []
+            },
+            "time": "11.45-13.15",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "ProGS",
+        "_id": "4edc85b9e4b090a2379d246a",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Brothuhn"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Mittwoch",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC2"
+                },
+                "alternative": []
+            },
+            "time": "11.45-13.15",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "DynWSuWS",
+        "_id": "4edc85b9e4b090a2379d246b",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Neuhardt"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Donnerstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "11.45-13.15",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "AgSWE",
+        "_id": "4edc85b9e4b090a2379d246c",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Englmeier"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Montag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "14.15-15.45",
+            "week": "g"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "AgSWE",
+        "_id": "4edc85b9e4b090a2379d246d",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Englmeier"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Montag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC3"
+                },
+                "alternative": []
+            },
+            "time": "14.15-15.45",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "MMUS",
+        "_id": "4edc85b9e4b090a2379d246e",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Höller"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "B",
+                    "room": "231"
+                },
+                "alternative": []
+            },
+            "time": "14.15-15.45",
+            "week": "g"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "UE",
+        "_id": "4edc85b9e4b090a2379d246f",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Urban"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "14.15-15.45",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "DynWSuWS",
+        "_id": "4edc85b9e4b090a2379d2470",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Neuhardt"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Donnerstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "14.15-15.45",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "DynWSuWS",
+        "_id": "4edc85b9e4b090a2379d2471",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Neuhardt"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Donnerstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC3"
+                },
+                "alternative": []
+            },
+            "time": "14.15-15.45",
+            "week": "g"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "ME",
+        "_id": "4edc85b9e4b090a2379d2472",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Sommer"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Montag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "16.00-17.30",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "VS",
+        "_id": "4edc85b9e4b090a2379d2473",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Braun"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC2"
+                },
+                "alternative": []
+            },
+            "time": "16.00-17.30",
+            "week": "w"
+        },
+        "group": ""
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "ME",
+        "_id": "4edc85b9e4b090a2379d2474",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Sommer"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Montag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC2"
+                },
+                "alternative": []
+            },
+            "time": "17.45-19.15",
+            "week": "g"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Uebung",
+        "titleShort": "DSS",
+        "_id": "4edc85b9e4b090a2379d2475",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Beyer"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Montag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "PC2"
+                },
+                "alternative": []
+            },
+            "time": "17.45-19.15",
+            "week": "u"
+        },
+        "group": " "
+    },
+    {
+        "eventType": "Vorlesung",
+        "titleShort": "UE",
+        "_id": "4edc85b9e4b090a2379d2476",
+        "member": [
+            {
+                "fhs_id": "",
+                "name": "Urban"
+            }
+        ],
+        "className": "mai3",
+        "titleLong": "",
+        "appointment": {
+            "day": "Dienstag",
+            "location": {
+                "place": {
+                    "building": "F",
+                    "room": "111"
+                },
+                "alternative": []
+            },
+            "time": "17.45-19.15",
+            "week": "w"
+        },
+        "group": ""
+    }
+]
