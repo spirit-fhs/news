@@ -7,7 +7,7 @@ HOSTNAME=	$(shell hostname -s)
 ifeq ($(HOSTNAME),$(PROD_HOST))
 	WAR_FILE=root.war
 else
-	WAR_FILE=./target/scala-2.10/spirit-news_2.10-1.1.war
+	WAR_FILE=./target/scala-2.10/spirit-news_2.10-1.2.war
 endif
 
 JETTY_DIR=	/usr/share/jetty/
