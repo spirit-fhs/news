@@ -27,6 +27,11 @@ build:
 ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Pulling code from Github"
 	git pull origin master
+	git submodule deinit .
+	git submodule init
+	git submodule update
+	git submodule foreach git checkout master
+	git submodule foreach git pull
 	@echo "==> Running SBT to package the code for deployment"
 	$(SBT_CMD) clean update	
 	$(SBT_CMD) compile package
