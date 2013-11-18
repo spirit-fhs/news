@@ -4,7 +4,7 @@ import com.earldouglas.xsbtwebplugin.PluginKeys
 
 name := "SPIRIT-News"
 
-version := "1.2"
+version := "1.2.1"
 
 organization := "SPIRIT"
 

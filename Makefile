@@ -3,11 +3,12 @@
 DEV_HOST=	ivlbrau3
 PROD_HOST=	ivlbrau4
 HOSTNAME=	$(shell hostname -s)
+VERSION=    1.2.1
 
 ifeq ($(HOSTNAME),$(PROD_HOST))
 	WAR_FILE=root.war
 else
-	WAR_FILE=./target/scala-2.10/spirit-news_2.10-1.2.war
+	WAR_FILE=./target/scala-2.10/spirit-news_2.10-$(VERSION).war
 endif
 
 JETTY_DIR=	/usr/share/jetty/
