@@ -55,7 +55,7 @@ object Feed extends RestHelper with SpiritHelpers {
   def createFeed = {
 
     val news = Entry.findAll.sortWith(
-      (entry1, entry2) => (entry1 > entry2)
+      (entry1, entry2) => entry1 > entry2
     )
 
      <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

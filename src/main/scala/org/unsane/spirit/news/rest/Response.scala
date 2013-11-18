@@ -8,15 +8,15 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of the author nor the names of his contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -33,25 +33,26 @@
 package org.unsane.spirit.news
 package rest
 
-import org.unsane.spirit.news
 import model._
 
-import net.liftweb.json.Serialization.write
+import net.liftweb.http._
+import net.liftweb.http.rest._
+import net.liftmodules.textile._
 
 import net.liftweb.json.JsonDSL._
 import net.liftweb.common.Box
-import net.liftweb.json.{JArray}
+import net.liftweb.json.JArray
 import net.liftweb.common.Loggable
 
 
-import java.util.{GregorianCalendar,Date, Locale}
+import java.util.{Date, Locale}
 
 import java.text.SimpleDateFormat
-import net.liftweb.json.JsonAST.{JField, JValue, JObject, JString}
+import net.liftweb.json.JsonAST.JValue
 
-object Response extends Loggable {
+object Response extends Loggable with Config with RestHelper {
 
-  implicit val formats = net.liftweb.json.DefaultFormats
+  //implicit val formats = net.liftweb.json.DefaultFormats
 
   private[this] def afterDate(date1Param: String, date2Param: String): Boolean = {
 
@@ -70,13 +71,13 @@ object Response extends Loggable {
       }
     }
   }
-  
-  private[this] def makeJValue(entry: EntryPreview)  : JValue = {
 
-    ("nr", entry.nr) ~ ("date", entry.date) ~ ("writer", entry.writer) ~ ("subject", entry.subject) ~ ("semester", entry.semester)
+  private[this] def makeJValue(entry: EntryPreview): JValue = {
+
+    ("nr", entry.nr) ~("date", entry.date) ~("writer", entry.writer) ~("subject", entry.subject) ~("semester", entry.semester)
   }
 
-  private[this] def makePreview(entry: Entry) : EntryPreview = {
+  private[this] def makePreview(entry: Entry): EntryPreview = {
     new EntryPreview(
       entry.nr.value,
       entry.date.value,
@@ -85,21 +86,26 @@ object Response extends Loggable {
       entry.semester.value)
   }
 
-  private[this] def filterNews(entries: List[Entry]) : List[EntryPreview] = {
+  private[this] def filterNews(entries: List[Entry]): List[EntryPreview] = {
     entries.map(makePreview _)
   }
 
   private[this] def filterSemester(entries: List[Entry], key: String): List[Entry] = {
-    entries.filter{entry => entry.semester.value.split(" ") contains key
+    entries.filter {
+      entry => entry.semester.value.split(" ") contains key
     }
   }
 
   private[this] def filterDateEntryPreview(entries: List[EntryPreview], key: String): List[EntryPreview] = {
-    entries.filter{entry => afterDate(entry.date,key)}
+    entries.filter {
+      entry => afterDate(entry.date, key)
+    }
   }
 
   private[this] def filterDate(entries: List[Entry], key: String): List[Entry] = {
-    entries.filter{entry => afterDate(entry.date.value,key)}
+    entries.filter {
+      entry => afterDate(entry.date.value, key)
+    }
   }
 
   def getPreviewNews(params: Map[String, List[String]]): JArray = {
@@ -113,16 +119,17 @@ object Response extends Loggable {
 
     JArray(newsPreview.map(makeJValue _))
   }
-  
-  def getAllNews(params: Map[String, List[String]]) : JArray = {
 
-    if(params.isEmpty) {
-      logger info  "entry"
-      JArray(Entry.findAll.map(_.asJValue))
+  def getAllNews(params: Map[String, List[String]]): JArray = {
+
+    if (params.isEmpty) {
+      logger info "entry"
+      JArray(Entry.findAll.sortWith(
+        (entry1, entry2) => entry1.nr.value > entry2.nr.value ).map(_.asJValue))
     }
     else {
-      var news = Entry.findAll
-      
+      var news = Entry.findAll.sortWith((entry1,entry2) => entry1.nr.value > entry2.nr.value )
+
       news = params.get("semester") match {
         case Some(x) => filterSemester(news, x.head)
         case _ => news
@@ -138,15 +145,33 @@ object Response extends Loggable {
   }
 
   def getOneNews(id: String): Box[JValue] = {
-    Entry.find("nr" -> id).map{x => x.asJValue}
+    Entry.find("nr" -> id).map {
+      x => x.asJValue
+    }
   }
 
-  def getSchedule(className: String, week: String) : JArray = {
-    val classSchedule = ScheduleRecord.findAll.filter {
-        x => x.className.value.toLowerCase == className }
+  def getSchedule(className: String, week: String): JArray = {
 
-    val in = classSchedule.filterNot( x =>
-        x.appointment.get.week.toLowerCase == week )
+
+    val classSchedule: List[ScheduleRecord] = if (allClassNamesAsLowercase.contains(className)) {
+
+      logger info "className found"
+
+      ScheduleRecord.findAll.filter {
+
+        x => x.className.value.toLowerCase == className
+      }
+    } else {
+
+      logger info "className not found"
+
+      List[ScheduleRecord]()
+    }
+
+
+
+    val in = classSchedule.filterNot(x =>
+      x.appointment.get.week.toLowerCase == week)
 
     in.map(_.asJValue)
   }
