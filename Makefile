@@ -28,7 +28,7 @@ build:
 ifeq ($(HOSTNAME),$(DEV_HOST))
 	@echo "==> Pulling code from Github"
 	git pull origin master
-	git submodule deinit .
+	git submodule deinit -f .
 	git submodule init
 	git submodule update
 	git submodule foreach git checkout master

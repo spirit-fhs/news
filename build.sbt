@@ -47,6 +47,8 @@ libraryDependencies ++= {
     "ch.qos.logback" % "logback-classic" % "1.0.11",
     "org.eclipse.jetty" % "jetty-webapp" % "8.1.10.v20130312" % "compile,container,test",
     "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container,test" artifacts Artifact("javax.servlet", "jar", "jar"),
+    "org.eclipse.jetty" % "jetty-server" % "7.6.14.v20131031",
+    "javax.mail" % "mail" % "1.4.7",
     "javax.servlet" % "servlet-api" % "2.5" % "provided",
     "org.scala-stm" %% "scala-stm" % "0.7"
     )
