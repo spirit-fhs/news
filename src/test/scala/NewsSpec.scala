@@ -133,7 +133,7 @@ object NewsSpec extends Specification with Config with Contexts {
       CrudUpdate.tweetUpdate = true
       CrudUpdate.update()
 
-      Entry.findAll.head.nr.value mustEqual oldNr.toString
+      Entry.findAll.sortWith((entry1, entry2) => entry1.nr.value > entry2.nr.value).head.nr.value mustEqual oldNr.toString
     }
 
     "update an existing Entry without inc its number (If not Tweeting Update)." in {

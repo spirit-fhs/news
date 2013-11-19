@@ -68,7 +68,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
   /**
    * CrudEntry is either a new Entry or a an existing Entry to be Updated!
    */
-  lazy val CrudEntry =
+   val CrudEntry =
     atomic {
       implicit txn =>
         CurrentEntry.get match {
@@ -118,7 +118,7 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
    * saving, spreading it via email and twitter.
    */
   def create() {
-    lazy val nr = if (EntryCounter.findAll.isEmpty) "1" else EntryCounter.findAll.head.counter.toString
+    lazy val nr = if (EntryCounter.findAll.isEmpty) "0" else EntryCounter.findAll.head.counter.toString
 
     CrudEntry.date.set(date)
     CrudEntry.name.set(User.currentUserId.openOr("Oops!"))
@@ -165,14 +165,14 @@ class CRUDEntry extends Loggable with SpiritHelpers with Config with EntryPrevie
     CrudEntry.semester.set(changedSemester)
     CrudEntry.name.set(User.currentUserId.openOr("Oops!"))
     CrudEntry.nr.set(newNr)
-    CrudEntry.save
+    CrudEntry.save(true)
 
     if (newNr != oldNr) {
       val count =
         if (EntryCounter.findAll.isEmpty) EntryCounter.createRecord
         else EntryCounter.findAll.head
       count.counter.set((newNr.toInt + 1).toString)
-      count.save
+      count.save(true)
     }
 
     logger info "Semesters: " + changedSemester
